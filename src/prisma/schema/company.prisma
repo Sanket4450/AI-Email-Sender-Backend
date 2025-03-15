@@ -1,0 +1,52 @@
+model Company {
+  id          String            @id @default(cuid())
+  title       String            @unique
+  industries  CompanyIndustry[]
+  tags        CompanyTag[]
+  description String?
+  contacts    Contact[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([title])
+  @@map("company")
+}
+
+model Industry {
+  id        String            @id @default(cuid())
+  title     String            @unique
+  companies CompanyIndustry[]
+
+  @@map("industry")
+}
+
+model CompanyIndustry {
+  companyId  String   @unique
+  industryId String   @unique
+  company    Company  @relation(fields: [companyId], references: [id])
+  industry   Industry @relation(fields: [industryId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@id([companyId, industryId])
+  @@map("company_industry")
+}
+
+model CompanyTag {
+  companyId String  @unique
+  tagId     String  @unique
+  company   Company @relation(fields: [companyId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([companyId, tagId])
+  @@map("company_tag")
+}
+
+model Tag {
+  id        String       @id @default(cuid())
+  title     String       @unique
+  companies CompanyTag[]
+  contacts  ContactTag[]
+
+  @@map("tag")
+}

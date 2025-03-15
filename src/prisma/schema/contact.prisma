@@ -1,0 +1,38 @@
+model Contact {
+  id          String        @id @default(cuid())
+  name        String
+  position    String
+  email       String        @unique
+  phone       String?
+  linkedInUrl String?
+  tags        ContactTag[]
+  status      ContactStatus @default(NOT_CONTACTED)
+  companyId   String        @unique
+  company     Company       @relation(fields: [companyId], references: [id])
+  emails      Email[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([name, email])
+  @@map("contact")
+}
+
+enum ContactStatus {
+  NOT_CONTACTED
+  EMAIL_SENT
+  REJECTED
+  PENDING
+  REPLIED
+}
+
+model ContactTag {
+  contactId String   @unique
+  tagId     String   @unique
+  Contact   Contact  @relation(fields: [contactId], references: [id])
+  tag       Tag      @relation(fields: [tagId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([contactId, tagId])
+  @@map("contact_tag")
+}

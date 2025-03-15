@@ -1,0 +1,23 @@
+model Sender {
+  id          String   @id @default(cuid())
+  displayName String
+  name        String
+  apiKey      String
+  espId       String
+  esp         ESP      @relation(fields: [espId], references: [id])
+  priority    Int      @default(1)
+  target      Int
+  sentCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("sender")
+}
+
+model ESP {
+  id      String   @id @default(cuid())
+  title   String   @unique
+  senders Sender[]
+
+  @@map("esp")
+}
