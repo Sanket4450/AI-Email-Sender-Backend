@@ -4,6 +4,7 @@ model Company {
   industries  CompanyIndustry[]
   tags        CompanyTag[]
   description String?
+  location    String
   contacts    Contact[]
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt

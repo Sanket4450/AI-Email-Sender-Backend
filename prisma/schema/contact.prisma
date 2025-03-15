@@ -5,6 +5,7 @@ model Contact {
   email       String        @unique
   phone       String?
   linkedInUrl String?
+  location    String?
   tags        ContactTag[]
   status      ContactStatus @default(NOT_CONTACTED)
   companyId   String        @unique
