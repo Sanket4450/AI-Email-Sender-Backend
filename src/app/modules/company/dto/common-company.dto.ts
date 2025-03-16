@@ -21,9 +21,5 @@ export class CommonCompanyDto {
 
   @IsArray()
   @IsInt({ each: true })
-  industries: number[];
-
-  @IsArray()
-  @IsInt({ each: true })
-  tags: number[];
+  tags: string[];
 }
