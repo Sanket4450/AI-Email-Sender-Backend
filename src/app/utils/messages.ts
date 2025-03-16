@@ -9,13 +9,22 @@ export const ERROR_MSG = {
   TOKEN_EXPIRED: 'Token has expired!',
 
   // Company
-  COMPAY_NOT_FOUND: 'Company not found',
-  COMPANY_ALREADY_EXISTS: 'Company already exists with this name',
+  COMPANY_NOT_FOUND: 'Company not found',
+  COMPANY_ALREADY_EXISTS: 'Company already exists with this title',
+
+  // Contact
+  CONTACT_NOT_FOUND: 'Contact not found',
+  CONTACT_ALREADY_EXISTS: 'Contact already exists with this email',
 
   // Tag
   TAG_NOT_FOUND: 'Tag not found',
   ONE_OR_MORE_TAGS_NOT_FOUND: 'One or more tags not found',
   TAG_ALREADY_EXISTS: 'Tag already exists with this title',
+};
+
+export const VALIDATION_MSG = {
+  // Contact
+  PHONE: 'Phone number must be 10 characters long',
 };
 
 export const SUCCESS_MSG = {
@@ -33,6 +42,13 @@ export const SUCCESS_MSG = {
   COMPANY_DELETED: 'Company deleted successfully',
   COMPANIES_FETCHED: 'Companies fetched successfully',
   COMPANY_FETCHED: 'Company fetched successfully',
+
+  // Company
+  CONTACT_CREATED: 'Contact created successfully',
+  CONTACT_UPDATED: 'Contact updated successfully',
+  CONTACT_DELETED: 'Contact deleted successfully',
+  CONTACTS_FETCHED: 'Contacts fetched successfully',
+  CONTACT_FETCHED: 'Contact fetched successfully',
 
   // Tag
   TAG_CREATED: 'Tag created successfully',

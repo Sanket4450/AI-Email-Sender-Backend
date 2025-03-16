@@ -19,7 +19,8 @@ export class CommonCompanyDto {
   @IsNotEmpty()
   location: string;
 
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  tags: string[];
+  tags?: string[];
 }

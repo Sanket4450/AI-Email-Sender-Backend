@@ -1,0 +1,50 @@
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
+import { ContactService } from './contact.service';
+import { CreateContactyDto } from './dto/create-contact.dto';
+import { UpdateContactyDto } from './dto/update-contact.dto';
+
+@Controller('api/contacts')
+export class ContactController {
+  constructor(private readonly contactService: ContactService) {}
+
+  // Create a new contact
+  @Post()
+  async createContact(@Body() body: CreateContactyDto) {
+    return this.contactService.createContact(body);
+  }
+
+  // Update a contact by ID
+  @Patch(':id')
+  async updateContact(@Param('id') id: string, @Body() body: UpdateContactyDto) {
+    return this.contactService.updateContact(id, body);
+  }
+
+  // Delete a contact by ID
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteContact(@Param('id') id: string) {
+    return this.contactService.deleteContact(id);
+  }
+
+  // Get all contacts
+  @Get()
+  async getContacts() {
+    return this.contactService.getContacts();
+  }
+
+  // Get a contact by ID
+  @Get(':id')
+  async getSingleContact(@Param('id') id: string) {
+    return this.contactService.getSingleContact(id);
+  }
+}

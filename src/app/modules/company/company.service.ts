@@ -1,5 +1,5 @@
 import { Company, Prisma } from '@prisma/client';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { CreateCompanyyDto } from './dto/create-company.dto';
 import { UpdateCompanyyDto } from './dto/update-company.dto';
@@ -26,7 +26,8 @@ export class CompanyService {
       );
     }
 
-    if (tags.length) {
+    // Validate tags if provided
+    if (tags?.length) {
       const existingTags = await this.prisma.tag.findMany({
         where: { id: { in: tags } },
       });
@@ -42,7 +43,7 @@ export class CompanyService {
     await this.prisma.company.create({
       data: {
         ...createCompanyBody,
-        ...(tags.length && {
+        ...(tags?.length && {
           companyTags: {
             create: tags.map((tagId) => ({
               tag: { connect: { id: tagId } },
@@ -61,27 +62,31 @@ export class CompanyService {
 
     await this.companyExists(id);
 
-    const existingTags = await this.prisma.tag.findMany({
-      where: { id: { in: tags } },
-    });
+    if (tags?.length) {
+      const existingTags = await this.prisma.tag.findMany({
+        where: { id: { in: tags } },
+      });
 
-    if (existingTags.length !== tags.length) {
-      throw new CustomHttpException(
-        HttpStatus.NOT_FOUND,
-        ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
-      );
+      if (existingTags.length !== tags.length) {
+        throw new CustomHttpException(
+          HttpStatus.NOT_FOUND,
+          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
+        );
+      }
     }
 
     await this.prisma.company.update({
       where: { id },
       data: {
         ...updateCompanyBody,
-        companyTags: {
-          connectOrCreate: tags.map((tagId) => ({
-            where: { companyId_tagId: { companyId: id, tagId } },
-            create: { tag: { connect: { id: tagId } } },
-          })),
-        },
+        ...(tags?.length && {
+          companyTags: {
+            connectOrCreate: tags.map((tagId) => ({
+              where: { companyId_tagId: { companyId: id, tagId } },
+              create: { tag: { connect: { id: tagId } } },
+            })),
+          },
+        }),
       },
     });
 
@@ -155,7 +160,7 @@ export class CompanyService {
     if (!company) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
-        ERROR_MSG.COMPAY_NOT_FOUND,
+        ERROR_MSG.COMPANY_NOT_FOUND,
       );
     }
 
@@ -172,7 +177,7 @@ export class CompanyService {
     if (!company) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
-        ERROR_MSG.COMPAY_NOT_FOUND,
+        ERROR_MSG.COMPANY_NOT_FOUND,
       );
     }
 

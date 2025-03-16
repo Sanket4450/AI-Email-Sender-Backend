@@ -1,0 +1,230 @@
+import { Injectable, HttpStatus } from '@nestjs/common';
+import { PrismaService } from 'src/config/prisma/prisma.service';
+import { CreateContactyDto } from './dto/create-contact.dto';
+import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
+import { responseBuilder } from 'src/app/utils/responseBuilder';
+import { UpdateContactyDto } from './dto/update-contact.dto';
+import { CompanyService } from '../company/company.service';
+import { Contact, Prisma } from '@prisma/client';
+import { CustomHttpException } from 'src/app/exceptions/error.exception';
+
+@Injectable()
+export class ContactService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly companyService: CompanyService,
+  ) {}
+
+  // Create a new contact
+  async createContact(body: CreateContactyDto) {
+    const { companyId, tags, ...createContactBody } = body;
+
+    // Check if the email is already used
+    const existingContact = await this.prisma.contact.findUnique({
+      where: { email: body.email },
+    });
+
+    if (existingContact) {
+      throw new CustomHttpException(
+        HttpStatus.CONFLICT,
+        ERROR_MSG.COMPANY_ALREADY_EXISTS,
+      );
+    }
+
+    // Validate companyId if provided
+    await this.companyService.companyExists(companyId);
+
+    // Validate tags if provided
+    if (tags?.length) {
+      const existingTags = await this.prisma.tag.findMany({
+        where: { id: { in: tags } },
+      });
+
+      if (existingTags.length !== tags.length) {
+        throw new CustomHttpException(
+          HttpStatus.NOT_FOUND,
+          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
+        );
+      }
+    }
+
+    // Create the contact
+    await this.prisma.contact.create({
+      data: {
+        ...createContactBody,
+        ...(tags?.length && {
+          contactTags: {
+            create: tags.map((tagId) => ({
+              tag: { connect: { id: tagId } },
+            })),
+          },
+        }),
+        company: { connect: { id: companyId } },
+      },
+    });
+
+    return responseBuilder({ message: SUCCESS_MSG.CONTACT_CREATED });
+  }
+
+  // Update a contact by ID
+  async updateContact(id: string, body: UpdateContactyDto) {
+    const { companyId, tags, ...updateContactBody } = body;
+
+    // Validate companyId if provided
+    if (companyId) {
+      await this.companyService.companyExists(companyId);
+    }
+
+    // Validate tags if provided
+    if (tags?.length) {
+      const existingTags = await this.prisma.tag.findMany({
+        where: { id: { in: tags } },
+      });
+
+      if (existingTags.length !== tags.length) {
+        throw new CustomHttpException(
+          HttpStatus.NOT_FOUND,
+          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
+        );
+      }
+    }
+
+    // Update the contact
+    await this.prisma.contact.update({
+      where: { id },
+      data: {
+        ...updateContactBody,
+        ...(tags?.length && {
+          contactTags: {
+            connectOrCreate: tags.map((tagId) => ({
+              where: { contactId_tagId: { contactId: id, tagId } },
+              create: { tag: { connect: { id: tagId } } },
+            })),
+          },
+        }),
+        ...(companyId && { company: { connect: { id: companyId } } }),
+      },
+    });
+
+    return responseBuilder({ message: SUCCESS_MSG.CONTACT_UPDATED });
+  }
+
+  // Delete a contact by ID
+  async deleteContact(id: string) {
+    await this.contactExists(id);
+
+    return this.prisma.contact.delete({ where: { id } });
+  }
+
+  // Get all contacts
+  async getContacts() {
+    const query = Prisma.sql`
+      SELECT
+        c.id AS id,
+        c.name AS name,
+        c.position AS position,
+        c.email AS email,
+        c."linkedInUrl" AS "linkedInUrl",
+        c.location AS location,
+        c.status AS status,
+        c."createdAt" AS "createdAt",
+
+        JSON_BUILD_OBJECT(
+          'id', co.id,
+          'title', co.title,
+          'description', co.description,
+          'location', co.location,
+          'createdAt', co."createdAt"
+        ) AS company,
+
+        COALESCE(
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'id', t.id,
+              'title', t.title
+            )
+          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+        )  AS tags
+
+      FROM contact c
+      JOIN company co ON c."companyId" = co.id
+      LEFT JOIN contact_tag ct ON c.id = ct."contactId"
+      LEFT JOIN tag t ON ct."tagId" = t.id
+      GROUP BY c.id, co.id
+    `;
+
+    const contacts = await this.prisma.$queryRaw<Contact[]>(query);
+
+    return responseBuilder({
+      message: SUCCESS_MSG.CONTACTS_FETCHED,
+      result: contacts,
+    });
+  }
+
+  // Get a contact by ID
+  async getSingleContact(id: string) {
+    const query = Prisma.sql`
+      SELECT
+        c.id AS id,
+        c.name AS name,
+        c.position AS position,
+        c.email AS email,
+        c."linkedInUrl" AS "linkedInUrl",
+        c.location AS location,
+        c.status AS status,
+        c."createdAt" AS "createdAt",
+
+        JSON_BUILD_OBJECT(
+          'id', co.id,
+          'title', co.title,
+          'description', co.description,
+          'location', co.location,
+          'createdAt', co."createdAt"
+        ) AS company,
+
+        COALESCE(
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'id', t.id,
+              'title', t.title
+            )
+          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+        )  AS tags
+
+      FROM contact c
+      JOIN company co ON c."companyId" = co.id
+      LEFT JOIN contact_tag ct ON c.id = ct."contactId"
+      LEFT JOIN tag t ON ct."tagId" = t.id
+      WHERE c.id = ${id}
+      GROUP BY c.id, co.id
+    `;
+
+    const [contact] = await this.prisma.$queryRaw<Contact[]>(query);
+
+    if (!contact) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.CONTACT_NOT_FOUND,
+      );
+    }
+
+    return responseBuilder({
+      message: SUCCESS_MSG.CONTACT_FETCHED,
+      result: contact,
+    });
+  }
+
+  // Check if a contact exists
+  async contactExists(id: string) {
+    const contact = await this.prisma.contact.findUnique({ where: { id } });
+
+    if (!contact) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.COMPANY_NOT_FOUND,
+      );
+    }
+
+    return contact;
+  }
+}
