@@ -77,7 +77,10 @@ export class CompanyService {
       data: {
         ...updateCompanyBody,
         companyTags: {
-          create: tags.map((tagId) => ({ tag: { connect: { id: tagId } } })),
+          connectOrCreate: tags.map((tagId) => ({
+            where: { companyId_tagId: { companyId: id, tagId } },
+            create: { tag: { connect: { id: tagId } } },
+          })),
         },
       },
     });
@@ -95,7 +98,24 @@ export class CompanyService {
   // Get all companies
   async getCompanies() {
     const query = Prisma.sql`
-      SELECT * FROM ${Prisma.raw('Company')}
+      SELECT
+        c.id AS id,
+        c.title AS title,
+        c.description AS description,
+        c.location AS location,
+        c."createdAt" AS "createdAt",
+        COALESCE(
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'id', t.id,
+              'title', t.title
+            )
+          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+        )  AS tags
+      FROM company c
+      LEFT JOIN company_tag ct ON c.id = ct."companyId"
+      LEFT JOIN tag t ON ct."tagId" = t.id
+      GROUP BY c.id
     `;
 
     const companies = await this.prisma.$queryRaw<Company[]>(query);
@@ -109,7 +129,25 @@ export class CompanyService {
   // Get a company by ID
   async getSingleCompany(id: string) {
     const query = Prisma.sql`
-      SELECT * FROM ${Prisma.raw('Company')}
+      SELECT
+        c.id AS id,
+        c.title AS title,
+        c.description AS description,
+        c.location AS location,
+        c."createdAt" AS "createdAt",
+        COALESCE(
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'id', t.id,
+              'title', t.title
+            )
+          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+        )  AS tags
+      FROM company c
+      LEFT JOIN company_tag ct ON c.id = ct."companyId"
+      LEFT JOIN tag t ON ct."tagId" = t.id
+      WHERE c.id = ${id}
+      GROUP BY c.id
     `;
 
     const [company] = await this.prisma.$queryRaw<Company[]>(query);

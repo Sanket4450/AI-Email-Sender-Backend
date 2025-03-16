@@ -53,7 +53,6 @@ export class TagService {
 
   // Get all tags
   async getTags(query: GetTagsDto) {
-    console.log(query);
     const { offset, limit } = getPagination(query);
 
     const tags = await this.prisma.tag.findMany({
