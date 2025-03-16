@@ -11,3 +11,7 @@ export const getPagination = (
 
   return { offset, limit };
 };
+
+export const removeWhiteSpace = (value: string): string => {
+  return value.trim().replace(/\s+/g, ' ');
+};

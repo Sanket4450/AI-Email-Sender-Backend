@@ -1,7 +1,7 @@
 model Company {
   id          String       @id @default(cuid())
   title       String       @unique
-  tags        CompanyTag[]
+  companyTags CompanyTag[]
   description String?
   location    String
   contacts    Contact[]
@@ -23,10 +23,11 @@ model CompanyTag {
 }
 
 model Tag {
-  id        String       @id @default(cuid())
-  title     String       @unique
-  companies CompanyTag[]
-  contacts  ContactTag[]
+  id           String       @id @default(cuid())
+  title        String       @unique
+  tagCompanies CompanyTag[]
+  tagContacts  ContactTag[]
 
+  @@index([title])
   @@map("tag")
 }

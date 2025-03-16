@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './app/filter/http-exception.filter';
+import { SanitizeInputPipe } from './app/pipes/sanitize-input.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.useGlobalPipes(new SanitizeInputPipe());
 
   app.useGlobalFilters(new AllExceptionsFilter());
 

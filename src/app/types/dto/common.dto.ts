@@ -1,9 +1,5 @@
-import {
-  IsNotEmpty,
-  IsNumberString,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class SearchDto {
   @IsOptional()
@@ -13,12 +9,12 @@ export class SearchDto {
 
 export class PaginationDto {
   @IsOptional()
-  @IsNumberString()
-  @IsNotEmpty()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
   page: number;
 
   @IsOptional()
-  @IsNumberString()
-  @IsNotEmpty()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
   limit: number;
 }

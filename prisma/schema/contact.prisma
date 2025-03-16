@@ -6,7 +6,7 @@ model Contact {
   phone       String?
   linkedInUrl String?
   location    String?
-  tags        ContactTag[]
+  contactTags ContactTag[]
   status      ContactStatus @default(NOT_CONTACTED)
   companyId   String
   company     Company       @relation(fields: [companyId], references: [id])
@@ -29,10 +29,8 @@ enum ContactStatus {
 model ContactTag {
   contactId String
   tagId     String
-  Contact   Contact  @relation(fields: [contactId], references: [id])
-  tag       Tag      @relation(fields: [tagId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  contact   Contact @relation(fields: [contactId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
 
   @@id([contactId, tagId])
   @@map("contact_tag")

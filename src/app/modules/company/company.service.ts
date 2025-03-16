@@ -22,7 +22,7 @@ export class CompanyService {
     if (existingCompany) {
       throw new CustomHttpException(
         HttpStatus.CONFLICT,
-        ERROR_MSG.COMPAY_NOT_FOUND,
+        ERROR_MSG.COMPANY_ALREADY_EXISTS,
       );
     }
 
@@ -43,7 +43,7 @@ export class CompanyService {
       data: {
         ...createCompanyBody,
         ...(tags.length && {
-          tags: {
+          companyTags: {
             create: tags.map((tagId) => ({
               tag: { connect: { id: tagId } },
             })),
@@ -76,7 +76,9 @@ export class CompanyService {
       where: { id },
       data: {
         ...updateCompanyBody,
-        tags: { connect: tags.map((tag) => ({ tagId: tag })) },
+        companyTags: {
+          create: tags.map((tagId) => ({ tag: { connect: { id: tagId } } })),
+        },
       },
     });
 
@@ -96,7 +98,12 @@ export class CompanyService {
       SELECT * FROM ${Prisma.raw('Company')}
     `;
 
-    return this.prisma.$queryRaw(query);
+    const companies = await this.prisma.$queryRaw<Company[]>(query);
+
+    return responseBuilder({
+      message: SUCCESS_MSG.COMPANIES_FETCHED,
+      result: companies,
+    });
   }
 
   // Get a company by ID
@@ -114,7 +121,10 @@ export class CompanyService {
       );
     }
 
-    return company;
+    return responseBuilder({
+      message: SUCCESS_MSG.COMPANY_FETCHED,
+      result: company,
+    });
   }
 
   // Check if a company exists

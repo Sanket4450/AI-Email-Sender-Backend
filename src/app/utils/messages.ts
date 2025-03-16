@@ -31,14 +31,17 @@ export const SUCCESS_MSG = {
   COMPANY_CREATED: 'Company created successfully',
   COMPANY_UPDATED: 'Company updated successfully',
   COMPANY_DELETED: 'Company deleted successfully',
+  COMPANIES_FETCHED: 'Companies fetched successfully',
+  COMPANY_FETCHED: 'Company fetched successfully',
 
   // Tag
   TAG_CREATED: 'Tag created successfully',
   TAG_UPDATED: 'Tag updated successfully',
   TAG_DELETED: 'Tag deleted successfully',
+  TAGS_FETCHED: 'Tags fetched successfully',
+  TAG_FETCHED: 'Tag fetched successfully',
 
   // User
-  USER_CREATED: 'User created successfully',
   USER_UPDATED: 'User updated successfully',
   USER_DELETED: 'User deleted successfully',
 };

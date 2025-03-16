@@ -14,8 +14,8 @@ export class TagService {
 
   // Create a new tag
   async createTag(body: CreateTagDto) {
-    const existingTag = await this.prisma.company.findFirst({
-      where: { title: body.title },
+    const existingTag = await this.prisma.tag.findFirst({
+      where: { title: { equals: body.title, mode: 'insensitive' } },
     });
 
     if (existingTag) {
@@ -53,14 +53,18 @@ export class TagService {
 
   // Get all tags
   async getTags(query: GetTagsDto) {
+    console.log(query);
     const { offset, limit } = getPagination(query);
 
-    return this.prisma.tag.findMany({
+    const tags = await this.prisma.tag.findMany({
       where: { ...(query.search && { title: { contains: query.search } }) },
       select: { id: true, title: true },
+      orderBy: { title: 'asc' },
       skip: offset,
       take: limit,
     });
+
+    return responseBuilder({ message: SUCCESS_MSG.TAGS_FETCHED, result: tags });
   }
 
   // Check if a tag exists
