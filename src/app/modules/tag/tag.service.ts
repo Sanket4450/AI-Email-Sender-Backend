@@ -1,25 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { SUCCESS_MSG } from 'src/app/utils/messages';
+import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { GetTagsDto } from './dto/get-tags.dto';
 import { getPagination } from 'src/app/utils/common.utils';
+import { CustomHttpException } from 'src/app/exceptions/error.exception';
 
 @Injectable()
 export class TagService {
   constructor(private readonly prisma: PrismaService) {}
 
   // Create a new tag
-  async createTag(data: CreateTagDto) {
-    await this.prisma.tag.create({ data });
+  async createTag(body: CreateTagDto) {
+    const existingTag = await this.prisma.company.findFirst({
+      where: { title: body.title },
+    });
+
+    if (existingTag) {
+      throw new CustomHttpException(
+        HttpStatus.CONFLICT,
+        ERROR_MSG.TAG_ALREADY_EXISTS,
+      );
+    }
+
+    await this.prisma.tag.create({ data: body });
 
     return responseBuilder({ message: SUCCESS_MSG.TAG_CREATED });
   }
 
   // Update an tag by ID
   async updateTag(id: string, data: UpdateTagDto) {
+    await this.tagExists(id);
+
     await this.prisma.tag.update({
       where: { id },
       data,
@@ -30,6 +44,8 @@ export class TagService {
 
   // Delete an tag by ID
   async deleteTag(id: string) {
+    await this.tagExists(id);
+
     await this.prisma.tag.delete({ where: { id } });
 
     return responseBuilder({ message: SUCCESS_MSG.TAG_DELETED });
@@ -45,5 +61,19 @@ export class TagService {
       skip: offset,
       take: limit,
     });
+  }
+
+  // Check if a tag exists
+  async tagExists(id: string) {
+    const tag = await this.prisma.tag.findUnique({ where: { id } });
+
+    if (!tag) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.TAG_NOT_FOUND,
+      );
+    }
+
+    return tag;
   }
 }

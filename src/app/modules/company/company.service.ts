@@ -26,10 +26,29 @@ export class CompanyService {
       );
     }
 
+    if (tags.length) {
+      const existingTags = await this.prisma.tag.findMany({
+        where: { id: { in: tags } },
+      });
+
+      if (existingTags.length !== tags.length) {
+        throw new CustomHttpException(
+          HttpStatus.NOT_FOUND,
+          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
+        );
+      }
+    }
+
     await this.prisma.company.create({
       data: {
         ...createCompanyBody,
-        tags: { connect: tags.map((tag) => ({ tagId: tag })) },
+        ...(tags.length && {
+          tags: {
+            create: tags.map((tagId) => ({
+              tag: { connect: { id: tagId } },
+            })),
+          },
+        }),
       },
     });
 

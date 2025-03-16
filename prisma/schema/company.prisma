@@ -13,8 +13,8 @@ model Company {
 }
 
 model CompanyTag {
-  companyId String  @unique
-  tagId     String  @unique
+  companyId String
+  tagId     String
   company   Company @relation(fields: [companyId], references: [id])
   tag       Tag     @relation(fields: [tagId], references: [id])
 

@@ -20,6 +20,6 @@ export class CommonCompanyDto {
   location: string;
 
   @IsArray()
-  @IsInt({ each: true })
+  @IsString({ each: true })
   tags: string[];
 }

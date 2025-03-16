@@ -8,7 +8,7 @@ model Contact {
   location    String?
   tags        ContactTag[]
   status      ContactStatus @default(NOT_CONTACTED)
-  companyId   String        @unique
+  companyId   String
   company     Company       @relation(fields: [companyId], references: [id])
   emails      Email[]
   createdAt   DateTime      @default(now())
@@ -27,8 +27,8 @@ enum ContactStatus {
 }
 
 model ContactTag {
-  contactId String   @unique
-  tagId     String   @unique
+  contactId String
+  tagId     String
   Contact   Contact  @relation(fields: [contactId], references: [id])
   tag       Tag      @relation(fields: [tagId], references: [id])
   createdAt DateTime @default(now())
