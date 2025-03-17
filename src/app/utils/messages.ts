@@ -20,6 +20,10 @@ export const ERROR_MSG = {
   TAG_NOT_FOUND: 'Tag not found',
   ONE_OR_MORE_TAGS_NOT_FOUND: 'One or more tags not found',
   TAG_ALREADY_EXISTS: 'Tag already exists with this title',
+
+  // ESP
+  ESP_NOT_FOUND: 'ESP not found',
+  ESP_ALREADY_EXISTS: 'ESP already exists with this title',
 };
 
 export const VALIDATION_MSG = {
@@ -35,6 +39,10 @@ export const SUCCESS_MSG = {
   USER_REGISTERED: 'User registered successfully',
   LOGGED_IN: 'User Logged in successfully',
   LOGGED_OUT: 'User Logged out successfully',
+
+  // User
+  USER_UPDATED: 'User updated successfully',
+  USER_DELETED: 'User deleted successfully',
 
   // Company
   COMPANY_CREATED: 'Company created successfully',
@@ -57,7 +65,10 @@ export const SUCCESS_MSG = {
   TAGS_FETCHED: 'Tags fetched successfully',
   TAG_FETCHED: 'Tag fetched successfully',
 
-  // User
-  USER_UPDATED: 'User updated successfully',
-  USER_DELETED: 'User deleted successfully',
+  // ESP
+  ESP_CREATED: 'ESP created successfully',
+  ESP_UPDATED: 'ESP updated successfully',
+  ESP_DELETED: 'ESP deleted successfully',
+  ESPS_FETCHED: 'ESPs fetched successfully',
+  ESP_FETCHED: 'ESP fetched successfully',
 };

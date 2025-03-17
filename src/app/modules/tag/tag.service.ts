@@ -31,12 +31,28 @@ export class TagService {
   }
 
   // Update an tag by ID
-  async updateTag(id: string, data: UpdateTagDto) {
+  async updateTag(id: string, body: UpdateTagDto) {
     await this.tagExists(id);
+
+    if (body.title) {
+      const existingTag = await this.prisma.tag.findFirst({
+        where: {
+          title: { equals: body.title, mode: 'insensitive' },
+          id: { not: id },
+        },
+      });
+
+      if (existingTag) {
+        throw new CustomHttpException(
+          HttpStatus.CONFLICT,
+          ERROR_MSG.TAG_ALREADY_EXISTS,
+        );
+      }
+    }
 
     await this.prisma.tag.update({
       where: { id },
-      data,
+      data: body,
     });
 
     return responseBuilder({ message: SUCCESS_MSG.TAG_UPDATED });
