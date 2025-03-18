@@ -24,6 +24,10 @@ export const ERROR_MSG = {
   // ESP
   ESP_NOT_FOUND: 'ESP not found',
   ESP_ALREADY_EXISTS: 'ESP already exists with this title',
+
+  // Encryption
+  ENCRYPTION_FAILED: 'Encryption failed',
+  DECRYPTION_FAILED: 'Decryption failed',
 };
 
 export const VALIDATION_MSG = {

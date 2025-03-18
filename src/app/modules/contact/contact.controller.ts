@@ -10,8 +10,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
-import { CreateContactyDto } from './dto/create-contact.dto';
-import { UpdateContactyDto } from './dto/update-contact.dto';
+import { CreateContactDto } from './dto/create-contact.dto';
+import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller('api/contacts')
 export class ContactController {
@@ -19,13 +19,13 @@ export class ContactController {
 
   // Create a new contact
   @Post()
-  async createContact(@Body() body: CreateContactyDto) {
+  async createContact(@Body() body: CreateContactDto) {
     return this.contactService.createContact(body);
   }
 
   // Update a contact by ID
   @Patch(':id')
-  async updateContact(@Param('id') id: string, @Body() body: UpdateContactyDto) {
+  async updateContact(@Param('id') id: string, @Body() body: UpdateContactDto) {
     return this.contactService.updateContact(id, body);
   }
 

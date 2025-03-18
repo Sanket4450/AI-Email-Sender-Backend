@@ -1,3 +1,3 @@
 import { CommonContactDto } from './common-contact.dto';
 
-export class CreateContactyDto extends CommonContactDto {}
+export class CreateContactDto extends CommonContactDto {}

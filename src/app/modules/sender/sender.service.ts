@@ -1,30 +1,30 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { CreateContactDto } from './dto/create-contact.dto';
+import { CreateSenderDto } from './dto/create-sender.dto';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { UpdateContactDto } from './dto/update-contact.dto';
+import { UpdateSenderDto } from './dto/update-sender.dto';
 import { CompanyService } from '../company/company.service';
-import { Contact, Prisma } from '@prisma/client';
+import { Sender, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 
 @Injectable()
-export class ContactService {
+export class SenderService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly companyService: CompanyService,
   ) {}
 
   // Create a new contact
-  async createContact(body: CreateContactDto) {
-    const { companyId, tags, ...createContactBody } = body;
+  async createSender(body: CreateSenderDto) {
+    const { companyId, tags, ...createSenderBody } = body;
 
     // Check if the email is already used
-    const existingContact = await this.prisma.contact.findUnique({
+    const existingSender = await this.prisma.contact.findUnique({
       where: { email: body.email },
     });
 
-    if (existingContact) {
+    if (existingSender) {
       throw new CustomHttpException(
         HttpStatus.CONFLICT,
         ERROR_MSG.COMPANY_ALREADY_EXISTS,
@@ -51,7 +51,7 @@ export class ContactService {
     // Create the contact
     await this.prisma.contact.create({
       data: {
-        ...createContactBody,
+        ...createSenderBody,
         ...(tags?.length && {
           contactTags: {
             create: tags.map((tagId) => ({
@@ -67,8 +67,8 @@ export class ContactService {
   }
 
   // Update a contact by ID
-  async updateContact(id: string, body: UpdateContactDto) {
-    const { companyId, tags, ...updateContactBody } = body;
+  async updateSender(id: string, body: UpdateSenderDto) {
+    const { companyId, tags, ...updateSenderBody } = body;
 
     // Validate companyId if provided
     if (companyId) {
@@ -93,7 +93,7 @@ export class ContactService {
     await this.prisma.contact.update({
       where: { id },
       data: {
-        ...updateContactBody,
+        ...updateSenderBody,
         ...(tags?.length && {
           contactTags: {
             connectOrCreate: tags.map((tagId) => ({
@@ -110,14 +110,14 @@ export class ContactService {
   }
 
   // Delete a contact by ID
-  async deleteContact(id: string) {
+  async deleteSender(id: string) {
     await this.contactExists(id);
 
     return this.prisma.contact.delete({ where: { id } });
   }
 
   // Get all contacts
-  async getContacts() {
+  async getSenders() {
     const query = Prisma.sql`
       SELECT
         c.id AS id,
@@ -153,7 +153,7 @@ export class ContactService {
       GROUP BY c.id, co.id
     `;
 
-    const contacts = await this.prisma.$queryRaw<Contact[]>(query);
+    const contacts = await this.prisma.$queryRaw<Sender[]>(query);
 
     return responseBuilder({
       message: SUCCESS_MSG.CONTACTS_FETCHED,
@@ -162,7 +162,7 @@ export class ContactService {
   }
 
   // Get a contact by ID
-  async getSingleContact(id: string) {
+  async getSingleSender(id: string) {
     const query = Prisma.sql`
       SELECT
         c.id AS id,
@@ -199,7 +199,7 @@ export class ContactService {
       GROUP BY c.id, co.id
     `;
 
-    const [contact] = await this.prisma.$queryRaw<Contact[]>(query);
+    const [contact] = await this.prisma.$queryRaw<Sender[]>(query);
 
     if (!contact) {
       throw new CustomHttpException(
