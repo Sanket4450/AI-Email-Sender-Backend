@@ -8,10 +8,12 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { SenderService } from './sender.service';
 import { CreateSenderDto } from './dto/create-sender.dto';
 import { UpdateSenderDto } from './dto/update-sender.dto';
+import { GetSendersDto } from './dto/get-senders.dto';
 
 @Controller('api/senders')
 export class SenderController {
@@ -38,8 +40,8 @@ export class SenderController {
 
   // Get all contacts
   @Get()
-  async getSenders() {
-    return this.contactService.getSenders();
+  async getSenders(@Query() query: GetSendersDto) {
+    return this.contactService.getSenders(query);
   }
 
   // Get a contact by ID

@@ -1,4 +1,5 @@
 import {
+  IsEmail,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -19,6 +20,11 @@ export class CommonSenderDto {
   @IsString()
   @IsNotEmpty()
   displayName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 
   @IsString()
   @IsNotEmpty()

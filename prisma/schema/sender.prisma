@@ -2,6 +2,7 @@ model Sender {
   id          String   @id @default(cuid())
   displayName String
   name        String
+  email       String
   apiKey      String
   esp         String
   priority    Int      @default(1)

@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -19,6 +20,7 @@ export class CommonContactDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsOptional()

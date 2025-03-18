@@ -8,6 +8,7 @@ import { Sender, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { CryptoService } from '../crypto/crypto.service';
 import { ESPS } from 'src/app/utils/constants';
+import { GetSendersDto } from './dto/get-senders.dto';
 
 @Injectable()
 export class SenderService {
@@ -97,23 +98,26 @@ export class SenderService {
   }
 
   // Get all senders
-  async getSenders() {
-    const query = Prisma.sql`
+  async getSenders(query: GetSendersDto) {
+    const { search } = query;
+
+    const sql = Prisma.sql`
       SELECT
         s.id AS id,
         s."displayName" AS "displayName",
         s.name AS name,
+        s.email AS email,
         s.esp AS esp,
         s.priority AS priority,
         s.target AS target,
         s."sentCount" AS "sentCount",
         s."createdAt" AS "createdAt"
-      FROM sender s
-      GROUP BY s.id
+      FROM sender S
+      ${search ? Prisma.sql`WHERE s."displayName" ILIKE ${search}` : Prisma.empty}
       ORDER BY s.priority ASC, s."createdAt" ASC
     `;
 
-    const senders = await this.prisma.$queryRaw<Sender[]>(query);
+    const senders = await this.prisma.$queryRaw<Sender[]>(sql);
 
     return responseBuilder({
       message: SUCCESS_MSG.SENDERS_FETCHED,
@@ -128,15 +132,14 @@ export class SenderService {
         s.id AS id,
         s."displayName" AS "displayName",
         s.name AS name,
+        s.email AS email,
         s.esp AS esp,
         s.priority AS priority,
         s.target AS target,
         s."sentCount" AS "sentCount",
         s."createdAt" AS "createdAt"
-      FROM sender s
+      FROM sender S
       WHERE s.id = ${id}
-      GROUP BY s.id
-      ORDER BY s.priority ASC, s."createdAt" ASC
     `;
 
     const [sender] = await this.prisma.$queryRaw<Sender[]>(query);
