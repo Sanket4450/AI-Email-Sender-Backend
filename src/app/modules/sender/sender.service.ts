@@ -4,227 +4,187 @@ import { CreateSenderDto } from './dto/create-sender.dto';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { UpdateSenderDto } from './dto/update-sender.dto';
-import { CompanyService } from '../company/company.service';
 import { Sender, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
+import { ESPService } from '../esp/esp.service';
+import { CryptoService } from '../crypto/crypto.service';
 
 @Injectable()
 export class SenderService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly companyService: CompanyService,
+    private readonly espService: ESPService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
-  // Create a new contact
+  // Create a new sender
   async createSender(body: CreateSenderDto) {
-    const { companyId, tags, ...createSenderBody } = body;
+    const { espId, ...createSenderBody } = body;
 
-    // Check if the email is already used
-    const existingSender = await this.prisma.contact.findUnique({
-      where: { email: body.email },
+    await this.espService.espExists(espId);
+
+    // Check if the name is already used with the same ESP
+    const existingSender = await this.prisma.sender.findFirst({
+      where: {
+        name: { equals: createSenderBody.name, mode: 'insensitive' },
+        espId,
+      },
     });
 
     if (existingSender) {
       throw new CustomHttpException(
         HttpStatus.CONFLICT,
-        ERROR_MSG.COMPANY_ALREADY_EXISTS,
+        ERROR_MSG.SENDER_ALREADY_EXISTS,
       );
     }
 
-    // Validate companyId if provided
-    await this.companyService.companyExists(companyId);
+    // Encrypting the API KEY
+    const apiKey = this.cryptoService.encrypt(createSenderBody.apiKey);
 
-    // Validate tags if provided
-    if (tags?.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags } },
-      });
-
-      if (existingTags.length !== tags.length) {
-        throw new CustomHttpException(
-          HttpStatus.NOT_FOUND,
-          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
-        );
-      }
-    }
-
-    // Create the contact
-    await this.prisma.contact.create({
+    // Create the sender
+    await this.prisma.sender.create({
       data: {
         ...createSenderBody,
-        ...(tags?.length && {
-          contactTags: {
-            create: tags.map((tagId) => ({
-              tag: { connect: { id: tagId } },
-            })),
-          },
-        }),
-        company: { connect: { id: companyId } },
+        apiKey,
+        esp: { connect: { id: espId } },
       },
     });
 
-    return responseBuilder({ message: SUCCESS_MSG.CONTACT_CREATED });
+    return responseBuilder({ message: SUCCESS_MSG.SENDER_CREATED });
   }
 
-  // Update a contact by ID
+  // Update a sender by ID
   async updateSender(id: string, body: UpdateSenderDto) {
-    const { companyId, tags, ...updateSenderBody } = body;
+    const { ...updateSenderBody } = body;
 
-    // Validate companyId if provided
-    if (companyId) {
-      await this.companyService.companyExists(companyId);
-    }
+    // Check if the sender exists
+    const sender = await this.senderExists(id);
 
-    // Validate tags if provided
-    if (tags?.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags } },
+    // Check if the name is already used with the same ESP
+    if (updateSenderBody.name) {
+      const existingSender = await this.prisma.sender.findFirst({
+        where: {
+          name: { equals: updateSenderBody.name, mode: 'insensitive' },
+          espId: sender.espId,
+          id: { not: id },
+        },
       });
 
-      if (existingTags.length !== tags.length) {
+      if (existingSender) {
         throw new CustomHttpException(
-          HttpStatus.NOT_FOUND,
-          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
+          HttpStatus.CONFLICT,
+          ERROR_MSG.SENDER_ALREADY_EXISTS,
         );
       }
     }
 
-    // Update the contact
-    await this.prisma.contact.update({
+    // Encrypting the API KEY
+    const apiKey = updateSenderBody.apiKey
+      ? this.cryptoService.encrypt(updateSenderBody.apiKey)
+      : null;
+
+    // Create the sender
+    await this.prisma.sender.update({
       where: { id },
       data: {
         ...updateSenderBody,
-        ...(tags?.length && {
-          contactTags: {
-            connectOrCreate: tags.map((tagId) => ({
-              where: { contactId_tagId: { contactId: id, tagId } },
-              create: { tag: { connect: { id: tagId } } },
-            })),
-          },
-        }),
-        ...(companyId && { company: { connect: { id: companyId } } }),
+        ...(apiKey && { apiKey }),
       },
     });
 
-    return responseBuilder({ message: SUCCESS_MSG.CONTACT_UPDATED });
+    return responseBuilder({ message: SUCCESS_MSG.SENDER_UPDATED });
   }
 
-  // Delete a contact by ID
+  // Delete a sender by ID
   async deleteSender(id: string) {
-    await this.contactExists(id);
+    await this.senderExists(id);
 
-    return this.prisma.contact.delete({ where: { id } });
+    await this.prisma.sender.delete({ where: { id } });
+
+    return responseBuilder({ message: SUCCESS_MSG.SENDER_DELETED });
   }
 
-  // Get all contacts
+  // Get all senders
   async getSenders() {
     const query = Prisma.sql`
       SELECT
-        c.id AS id,
-        c.name AS name,
-        c.position AS position,
-        c.email AS email,
-        c."linkedInUrl" AS "linkedInUrl",
-        c.location AS location,
-        c.status AS status,
-        c."createdAt" AS "createdAt",
+        s.id AS id,
+        s."displayName" AS "displayName",
+        s.name AS name,
+        s.priority AS priority,
+        s.target AS target,
+        s."sentCount" AS "sentCount",
+        s."createdAt" AS "createdAt",
 
         JSON_BUILD_OBJECT(
-          'id', co.id,
-          'title', co.title,
-          'description', co.description,
-          'location', co.location,
-          'createdAt', co."createdAt"
-        ) AS company,
+          'id', esp.id,
+          'title', esp.title
+        ) AS esp
 
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', t.id,
-              'title', t.title
-            )
-          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-        )  AS tags
-
-      FROM contact c
-      JOIN company co ON c."companyId" = co.id
-      LEFT JOIN contact_tag ct ON c.id = ct."contactId"
-      LEFT JOIN tag t ON ct."tagId" = t.id
-      GROUP BY c.id, co.id
+      FROM sender s
+      JOIN esp esp ON s."espId" = esp.id
+      GROUP BY s.id, esp.id
+      ORDER BY s.priority ASC, s."createdAt" ASC
     `;
 
-    const contacts = await this.prisma.$queryRaw<Sender[]>(query);
+    const senders = await this.prisma.$queryRaw<Sender[]>(query);
 
     return responseBuilder({
-      message: SUCCESS_MSG.CONTACTS_FETCHED,
-      result: contacts,
+      message: SUCCESS_MSG.SENDERS_FETCHED,
+      result: senders,
     });
   }
 
-  // Get a contact by ID
+  // Get a sender by ID
   async getSingleSender(id: string) {
     const query = Prisma.sql`
       SELECT
-        c.id AS id,
-        c.name AS name,
-        c.position AS position,
-        c.email AS email,
-        c."linkedInUrl" AS "linkedInUrl",
-        c.location AS location,
-        c.status AS status,
-        c."createdAt" AS "createdAt",
+        s.id AS id,
+        s."displayName" AS "displayName",
+        s.name AS name,
+        s.priority AS priority,
+        s.target AS target,
+        s."sentCount" AS "sentCount",
+        s."createdAt" AS "createdAt",
 
         JSON_BUILD_OBJECT(
-          'id', co.id,
-          'title', co.title,
-          'description', co.description,
-          'location', co.location,
-          'createdAt', co."createdAt"
-        ) AS company,
+          'id', esp.id,
+          'title', esp.title
+        ) AS esp
 
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', t.id,
-              'title', t.title
-            )
-          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-        )  AS tags
-
-      FROM contact c
-      JOIN company co ON c."companyId" = co.id
-      LEFT JOIN contact_tag ct ON c.id = ct."contactId"
-      LEFT JOIN tag t ON ct."tagId" = t.id
-      WHERE c.id = ${id}
-      GROUP BY c.id, co.id
+      FROM sender s
+      JOIN esp esp ON s."espId" = esp.id
+      WHERE s.id = ${id}
+      GROUP BY s.id, esp.id
+      ORDER BY s.priority ASC, s."createdAt" ASC
     `;
 
-    const [contact] = await this.prisma.$queryRaw<Sender[]>(query);
+    const [sender] = await this.prisma.$queryRaw<Sender[]>(query);
 
-    if (!contact) {
+    if (!sender) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
-        ERROR_MSG.CONTACT_NOT_FOUND,
+        ERROR_MSG.SENDER_NOT_FOUND,
       );
     }
 
     return responseBuilder({
-      message: SUCCESS_MSG.CONTACT_FETCHED,
-      result: contact,
+      message: SUCCESS_MSG.SENDER_FETCHED,
+      result: sender,
     });
   }
 
-  // Check if a contact exists
-  async contactExists(id: string) {
-    const contact = await this.prisma.contact.findUnique({ where: { id } });
+  // Check if a sender exists
+  async senderExists(id: string) {
+    const sender = await this.prisma.sender.findUnique({ where: { id } });
 
-    if (!contact) {
+    if (!sender) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
-        ERROR_MSG.COMPANY_NOT_FOUND,
+        ERROR_MSG.SENDER_NOT_FOUND,
       );
     }
 
-    return contact;
+    return sender;
   }
 }

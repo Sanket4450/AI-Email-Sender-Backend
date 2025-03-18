@@ -113,7 +113,10 @@ export class ContactService {
   async deleteContact(id: string) {
     await this.contactExists(id);
 
-    return this.prisma.contact.delete({ where: { id } });
+    await this.prisma.contact.delete({ where: { id } });
+
+    return responseBuilder({ message: SUCCESS_MSG.CONTACT_DELETED });
+
   }
 
   // Get all contacts

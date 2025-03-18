@@ -13,7 +13,7 @@ import { SenderService } from './sender.service';
 import { CreateSenderDto } from './dto/create-sender.dto';
 import { UpdateSenderDto } from './dto/update-sender.dto';
 
-@Controller('api/contacts')
+@Controller('api/senders')
 export class SenderController {
   constructor(private readonly contactService: SenderService) {}
 

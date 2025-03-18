@@ -7,5 +7,6 @@ import { PrismaModule } from 'src/config/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [ESPController],
   providers: [ESPService],
+  exports: [ESPService],
 })
 export class ESPModule {}

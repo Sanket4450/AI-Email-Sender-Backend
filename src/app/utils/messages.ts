@@ -23,7 +23,11 @@ export const ERROR_MSG = {
 
   // ESP
   ESP_NOT_FOUND: 'ESP not found',
-  ESP_ALREADY_EXISTS: 'ESP already exists with this title',
+  ESP_ALREADY_EXISTS: 'ESP already exists with this name',
+
+  // Sender
+  SENDER_NOT_FOUND: 'Sender not found',
+  SENDER_ALREADY_EXISTS: 'Sender already exists with this name',
 
   // Encryption
   ENCRYPTION_FAILED: 'Encryption failed',
@@ -75,4 +79,11 @@ export const SUCCESS_MSG = {
   ESP_DELETED: 'ESP deleted successfully',
   ESPS_FETCHED: 'ESPs fetched successfully',
   ESP_FETCHED: 'ESP fetched successfully',
+
+  // Sender
+  SENDER_CREATED: 'Sender created successfully',
+  SENDER_UPDATED: 'Sender updated successfully',
+  SENDER_DELETED: 'Sender deleted successfully',
+  SENDERS_FETCHED: 'Senders fetched successfully',
+  SENDER_FETCHED: 'Sender fetched successfully',
 };

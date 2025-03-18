@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CommonSenderDto {
   @IsString()
@@ -12,6 +12,10 @@ export class CommonSenderDto {
   @IsString()
   @IsNotEmpty()
   apiKey: string;
+
+  @IsOptional()
+  @IsInt()
+  priority?: number;
 
   @IsInt()
   target: number;
