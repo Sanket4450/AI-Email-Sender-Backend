@@ -6,28 +6,25 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { UpdateSenderDto } from './dto/update-sender.dto';
 import { Sender, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
-import { ESPService } from '../esp/esp.service';
 import { CryptoService } from '../crypto/crypto.service';
+import { ESPS } from 'src/app/utils/constants';
 
 @Injectable()
 export class SenderService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly espService: ESPService,
     private readonly cryptoService: CryptoService,
   ) {}
 
   // Create a new sender
   async createSender(body: CreateSenderDto) {
-    const { espId, ...createSenderBody } = body;
-
-    await this.espService.espExists(espId);
+    await this.validateESP(body.esp);
 
     // Check if the name is already used with the same ESP
     const existingSender = await this.prisma.sender.findFirst({
       where: {
-        name: { equals: createSenderBody.name, mode: 'insensitive' },
-        espId,
+        name: { equals: body.name, mode: 'insensitive' },
+        esp: body.esp,
       },
     });
 
@@ -39,14 +36,13 @@ export class SenderService {
     }
 
     // Encrypting the API KEY
-    const apiKey = this.cryptoService.encrypt(createSenderBody.apiKey);
+    const apiKey = this.cryptoService.encrypt(body.apiKey);
 
     // Create the sender
     await this.prisma.sender.create({
       data: {
-        ...createSenderBody,
+        ...body,
         apiKey,
-        esp: { connect: { id: espId } },
       },
     });
 
@@ -55,17 +51,15 @@ export class SenderService {
 
   // Update a sender by ID
   async updateSender(id: string, body: UpdateSenderDto) {
-    const { ...updateSenderBody } = body;
-
     // Check if the sender exists
     const sender = await this.senderExists(id);
 
     // Check if the name is already used with the same ESP
-    if (updateSenderBody.name) {
+    if (body.name) {
       const existingSender = await this.prisma.sender.findFirst({
         where: {
-          name: { equals: updateSenderBody.name, mode: 'insensitive' },
-          espId: sender.espId,
+          name: { equals: body.name, mode: 'insensitive' },
+          esp: sender.esp,
           id: { not: id },
         },
       });
@@ -79,15 +73,13 @@ export class SenderService {
     }
 
     // Encrypting the API KEY
-    const apiKey = updateSenderBody.apiKey
-      ? this.cryptoService.encrypt(updateSenderBody.apiKey)
-      : null;
+    const apiKey = body.apiKey ? this.cryptoService.encrypt(body.apiKey) : null;
 
     // Create the sender
     await this.prisma.sender.update({
       where: { id },
       data: {
-        ...updateSenderBody,
+        ...body,
         ...(apiKey && { apiKey }),
       },
     });
@@ -111,19 +103,13 @@ export class SenderService {
         s.id AS id,
         s."displayName" AS "displayName",
         s.name AS name,
+        s.esp AS esp,
         s.priority AS priority,
         s.target AS target,
         s."sentCount" AS "sentCount",
-        s."createdAt" AS "createdAt",
-
-        JSON_BUILD_OBJECT(
-          'id', esp.id,
-          'title', esp.title
-        ) AS esp
-
+        s."createdAt" AS "createdAt"
       FROM sender s
-      JOIN esp esp ON s."espId" = esp.id
-      GROUP BY s.id, esp.id
+      GROUP BY s.id
       ORDER BY s.priority ASC, s."createdAt" ASC
     `;
 
@@ -142,20 +128,14 @@ export class SenderService {
         s.id AS id,
         s."displayName" AS "displayName",
         s.name AS name,
+        s.esp AS esp,
         s.priority AS priority,
         s.target AS target,
         s."sentCount" AS "sentCount",
-        s."createdAt" AS "createdAt",
-
-        JSON_BUILD_OBJECT(
-          'id', esp.id,
-          'title', esp.title
-        ) AS esp
-
+        s."createdAt" AS "createdAt"
       FROM sender s
-      JOIN esp esp ON s."espId" = esp.id
       WHERE s.id = ${id}
-      GROUP BY s.id, esp.id
+      GROUP BY s.id
       ORDER BY s.priority ASC, s."createdAt" ASC
     `;
 
@@ -186,5 +166,15 @@ export class SenderService {
     }
 
     return sender;
+  }
+
+  // Validate ESP
+  async validateESP(esp: string) {
+    if (!Object.values(ESPS).includes(esp)) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.ESP_NOT_FOUND,
+      );
+    }
   }
 }

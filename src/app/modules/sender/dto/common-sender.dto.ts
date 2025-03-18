@@ -1,6 +1,17 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { ESPS } from 'src/app/utils/constants';
 
 export class CommonSenderDto {
+  @IsString()
+  @IsEnum(Object.values(ESPS))
+  esp: string;
+
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -19,8 +30,4 @@ export class CommonSenderDto {
 
   @IsInt()
   target: number;
-
-  @IsString()
-  @IsNotEmpty()
-  espId: string;
 }
