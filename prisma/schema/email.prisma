@@ -32,3 +32,25 @@ enum EventType {
   OPENED
   CLICKED
 }
+
+model Draft {
+  id         String         @id @default(cuid())
+  subject    String?
+  body       String?
+  recipients DraftContact[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([subject])
+  @@map("draft")
+}
+
+model DraftContact {
+  draftId   String
+  contactId String
+  draft     Draft   @relation(fields: [draftId], references: [id])
+  contact   Contact @relation(fields: [contactId], references: [id])
+
+  @@id([draftId, contactId])
+  @@map("draft_contact")
+}

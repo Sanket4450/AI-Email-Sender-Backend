@@ -1,18 +1,19 @@
 model Contact {
-  id          String        @id @default(cuid())
-  name        String
-  position    String
-  email       String        @unique
-  phone       String?
-  linkedInUrl String?
-  location    String?
-  contactTags ContactTag[]
-  status      ContactStatus @default(NOT_CONTACTED)
-  companyId   String
-  company     Company       @relation(fields: [companyId], references: [id])
-  emails      Email[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String         @id @default(cuid())
+  name          String
+  position      String
+  email         String         @unique
+  phone         String?
+  linkedInUrl   String?
+  location      String?
+  contactTags   ContactTag[]
+  status        ContactStatus  @default(NOT_CONTACTED)
+  companyId     String
+  company       Company        @relation(fields: [companyId], references: [id])
+  contactDrafts DraftContact[]
+  emails        Email[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([name, email])
   @@map("contact")
