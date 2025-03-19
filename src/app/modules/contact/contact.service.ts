@@ -27,7 +27,7 @@ export class ContactService {
     if (existingContact) {
       throw new CustomHttpException(
         HttpStatus.CONFLICT,
-        ERROR_MSG.COMPANY_ALREADY_EXISTS,
+        ERROR_MSG.CONTACT_ALREADY_EXISTS,
       );
     }
 
@@ -224,7 +224,7 @@ export class ContactService {
     if (!contact) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
-        ERROR_MSG.COMPANY_NOT_FOUND,
+        ERROR_MSG.CONTACT_NOT_FOUND,
       );
     }
 
