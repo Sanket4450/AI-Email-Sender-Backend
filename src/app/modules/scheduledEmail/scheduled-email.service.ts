@@ -1,19 +1,26 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { CreateDraftDto } from './dto/create-draft.dto';
+import { CreateScheduledEmailDto } from './dto/create-scheduled-email.dto';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
-import { UpdateDraftDto } from './dto/update-draft.dto';
+import { UpdateScheduledEmailDto } from './dto/update-scheduled-email.dto';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { Draft, Prisma } from '@prisma/client';
+import { ScheduledEmail, Prisma } from '@prisma/client';
+import { SenderService } from '../sender/sender.service';
 
 @Injectable()
-export class DraftService {
-  constructor(private readonly prisma: PrismaService) {}
+export class ScheduledEmailService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly senderService: SenderService,
+  ) {}
 
-  // Create a new draft
-  async createDraft(body: CreateDraftDto) {
-    const { contactIds, ...createDraftBody } = body;
+  // Create a new scheduledEmail
+  async createScheduledEmail(body: CreateScheduledEmailDto) {
+    const { senderId, contactIds, ...createScheduledEmailBody } = body;
+
+    // Validate that the sender exists
+    await this.senderService.senderExists(senderId);
 
     // Validate that all provided contact IDs exist in the database
     if (contactIds) {
@@ -29,11 +36,11 @@ export class DraftService {
       }
     }
 
-    // Create the draft and associate contacts
-    await this.prisma.draft.create({
+    // Create the scheduledEmail and associate contacts
+    await this.prisma.scheduledEmail.create({
       data: {
-        ...createDraftBody,
-        draftContacts: contactIds
+        ...createScheduledEmailBody,
+        scheduledEmailContacts: contactIds
           ? {
               create: contactIds.map((contactId) => ({
                 contact: { connect: { id: contactId } },
@@ -44,15 +51,18 @@ export class DraftService {
     });
 
     return responseBuilder({
-      message: SUCCESS_MSG.DRAFT_CREATED,
+      message: SUCCESS_MSG.EMAIL_CREATED,
     });
   }
 
-  // Update a draft by ID
-  async updateDraft(id: string, body: UpdateDraftDto) {
-    const { contactIds, ...updateDraftBody } = body;
+  // Update a scheduledEmail by ID
+  async updateScheduledEmail(id: string, body: UpdateScheduledEmailDto) {
+    const { senderId, contactIds, ...updateScheduledEmailBody } = body;
 
-    await this.draftExists(id);
+    await this.scheduledEmailExists(id);
+
+    // Validate that the sender exists
+    if (senderId) await this.senderService.senderExists(id);
 
     // Validate that all provided contact IDs exist in the database
     if (contactIds) {
@@ -68,15 +78,18 @@ export class DraftService {
       }
     }
 
-    // Update the draft and re-associate contacts
-    await this.prisma.draft.update({
+    // Update the scheduledEmail and re-associate contacts
+    await this.prisma.scheduledEmail.update({
       where: { id },
       data: {
-        ...updateDraftBody,
+        ...updateScheduledEmailBody,
+        ...(senderId && { sender: { connect: { id: senderId } } }),
         ...(contactIds?.length && {
           contacts: {
             connectOrCreate: contactIds.map((contactId) => ({
-              where: { draftId_contactId: { draftId: id, contactId } },
+              where: {
+                scheduledEmailId_contactId: { scheduledEmailId: id, contactId },
+              },
               create: { contact: { connect: { id: contactId } } },
             })),
           },
@@ -85,24 +98,27 @@ export class DraftService {
     });
 
     return responseBuilder({
-      message: SUCCESS_MSG.DRAFT_UPDATED,
+      message: SUCCESS_MSG.EMAIL_UPDATED,
     });
   }
 
-  // Delete a draft by ID
-  async deleteDraft(id: string) {
-    await this.draftExists(id);
+  // Delete a scheduledEmail by ID
+  async deleteScheduledEmail(id: string) {
+    await this.scheduledEmailExists(id);
 
-    await this.prisma.draftContact.deleteMany({ where: { draftId: id } });
-    await this.prisma.draft.delete({ where: { id } });
+    await this.prisma.scheduledEmailContact.deleteMany({
+      where: { emailId: id },
+    });
+
+    await this.prisma.scheduledEmail.delete({ where: { id } });
 
     return responseBuilder({
-      message: SUCCESS_MSG.DRAFT_DELETED,
+      message: SUCCESS_MSG.EMAIL_DELETED,
     });
   }
 
-  // Get all drafts
-  async getDrafts() {
+  // Get all scheduledEmails
+  async getScheduledEmails() {
     const query = Prisma.sql`
       SELECT
         d.id AS id,
@@ -116,22 +132,23 @@ export class DraftService {
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts
-      FROM draft d
-      LEFT JOIN draft_contact dc ON d.id = dc."draftId"
+      FROM scheduledEmail d
+      LEFT JOIN scheduledEmail_contact dc ON d.id = dc."scheduledEmailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
       GROUP BY d.id
     `;
 
-    const drafts = await this.prisma.$queryRaw<Draft[]>(query);
+    const scheduledEmails =
+      await this.prisma.$queryRaw<ScheduledEmail[]>(query);
 
     return responseBuilder({
-      message: SUCCESS_MSG.DRAFTS_FETCHED,
-      result: drafts,
+      message: SUCCESS_MSG.EMAILS_FETCHED,
+      result: scheduledEmails,
     });
   }
 
-  // Get a draft by ID
-  async getSingleDraft(id: string) {
+  // Get a scheduledEmail by ID
+  async getSingleScheduledEmail(id: string) {
     const query = Prisma.sql`
       SELECT
         d.id AS id,
@@ -146,32 +163,35 @@ export class DraftService {
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts
-      FROM draft d
-      LEFT JOIN draft_contact dc ON d.id = dc."draftId"
+      FROM scheduledEmail d
+      LEFT JOIN scheduledEmail_contact dc ON d.id = dc."scheduledEmailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
       WHERE d.id = ${id}
       GROUP BY d.id
     `;
 
-    const [draft] = await this.prisma.$queryRaw<Draft[]>(query);
+    const [scheduledEmail] =
+      await this.prisma.$queryRaw<ScheduledEmail[]>(query);
 
     return responseBuilder({
-      message: SUCCESS_MSG.DRAFT_FETCHED,
-      result: draft,
+      message: SUCCESS_MSG.EMAIL_FETCHED,
+      result: scheduledEmail,
     });
   }
 
-  // Check if a draft exists
-  async draftExists(id: string) {
-    const draft = await this.prisma.draft.findUnique({ where: { id } });
+  // Check if a scheduledEmail exists
+  async scheduledEmailExists(id: string) {
+    const scheduledEmail = await this.prisma.scheduledEmail.findUnique({
+      where: { id },
+    });
 
-    if (!draft) {
+    if (!scheduledEmail) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
-        ERROR_MSG.DRAFT_NOT_FOUND,
+        ERROR_MSG.EMAIL_NOT_FOUND,
       );
     }
 
-    return draft;
+    return scheduledEmail;
   }
 }

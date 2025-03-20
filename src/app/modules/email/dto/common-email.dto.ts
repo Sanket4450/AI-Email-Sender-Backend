@@ -13,8 +13,4 @@ export class CommonEmailDto {
   @IsArray()
   @IsString({ each: true })
   contactIds?: string[];
-
-  @IsOptional()
-  @IsDateString()
-  scheduledAt?: string;
 }
