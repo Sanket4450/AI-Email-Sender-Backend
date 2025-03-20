@@ -18,3 +18,8 @@ export const ESPS = {
   ELASTIC_EMAIL: 'elastic-email',
   MAILJET: 'mailjet',
 };
+
+export const EMAIL_SEND_TYPES = {
+  EMAIL: 'email',
+  FOLLOW_UP: 'follow-up',
+};
