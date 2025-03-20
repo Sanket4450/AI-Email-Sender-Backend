@@ -1,49 +1,27 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Patch,
-  Delete,
-  Query,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { CreateEmailDto } from './dto/create-email.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
 import { GetEmailsDto } from './dto/get-emails.dto';
 
-@Controller('emails')
+@Controller('api/emails')
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
   // Create a new email
   @Post()
-  async create(@Body() body: CreateEmailDto) {
-    return this.emailService.create(body);
+  async createEmail(@Body() body: CreateEmailDto) {
+    return this.emailService.createEmail(body);
   }
 
-  // Update an email (only scheduledAt can be updated)
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: UpdateEmailDto) {
-    return this.emailService.update(id, body);
-  }
-
-  // Delete an email (only if it's scheduled)
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.emailService.remove(id);
-  }
-
-  // Get all emails with filters
+  // Get all emails with query
   @Get()
-  async findAll(@Query() filters: GetEmailsDto) {
-    return this.emailService.findAll(filters);
+  async getEmails(@Query() query: GetEmailsDto) {
+    return this.emailService.getEmails(query);
   }
 
   // Get a single email by ID
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.emailService.findOne(id);
+  async getSingleEmail(@Param('id') id: string) {
+    return this.emailService.getSingleEmail(id);
   }
 }

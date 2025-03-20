@@ -40,7 +40,8 @@ export class ScheduledEmailService {
     await this.prisma.scheduledEmail.create({
       data: {
         ...createScheduledEmailBody,
-        scheduledEmailContacts: contactIds
+        sender: { connect: { id: senderId } },
+        emailContacts: contactIds
           ? {
               create: contactIds.map((contactId) => ({
                 contact: { connect: { id: contactId } },
@@ -132,7 +133,7 @@ export class ScheduledEmailService {
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts
-      FROM scheduledEmail d
+      FROM scheduled_email d
       LEFT JOIN scheduledEmail_contact dc ON d.id = dc."scheduledEmailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
       GROUP BY d.id
@@ -163,8 +164,8 @@ export class ScheduledEmailService {
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts
-      FROM scheduledEmail d
-      LEFT JOIN scheduledEmail_contact dc ON d.id = dc."scheduledEmailId"
+      FROM "scheduledEmail" d
+      LEFT JOIN "scheduledEmail_contact" dc ON d.id = dc."scheduledEmailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
       WHERE d.id = ${id}
       GROUP BY d.id

@@ -129,7 +129,6 @@ export class ContactService {
         c.email AS email,
         c."linkedInUrl" AS "linkedInUrl",
         c.location AS location,
-        c.status AS status,
         c."createdAt" AS "createdAt",
 
         JSON_BUILD_OBJECT(

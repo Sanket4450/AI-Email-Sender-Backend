@@ -9,5 +9,6 @@ import { CryptoModule } from '../crypto/crypto.module';
   imports: [PrismaModule, CompanyModule, CryptoModule],
   controllers: [SenderController],
   providers: [SenderService],
+  exports: [SenderService],
 })
 export class SenderModule {}

@@ -13,7 +13,7 @@ import { ScheduledEmailService } from './scheduled-email.service';
 import { CreateScheduledEmailDto } from './dto/create-scheduled-email.dto';
 import { UpdateScheduledEmailDto } from './dto/update-scheduled-email.dto';
 
-@Controller('api/drafts')
+@Controller('api/scheduled-emails')
 export class ScheduledEmailController {
   constructor(private readonly draftService: ScheduledEmailService) {}
 

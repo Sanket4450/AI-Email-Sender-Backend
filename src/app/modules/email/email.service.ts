@@ -1,12 +1,12 @@
-import { Injectable, CustomHttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { CreateEmailDto } from './dto/create-email.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { SenderService } from '../sender/sender.service';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { Prisma } from '@prisma/client';
+import { Email, Prisma } from '@prisma/client';
+import { GetEmailsDto } from './dto/get-emails.dto';
 
 @Injectable()
 export class EmailService {
@@ -16,7 +16,7 @@ export class EmailService {
   ) {}
 
   // Create a new email
-  async create(body: CreateEmailDto) {
+  async createEmail(body: CreateEmailDto) {
     const { senderId, contactIds, ...createEmailBody } = body;
 
     // Validate that the sender exists
@@ -37,6 +37,7 @@ export class EmailService {
     const createData: Prisma.EmailCreateManyInput[] = contacts.map((c) => ({
       ...createEmailBody,
       contactId: c.id,
+      senderId,
     }));
 
     await this.prisma.email.createMany({
@@ -48,109 +49,76 @@ export class EmailService {
     });
   }
 
-  // Update an email (only scheduledAt can be updated)
-  async update(id: string, body: UpdateEmailDto) {
-    const { senderId, contactIds, ...updateEmailBody } = body;
+  // Get all emails
+  async getEmails(query: GetEmailsDto) {
+    const sql = Prisma.sql`
+        SELECT
+          e.id AS id,
+          e.subject AS subject,
+          e."isBounced" AS isBounced,
+          e."isSpamReported" AS isSpamReported,
+          e."createdAt" AS "createdAt",
+          JSON_BUILD_OBJECT(
+            'id', s.id,
+            'displayName', s."displayName"
+          ) AS sender,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', ev.id,
+                'eventType', ev."eventType"
+              )
+            ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
+          )  AS events
+        FROM email e
+        JOIN sender s ON s.id = e."senderId"
+        LEFT JOIN email_event ev ON ev."emailId" = e.id
+        GROUP BY e.id, s.id;
+      `;
 
-    const email = await this.emailExists(id);
+    const emails = await this.prisma.$queryRaw<Email[]>(sql);
 
-    if (!email.scheduledAt) {
-      throw new CustomHttpException(
-        HttpStatus.BAD_REQUEST,
-        ERROR_MSG.EMAIL_CANNOT_MODIFY,
-      );
-    }
-
-    // Validate that the sender exists
-    if (senderId) await this.senderService.senderExists(senderId);
-
-    // Validate that the contact exists
-    if (contactIds) {
-      const contacts = await this.prisma.contact.findMany({
-        where: { id: { in: contactIds } },
-      });
-
-      if (contacts.length !== contactIds.length) {
-        throw new CustomHttpException(
-          HttpStatus.BAD_REQUEST,
-          ERROR_MSG.ONE_OR_MORE_CONTACTS_NOT_FOUND,
-        );
-      }
-    }
-
-    await this.prisma.email.update({
-      where: { id },
-      data: {
-        ...updateEmailBody,
-        ...(senderId && { sender: { connect: { id: senderId } } }),
-        ...(contactIds?.length && {
-          : {
-            create: contactIds.map((tagId) => ({
-              tag: { connect: { id: tagId } },
-            })),
-          },
-        }),
-      },
+    return responseBuilder({
+      message: SUCCESS_MSG.EMAILS_FETCHED,
+      result: emails,
     });
   }
 
-  // Delete an email (only if it's scheduled)
-  async remove(id: string) {
-    const email = await this.prisma.email.findUnique({ where: { id } });
+  // Get a email by ID
+  async getSingleEmail(id: string) {
+    const query = Prisma.sql`
+        SELECT
+          e.id AS id,
+          e.subject AS subject,
+          e.body AS body,
+          e."isBounced" AS isBounced,
+          e."isSpamReported" AS isSpamReported,
+          e."createdAt" AS "createdAt",
+          JSON_BUILD_OBJECT(
+            'id', s.id,
+            'displayName', s."displayName"
+          ) AS sender,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', ev.id,
+                'eventType', ev."eventType"
+              )
+            ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
+          )  AS events
+        FROM email e
+        JOIN sender s ON s.id = e."senderId"
+        LEFT JOIN email_event ev ON ev."emailId" = e.id
+        WHERE e.id = ${id}
+        GROUP BY e.id, s.id;
+      `;
 
-    if (!email) {
-      throw new CustomHttpException(
-        HttpStatus.NOT_FOUND,
-        ERROR_MSG.EMAIL_NOT_FOUND,
-      );
-    }
+    const [email] = await this.prisma.$queryRaw<Email[]>(query);
 
-    if (!email.scheduledAt) {
-      throw new CustomHttpException(
-        HttpStatus.BAD_REQUEST,
-        ERROR_MSG.EMAIL_CANNOT_MODIFY,
-      );
-    }
-
-    return this.prisma.email.delete({ where: { id } });
-  }
-
-  // Get all emails with filters
-  async findAll(filters: FilterEmailDto) {
-    const { subject, isBounced, isSpamReported, eventType } = filters;
-
-    return this.prisma.email.findMany({
-      where: {
-        subject: { contains: subject, mode: 'insensitive' },
-        isBounced,
-        isSpamReported,
-        events: eventType ? { some: { eventType } } : undefined,
-      },
-      include: {
-        contact: true,
-        events: true,
-      },
+    return responseBuilder({
+      message: SUCCESS_MSG.EMAIL_FETCHED,
+      result: email,
     });
-  }
-
-  // Get a single email by ID
-  async findOne(id: string) {
-    const email = await this.prisma.email.findUnique({
-      where: { id },
-      include: {
-        contact: true,
-        events: true,
-      },
-    });
-
-    if (!email) {
-      throw new CustomHttpException(
-        ERROR_MSG.EMAIL_NOT_FOUND,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    return email;
   }
 
   // Check if a email exists
