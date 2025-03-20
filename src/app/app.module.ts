@@ -6,6 +6,9 @@ import { CompanyModule } from './modules/company/company.module';
 import { TagModule } from './modules/tag/tag.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { SenderModule } from './modules/sender/sender.module';
+import { DraftModule } from './modules/draft/draft.module';
+import { ScheduledEmailModule } from './modules/scheduled-email/scheduled-email.module';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
   imports: [
@@ -14,6 +17,9 @@ import { SenderModule } from './modules/sender/sender.module';
     ContactModule,
     TagModule,
     SenderModule,
+    DraftModule,
+    ScheduledEmailModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

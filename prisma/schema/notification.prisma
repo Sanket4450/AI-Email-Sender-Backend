@@ -10,5 +10,5 @@ model Notification {
 }
 
 enum NotificationType {
-  REPLY
+  reply
 }

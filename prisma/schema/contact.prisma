@@ -7,9 +7,10 @@ model Contact {
   linkedInUrl   String?
   location      String?
   contactTags   ContactTag[]
-  status        ContactStatus  @default(NOT_CONTACTED)
   companyId     String
+  events        ContactEvent[]
   company       Company        @relation(fields: [companyId], references: [id])
+  contactScheduledEmails ScheduledEmailContact[]
   contactDrafts DraftContact[]
   emails        Email[]
   createdAt     DateTime       @default(now())
@@ -17,14 +18,6 @@ model Contact {
 
   @@index([name, email])
   @@map("contact")
-}
-
-enum ContactStatus {
-  NOT_CONTACTED
-  EMAIL_SENT
-  REJECTED
-  PENDING
-  REPLIED
 }
 
 model ContactTag {
@@ -35,4 +28,22 @@ model ContactTag {
 
   @@id([contactId, tagId])
   @@map("contact_tag")
+}
+
+model ContactEvent {
+  id        String           @id @default(cuid())
+  contactId String
+  contact   Contact          @relation(fields: [contactId], references: [id])
+  eventType ContactEventType
+  createdAt DateTime         @default(now())
+
+  @@map("contact_event")
+}
+
+enum ContactEventType {
+  notContacted
+  emailSent
+  rejected
+  pending
+  replied
 }

@@ -15,6 +15,7 @@ export const ERROR_MSG = {
   // Contact
   CONTACT_NOT_FOUND: 'Contact not found',
   CONTACT_ALREADY_EXISTS: 'Contact already exists with this email',
+  ONE_OR_MORE_CONTACTS_NOT_FOUND: 'One or more contacts not found',
 
   // Tag
   TAG_NOT_FOUND: 'Tag not found',
@@ -32,6 +33,13 @@ export const ERROR_MSG = {
   // Encryption
   ENCRYPTION_FAILED: 'Encryption failed',
   DECRYPTION_FAILED: 'Decryption failed',
+
+  // Draft
+  DRAFT_NOT_FOUND: 'Draft not found',
+
+  // Email
+  EMAIL_NOT_FOUND: 'Email not found',
+  EMAIL_CANNOT_MODIFY: 'Email cannot be modified',
 };
 
 export const VALIDATION_MSG = {
@@ -86,4 +94,18 @@ export const SUCCESS_MSG = {
   SENDER_DELETED: 'Sender deleted successfully',
   SENDERS_FETCHED: 'Senders fetched successfully',
   SENDER_FETCHED: 'Sender fetched successfully',
+
+  // Draft
+  DRAFT_CREATED: 'Draft created successfully',
+  DRAFT_UPDATED: 'Draft updated successfully',
+  DRAFT_DELETED: 'Draft deleted successfully',
+  DRAFTS_FETCHED: 'Draftss fetched successfully',
+  DRAFT_FETCHED: 'Draft fetched successfully',
+
+  // Email
+  EMAIL_CREATED: 'Email created successfully',
+  EMAIL_UPDATED: 'Email updated successfully',
+  EMAIL_DELETED: 'Email deleted successfully',
+  EMAILS_FETCHED: 'Emails fetched successfully',
+  EMAIL_FETCHED: 'Email fetched successfully',
 };

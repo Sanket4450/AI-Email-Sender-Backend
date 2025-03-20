@@ -1,15 +1,17 @@
 model Sender {
-  id          String   @id @default(cuid())
-  displayName String
-  name        String
-  email       String
-  apiKey      String
-  esp         String
-  priority    Int      @default(1)
-  target      Int
-  sentCount   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String           @id @default(cuid())
+  displayName     String
+  name            String
+  email           String
+  apiKey          String
+  esp             String
+  priority        Int              @default(1)
+  target          Int
+  sentCount       Int              @default(0)
+  scheduledEmails ScheduledEmail[]
+  emails          Email[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   @@map("sender")
 }

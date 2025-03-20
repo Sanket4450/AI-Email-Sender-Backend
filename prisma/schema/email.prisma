@@ -3,10 +3,11 @@ model Email {
   subject        String
   body           String
   contactId      String
-  recipient      Contact        @relation(fields: [contactId], references: [id])
-  scheduledAt    DateTime?
+  contact        Contact        @relation(fields: [contactId], references: [id])
   isBounced      Boolean        @default(false)
   isSpamReported Boolean        @default(false)
+  senderId       String
+  sender         Sender         @relation(fields: [senderId], references: [id])
   events         EmailEvent[]
   notifications  Notification[]
   createdAt      DateTime       @default(now())
@@ -17,29 +18,54 @@ model Email {
 }
 
 model EmailEvent {
-  id        String    @id @default(cuid())
+  id        String         @id @default(cuid())
   emailId   String
-  email     Email     @relation(fields: [emailId], references: [id])
-  eventType EventType
-  createdAt DateTime  @default(now())
+  email     Email          @relation(fields: [emailId], references: [id])
+  eventType EmailEventType
+  createdAt DateTime       @default(now())
 
   @@map("email_event")
 }
 
-enum EventType {
-  PROCESSED
-  DELIVERED
-  OPENED
-  CLICKED
+enum EmailEventType {
+  processed
+  delivered
+  opened
+  clicked
+}
+
+model ScheduledEmail {
+  id            String                  @id @default(cuid())
+  subject       String
+  body          String
+  scheduledAt   DateTime
+  senderId      String
+  sender        Sender                  @relation(fields: [senderId], references: [id])
+  emailContacts ScheduledEmailContact[]
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+
+  @@index([subject])
+  @@map("scheduled_email")
+}
+
+model ScheduledEmailContact {
+  contactId String
+  contact   Contact        @relation(fields: [contactId], references: [id])
+  emailId   String
+  email     ScheduledEmail @relation(fields: [emailId], references: [id])
+
+  @@id([emailId, contactId])
+  @@map("scheduled_email_contact")
 }
 
 model Draft {
-  id         String         @id @default(cuid())
-  subject    String?
-  body       String?
-  recipients DraftContact[]
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  id            String         @id @default(cuid())
+  subject       String?
+  body          String?
+  draftContacts DraftContact[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([subject])
   @@map("draft")
