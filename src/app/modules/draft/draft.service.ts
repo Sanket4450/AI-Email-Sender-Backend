@@ -155,6 +155,13 @@ export class DraftService {
 
     const [draft] = await this.prisma.$queryRaw<Draft[]>(query);
 
+    if (!draft) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.DRAFT_NOT_FOUND,
+      );
+    }
+
     return responseBuilder({
       message: SUCCESS_MSG.DRAFT_FETCHED,
       result: draft,

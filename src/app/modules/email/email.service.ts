@@ -115,6 +115,13 @@ export class EmailService {
 
     const [email] = await this.prisma.$queryRaw<Email[]>(query);
 
+    if (!email) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.EMAIL_NOT_FOUND,
+      );
+    }
+
     return responseBuilder({
       message: SUCCESS_MSG.EMAIL_FETCHED,
       result: email,

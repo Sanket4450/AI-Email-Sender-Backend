@@ -63,7 +63,7 @@ export class ScheduledEmailService {
     await this.scheduledEmailExists(id);
 
     // Validate that the sender exists
-    if (senderId) await this.senderService.senderExists(id);
+    if (senderId) await this.senderService.senderExists(senderId);
 
     // Validate that all provided contact IDs exist in the database
     if (contactIds) {
@@ -86,10 +86,10 @@ export class ScheduledEmailService {
         ...updateScheduledEmailBody,
         ...(senderId && { sender: { connect: { id: senderId } } }),
         ...(contactIds?.length && {
-          contacts: {
+          emailContacts: {
             connectOrCreate: contactIds.map((contactId) => ({
               where: {
-                scheduledEmailId_contactId: { scheduledEmailId: id, contactId },
+                emailId_contactId: { emailId: id, contactId },
               },
               create: { contact: { connect: { id: contactId } } },
             })),
@@ -122,9 +122,14 @@ export class ScheduledEmailService {
   async getScheduledEmails() {
     const query = Prisma.sql`
       SELECT
-        d.id AS id,
-        d.subject AS subject,
-        d."createdAt" AS "createdAt",
+        e.id AS id,
+        e.subject AS subject,
+        e."scheduledAt" AS "scheduledAt",
+        e."createdAt" AS "createdAt",
+        JSON_BUILD_OBJECT(
+          'id', s.id,
+          'displayName', s."displayName"
+        ) AS sender,
         COALESCE(
           JSON_AGG(
             JSON_BUILD_OBJECT(
@@ -133,10 +138,11 @@ export class ScheduledEmailService {
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts
-      FROM scheduled_email d
-      LEFT JOIN scheduledEmail_contact dc ON d.id = dc."scheduledEmailId"
+      FROM scheduled_email e
+      JOIN sender s ON s.id = e."senderId"
+      LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
-      GROUP BY d.id
+      GROUP BY e.id, s.id;
     `;
 
     const scheduledEmails =
@@ -152,10 +158,15 @@ export class ScheduledEmailService {
   async getSingleScheduledEmail(id: string) {
     const query = Prisma.sql`
       SELECT
-        d.id AS id,
-        d.subject AS subject,
-        d.body AS body,
-        d."createdAt" AS "createdAt",
+        e.id AS id,
+        e.subject AS subject,
+        e.body AS body,
+        e."scheduledAt" AS "scheduledAt",
+        e."createdAt" AS "createdAt",
+        JSON_BUILD_OBJECT(
+          'id', s.id,
+          'displayName', s."displayName"
+        ) AS sender,
         COALESCE(
           JSON_AGG(
             JSON_BUILD_OBJECT(
@@ -164,15 +175,23 @@ export class ScheduledEmailService {
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts
-      FROM "scheduledEmail" d
-      LEFT JOIN "scheduledEmail_contact" dc ON d.id = dc."scheduledEmailId"
+      FROM scheduled_email e
+      JOIN sender s ON s.id = e."senderId"
+      LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
-      WHERE d.id = ${id}
-      GROUP BY d.id
+      WHERE e.id = ${id}
+      GROUP BY e.id, s.id;
     `;
 
     const [scheduledEmail] =
       await this.prisma.$queryRaw<ScheduledEmail[]>(query);
+
+    if (!scheduledEmail) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.EMAIL_NOT_FOUND,
+      );
+    }
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAIL_FETCHED,
