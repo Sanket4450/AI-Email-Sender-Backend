@@ -15,7 +15,7 @@ export class DraftService {
   async createDraft(body: CreateDraftDto) {
     const { contactIds, ...createDraftBody } = body;
 
-    // Validate that all provided recipient IDs exist in the database
+    // Validate that all provided contact IDs exist in the database
     if (contactIds) {
       const existingContacts = await this.prisma.contact.findMany({
         where: { id: { in: contactIds } },
@@ -29,11 +29,11 @@ export class DraftService {
       }
     }
 
-    // Create the draft and associate recipients
+    // Create the draft and associate contacts
     await this.prisma.draft.create({
       data: {
         ...createDraftBody,
-        recipients: contactIds
+        contacts: contactIds
           ? {
               create: contactIds.map((contactId) => ({
                 contact: { connect: { id: contactId } },
@@ -54,7 +54,7 @@ export class DraftService {
 
     await this.draftExists(id);
 
-    // Validate that all provided recipient IDs exist in the database
+    // Validate that all provided contact IDs exist in the database
     if (contactIds) {
       const existingContacts = await this.prisma.contact.findMany({
         where: { id: { in: contactIds } },
@@ -68,13 +68,13 @@ export class DraftService {
       }
     }
 
-    // Update the draft and re-associate recipients
+    // Update the draft and re-associate contacts
     await this.prisma.draft.update({
       where: { id },
       data: {
         ...updateDraftBody,
         ...(contactIds?.length && {
-          recipients: {
+          contacts: {
             connectOrCreate: contactIds.map((contactId) => ({
               where: { draftId_contactId: { draftId: id, contactId } },
               create: { contact: { connect: { id: contactId } } },
@@ -115,7 +115,7 @@ export class DraftService {
               'name', c.name
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        )  AS recipients
+        )  AS contacts
       FROM draft d
       LEFT JOIN draft_contact dc ON d.id = dc."draftId"
       LEFT JOIN contact c ON dc."contactId" = c.id
@@ -145,7 +145,7 @@ export class DraftService {
               'name', c.name
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        )  AS recipients
+        )  AS contacts
       FROM draft d
       LEFT JOIN draft_contact dc ON d.id = dc."draftId"
       LEFT JOIN contact c ON dc."contactId" = c.id

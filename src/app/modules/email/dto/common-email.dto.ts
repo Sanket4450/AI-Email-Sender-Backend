@@ -1,6 +1,9 @@
 import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
 
-export class CommonDraftDto {
+export class CommonEmailDto {
+  @IsString()
+  senderId: string;
+
   @IsString()
   subject: string;
 

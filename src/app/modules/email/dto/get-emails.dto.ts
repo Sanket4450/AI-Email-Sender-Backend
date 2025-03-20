@@ -3,7 +3,7 @@ import { EventType } from '@prisma/client';
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { PaginationDto, SearchDto } from 'src/app/types/dto/common.dto';
 
-export class GetDraftsDto extends IntersectionType(SearchDto, PaginationDto) {
+export class GetEmailsDto extends IntersectionType(SearchDto, PaginationDto) {
   @IsOptional()
   @IsString()
   @IsNotEmpty()

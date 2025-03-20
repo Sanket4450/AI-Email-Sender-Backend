@@ -1,7 +1,3 @@
-import { IsDateString, IsOptional } from "class-validator";
+import { CommonEmailDto } from './common-email.dto';
 
-export class UpdateDraftDto {
-  @IsOptional()
-  @IsDateString()
-  scheduledAt?: string;
-}
+export class UpdateEmailDto extends CommonEmailDto {}
