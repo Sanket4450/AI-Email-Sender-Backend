@@ -129,17 +129,25 @@ export class ScheduledEmailService {
 
     const searchKeys = ['e.subject', 'c.name', 's.name'];
 
-    const searchWhere = Prisma.raw(
-      search
-        ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-        : '',
-    );
+    const searchWhere = search
+      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
+      : Prisma.empty;
 
-    const whereClause = Prisma.raw(
-      `${contactIds.length ? `c.id IN (${contactIds.join(',')}) AND` : ''}
-          ${senderId ? `s.id = ${senderId} AND` : ''}
-          (${searchWhere})`,
-    );
+    const conditions: Prisma.Sql[] = [];
+
+    if (contactIds.length) {
+      conditions.push(Prisma.sql`c.id IN (${Prisma.join(contactIds)})`);
+    }
+    if (senderId) {
+      conditions.push(Prisma.sql`s.id = ${senderId}`);
+    }
+    if (search) {
+      conditions.push(Prisma.sql`(${searchWhere})`);
+    }
+
+    const whereClause = conditions.length
+      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      : Prisma.empty;
 
     const rawQuery = Prisma.sql`
       SELECT
@@ -163,7 +171,7 @@ export class ScheduledEmailService {
       JOIN sender s ON s.id = e."senderId"
       LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
-      WHERE ${whereClause}
+      ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
       GROUP BY e.id, s.id
       OFFSET ${offset}
       LIMIT ${limit};
@@ -195,10 +203,15 @@ export class ScheduledEmailService {
           JSON_AGG(
             JSON_BUILD_OBJECT(
               'id', c.id,
-              'name', c.name
+              'name', c.name,
+              'position', c.position,
+              'email', c.email,
+              'phone', c.phone,
+              'linkedInUrl', c."linkedInUrl",
+              'location', c.location
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        )  AS contacts
+        ) AS contacts
       FROM scheduled_email e
       JOIN sender s ON s.id = e."senderId"
       LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"

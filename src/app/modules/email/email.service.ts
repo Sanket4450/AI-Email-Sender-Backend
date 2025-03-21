@@ -74,7 +74,7 @@ export class EmailService {
 
     const searchWhere = search
       ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-      : Prisma.sql``;
+      : Prisma.empty;
 
     const conditions: Prisma.Sql[] = [];
 
@@ -156,7 +156,12 @@ export class EmailService {
           e."createdAt" AS "createdAt",
           JSON_BUILD_OBJECT(
             'id', c.id,
-            'name', c."name"
+            'name', c."name",
+            'position', c.position,
+            'email', c.email,
+            'phone', c.phone,
+            'linkedInUrl', c."linkedInUrl",
+            'location', c.location
           ) AS contact,
           JSON_BUILD_OBJECT(
             'id', s.id,
