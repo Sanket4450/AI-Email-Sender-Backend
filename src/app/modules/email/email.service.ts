@@ -7,6 +7,7 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { Email, Prisma } from '@prisma/client';
 import { GetEmailsDto } from './dto/get-emails.dto';
+import { getPagination } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class EmailService {
@@ -51,6 +52,41 @@ export class EmailService {
 
   // Get all emails
   async getEmails(query: GetEmailsDto) {
+    const {
+      search,
+      contactId,
+      senderId,
+      isBounced = false,
+      isSpamReported = false,
+      eventTypes = [],
+      isDeepSearch = false,
+    } = query;
+    const { offset, limit } = getPagination(query);
+
+    const searchKeyword = `'%${search}%'`;
+
+    const searchKeys = [
+      'e.subject',
+      'c.name',
+      's.name',
+      ...(isDeepSearch ? ['e.body'] : []),
+    ];
+
+    const searchWhere = Prisma.raw(
+      search
+        ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
+        : '',
+    );
+
+    const whereClause = Prisma.raw(
+      `${contactId ? `c.id = ${contactId} AND` : ''}
+      ${senderId ? `s.id = ${senderId} AND` : ''}
+      ${isBounced ? `e."isBounced" = ${isBounced} AND` : ''}
+      ${isSpamReported ? `e."isSpamReported" = ${isSpamReported} AND` : ''}
+      ${eventTypes.length ? `ev."eventType" IN (${eventTypes.join(',')}) AND` : ''}
+      (${searchWhere})`,
+    );
+
     const sql = Prisma.sql`
         SELECT
           e.id AS id,
@@ -71,9 +107,13 @@ export class EmailService {
             ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
           )  AS events
         FROM email e
+        WHERE ${whereClause}
+        JOIN contact c ON c.id = e."contactId"
         JOIN sender s ON s.id = e."senderId"
         LEFT JOIN email_event ev ON ev."emailId" = e.id
-        GROUP BY e.id, s.id;
+        GROUP BY e.id, s.id
+        OFFSET ${offset}
+        LIMIT ${limit};
       `;
 
     const emails = await this.prisma.$queryRaw<Email[]>(sql);

@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 export class CommonEmailDto {
   @IsString()

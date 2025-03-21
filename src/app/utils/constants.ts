@@ -23,3 +23,10 @@ export const EMAIL_SEND_TYPES = {
   EMAIL: 'email',
   FOLLOW_UP: 'follow-up',
 };
+
+export const EMAIL_EVENTS = {
+  PROCESSED: 'processed',
+  DELIVERED: 'delivered',
+  OPENED: 'opened',
+  CLICKED: 'clicked',
+};

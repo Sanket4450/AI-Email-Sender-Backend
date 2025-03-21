@@ -105,8 +105,6 @@ export class SenderService {
       SELECT
         s.id AS id,
         s."displayName" AS "displayName",
-        s.name AS name,
-        s.email AS email,
         s.esp AS esp,
         s.priority AS priority,
         s.target AS target,
