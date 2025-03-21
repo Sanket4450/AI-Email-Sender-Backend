@@ -6,6 +6,8 @@ import { UpdateDraftDto } from './dto/update-draft.dto';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { Draft, Prisma } from '@prisma/client';
+import { GetDraftsDto } from './dto/get-drafts.dto';
+import { getPagination } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class DraftService {
@@ -102,7 +104,31 @@ export class DraftService {
   }
 
   // Get all drafts
-  async getDrafts() {
+  async getDrafts(query: GetDraftsDto) {
+    const { search, contactIds = [] } = query;
+    const { offset, limit } = getPagination(query);
+
+    const searchKeyword = `'%${search}%'`;
+
+    const searchKeys = ['e.subject', 'c.name', 's.name'];
+
+    const searchWhere = search
+      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
+      : Prisma.empty;
+
+    const conditions: Prisma.Sql[] = [];
+
+    if (contactIds.length) {
+      conditions.push(Prisma.sql`c.id IN (${Prisma.join(contactIds)})`);
+    }
+    if (search) {
+      conditions.push(Prisma.sql`(${searchWhere})`);
+    }
+
+    const whereClause = conditions.length
+      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      : Prisma.empty;
+
     const rawQuery = Prisma.sql`
       SELECT
         d.id AS id,
@@ -119,7 +145,10 @@ export class DraftService {
       FROM draft d
       LEFT JOIN draft_contact dc ON d.id = dc."draftId"
       LEFT JOIN contact c ON dc."contactId" = c.id
+      ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
       GROUP BY d.id
+      OFFSET ${offset}
+      LIMIT ${limit};
     `;
 
     const drafts = await this.prisma.$queryRaw<Draft[]>(rawQuery);
@@ -142,7 +171,12 @@ export class DraftService {
           JSON_AGG(
             JSON_BUILD_OBJECT(
               'id', c.id,
-              'name', c.name
+              'name', c.name,
+              'position', c.position,
+              'email', c.email,
+              'phone', c.phone,
+              'linkedInUrl', c."linkedInUrl",
+              'location', c.location
             )
           ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
         )  AS contacts

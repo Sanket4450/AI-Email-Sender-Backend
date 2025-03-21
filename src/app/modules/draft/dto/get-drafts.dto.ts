@@ -1,10 +1,10 @@
 import { IntersectionType } from '@nestjs/mapped-types';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 import { PaginationDto, SearchDto } from 'src/app/types/dto/common.dto';
 
 export class GetDraftsDto extends IntersectionType(SearchDto, PaginationDto) {
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  contactId?: string;
+  @IsArray()
+  @IsString({ each: true })
+  contactIds?: string[];
 }

@@ -12,6 +12,7 @@ import {
 import { DraftService } from './draft.service';
 import { CreateDraftDto } from './dto/create-draft.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
+import { GetDraftsDto } from './dto/get-drafts.dto';
 
 @Controller('api/drafts')
 export class DraftController {
@@ -37,9 +38,9 @@ export class DraftController {
   }
 
   // Get all drafts
-  @Get()
-  async getDrafts() {
-    return this.draftService.getDrafts();
+  @Post('get')
+  async getDrafts(@Body() body: GetDraftsDto) {
+    return this.draftService.getDrafts(body);
   }
 
   // Get a draft by ID
