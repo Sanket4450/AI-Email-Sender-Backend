@@ -103,7 +103,7 @@ export class DraftService {
 
   // Get all drafts
   async getDrafts() {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         d.id AS id,
         d.subject AS subject,
@@ -122,7 +122,7 @@ export class DraftService {
       GROUP BY d.id
     `;
 
-    const drafts = await this.prisma.$queryRaw<Draft[]>(query);
+    const drafts = await this.prisma.$queryRaw<Draft[]>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.DRAFTS_FETCHED,
@@ -132,7 +132,7 @@ export class DraftService {
 
   // Get a draft by ID
   async getSingleDraft(id: string) {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         d.id AS id,
         d.subject AS subject,
@@ -153,7 +153,7 @@ export class DraftService {
       GROUP BY d.id
     `;
 
-    const [draft] = await this.prisma.$queryRaw<Draft[]>(query);
+    const [draft] = await this.prisma.$queryRaw<Draft[]>(rawQuery);
 
     if (!draft) {
       throw new CustomHttpException(

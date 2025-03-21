@@ -1,5 +1,4 @@
 import { IntersectionType } from '@nestjs/mapped-types';
-import { EmailEventType } from '@prisma/client';
 import {
   IsArray,
   IsBoolean,
@@ -13,9 +12,9 @@ import { EMAIL_EVENTS } from 'src/app/utils/constants';
 
 export class GetEmailsDto extends IntersectionType(SearchDto, PaginationDto) {
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  contactId?: string;
+  @IsArray()
+  @IsString({ each: true })
+  contactIds?: string[];
 
   @IsOptional()
   @IsString()

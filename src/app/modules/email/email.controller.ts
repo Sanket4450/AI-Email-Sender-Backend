@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { GetEmailsDto } from './dto/get-emails.dto';
@@ -14,8 +14,8 @@ export class EmailController {
   }
 
   // Get all emails with query
-  @Get()
-  async getEmails(@Query() query: GetEmailsDto) {
+  @Post('get')
+  async getEmails(@Body() query: GetEmailsDto) {
     return this.emailService.getEmails(query);
   }
 

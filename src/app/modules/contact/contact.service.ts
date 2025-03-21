@@ -116,12 +116,11 @@ export class ContactService {
     await this.prisma.contact.delete({ where: { id } });
 
     return responseBuilder({ message: SUCCESS_MSG.CONTACT_DELETED });
-
   }
 
   // Get all contacts
   async getContacts() {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         c.id AS id,
         c.name AS name,
@@ -155,7 +154,7 @@ export class ContactService {
       GROUP BY c.id, co.id
     `;
 
-    const contacts = await this.prisma.$queryRaw<Contact[]>(query);
+    const contacts = await this.prisma.$queryRaw<Contact[]>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.CONTACTS_FETCHED,
@@ -165,7 +164,7 @@ export class ContactService {
 
   // Get a contact by ID
   async getSingleContact(id: string) {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         c.id AS id,
         c.name AS name,
@@ -201,7 +200,7 @@ export class ContactService {
       GROUP BY c.id, co.id
     `;
 
-    const [contact] = await this.prisma.$queryRaw<Contact[]>(query);
+    const [contact] = await this.prisma.$queryRaw<Contact[]>(rawQuery);
 
     if (!contact) {
       throw new CustomHttpException(

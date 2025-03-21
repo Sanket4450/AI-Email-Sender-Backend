@@ -102,7 +102,7 @@ export class CompanyService {
 
   // Get all companies
   async getCompanies() {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         c.id AS id,
         c.title AS title,
@@ -123,7 +123,7 @@ export class CompanyService {
       GROUP BY c.id
     `;
 
-    const companies = await this.prisma.$queryRaw<Company[]>(query);
+    const companies = await this.prisma.$queryRaw<Company[]>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.COMPANIES_FETCHED,
@@ -133,7 +133,7 @@ export class CompanyService {
 
   // Get a company by ID
   async getSingleCompany(id: string) {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         c.id AS id,
         c.title AS title,
@@ -155,7 +155,7 @@ export class CompanyService {
       GROUP BY c.id
     `;
 
-    const [company] = await this.prisma.$queryRaw<Company[]>(query);
+    const [company] = await this.prisma.$queryRaw<Company[]>(rawQuery);
 
     if (!company) {
       throw new CustomHttpException(

@@ -125,7 +125,7 @@ export class SenderService {
 
   // Get a sender by ID
   async getSingleSender(id: string) {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         s.id AS id,
         s."displayName" AS "displayName",
@@ -140,7 +140,7 @@ export class SenderService {
       WHERE s.id = ${id}
     `;
 
-    const [sender] = await this.prisma.$queryRaw<Sender[]>(query);
+    const [sender] = await this.prisma.$queryRaw<Sender[]>(rawQuery);
 
     if (!sender) {
       throw new CustomHttpException(

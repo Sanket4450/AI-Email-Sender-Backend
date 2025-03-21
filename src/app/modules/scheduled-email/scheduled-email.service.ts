@@ -7,6 +7,8 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { ScheduledEmail, Prisma } from '@prisma/client';
 import { SenderService } from '../sender/sender.service';
+import { GetScheduledEmailsDto } from './dto/get-scheduled-emails.dto';
+import { getPagination } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class ScheduledEmailService {
@@ -119,8 +121,27 @@ export class ScheduledEmailService {
   }
 
   // Get all scheduledEmails
-  async getScheduledEmails() {
-    const query = Prisma.sql`
+  async getScheduledEmails(query: GetScheduledEmailsDto) {
+    const { search, contactIds = [], senderId } = query;
+    const { offset, limit } = getPagination(query);
+
+    const searchKeyword = `'%${search}%'`;
+
+    const searchKeys = ['e.subject', 'c.name', 's.name'];
+
+    const searchWhere = Prisma.raw(
+      search
+        ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
+        : '',
+    );
+
+    const whereClause = Prisma.raw(
+      `${contactIds.length ? `c.id IN (${contactIds.join(',')}) AND` : ''}
+          ${senderId ? `s.id = ${senderId} AND` : ''}
+          (${searchWhere})`,
+    );
+
+    const rawQuery = Prisma.sql`
       SELECT
         e.id AS id,
         e.subject AS subject,
@@ -142,11 +163,14 @@ export class ScheduledEmailService {
       JOIN sender s ON s.id = e."senderId"
       LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
-      GROUP BY e.id, s.id;
+      WHERE ${whereClause}
+      GROUP BY e.id, s.id
+      OFFSET ${offset}
+      LIMIT ${limit};
     `;
 
     const scheduledEmails =
-      await this.prisma.$queryRaw<ScheduledEmail[]>(query);
+      await this.prisma.$queryRaw<ScheduledEmail[]>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAILS_FETCHED,
@@ -156,7 +180,7 @@ export class ScheduledEmailService {
 
   // Get a scheduledEmail by ID
   async getSingleScheduledEmail(id: string) {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
       SELECT
         e.id AS id,
         e.subject AS subject,
@@ -184,7 +208,7 @@ export class ScheduledEmailService {
     `;
 
     const [scheduledEmail] =
-      await this.prisma.$queryRaw<ScheduledEmail[]>(query);
+      await this.prisma.$queryRaw<ScheduledEmail[]>(rawQuery);
 
     if (!scheduledEmail) {
       throw new CustomHttpException(

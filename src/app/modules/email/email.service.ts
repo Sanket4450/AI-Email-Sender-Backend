@@ -54,7 +54,7 @@ export class EmailService {
   async getEmails(query: GetEmailsDto) {
     const {
       search,
-      contactId,
+      contactIds = [],
       senderId,
       isBounced = false,
       isSpamReported = false,
@@ -72,28 +72,48 @@ export class EmailService {
       ...(isDeepSearch ? ['e.body'] : []),
     ];
 
-    const searchWhere = Prisma.raw(
-      search
-        ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-        : '',
-    );
+    const searchWhere = search
+      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
+      : Prisma.sql``;
 
-    const whereClause = Prisma.raw(
-      `${contactId ? `c.id = ${contactId} AND` : ''}
-      ${senderId ? `s.id = ${senderId} AND` : ''}
-      ${isBounced ? `e."isBounced" = ${isBounced} AND` : ''}
-      ${isSpamReported ? `e."isSpamReported" = ${isSpamReported} AND` : ''}
-      ${eventTypes.length ? `ev."eventType" IN (${eventTypes.join(',')}) AND` : ''}
-      (${searchWhere})`,
-    );
+    const conditions: Prisma.Sql[] = [];
 
-    const sql = Prisma.sql`
+    if (contactIds.length) {
+      conditions.push(Prisma.sql`c.id IN (${Prisma.join(contactIds)})`);
+    }
+    if (senderId) {
+      conditions.push(Prisma.sql`s.id = ${senderId}`);
+    }
+    if (isBounced) {
+      conditions.push(Prisma.sql`e."isBounced" = ${isBounced}`);
+    }
+    if (isSpamReported) {
+      conditions.push(Prisma.sql`e."isSpamReported" = ${isSpamReported}`);
+    }
+    if (eventTypes.length) {
+      conditions.push(
+        Prisma.sql`ev."eventType" IN (${Prisma.join(eventTypes)})`,
+      );
+    }
+    if (search) {
+      conditions.push(Prisma.sql`(${searchWhere})`);
+    }
+
+    const whereClause = conditions.length
+      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      : Prisma.empty;
+
+    const rawQuery = Prisma.sql`
         SELECT
           e.id AS id,
           e.subject AS subject,
           e."isBounced" AS isBounced,
           e."isSpamReported" AS isSpamReported,
           e."createdAt" AS "createdAt",
+          JSON_BUILD_OBJECT(
+            'id', c.id,
+            'name', c."name"
+          ) AS contact,
           JSON_BUILD_OBJECT(
             'id', s.id,
             'displayName', s."displayName"
@@ -107,16 +127,16 @@ export class EmailService {
             ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
           )  AS events
         FROM email e
-        WHERE ${whereClause}
         JOIN contact c ON c.id = e."contactId"
         JOIN sender s ON s.id = e."senderId"
         LEFT JOIN email_event ev ON ev."emailId" = e.id
-        GROUP BY e.id, s.id
+        ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
+        GROUP BY e.id, c.id, s.id
         OFFSET ${offset}
         LIMIT ${limit};
       `;
 
-    const emails = await this.prisma.$queryRaw<Email[]>(sql);
+    const emails = await this.prisma.$queryRaw<Email[]>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAILS_FETCHED,
@@ -126,7 +146,7 @@ export class EmailService {
 
   // Get a email by ID
   async getSingleEmail(id: string) {
-    const query = Prisma.sql`
+    const rawQuery = Prisma.sql`
         SELECT
           e.id AS id,
           e.subject AS subject,
@@ -134,6 +154,10 @@ export class EmailService {
           e."isBounced" AS isBounced,
           e."isSpamReported" AS isSpamReported,
           e."createdAt" AS "createdAt",
+          JSON_BUILD_OBJECT(
+            'id', c.id,
+            'name', c."name"
+          ) AS contact,
           JSON_BUILD_OBJECT(
             'id', s.id,
             'displayName', s."displayName"
@@ -147,13 +171,14 @@ export class EmailService {
             ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
           )  AS events
         FROM email e
+        JOIN contact c ON c.id = e."contactId"
         JOIN sender s ON s.id = e."senderId"
         LEFT JOIN email_event ev ON ev."emailId" = e.id
         WHERE e.id = ${id}
-        GROUP BY e.id, s.id;
+        GROUP BY e.id, c.id, s.id;
       `;
 
-    const [email] = await this.prisma.$queryRaw<Email[]>(query);
+    const [email] = await this.prisma.$queryRaw<Email[]>(rawQuery);
 
     if (!email) {
       throw new CustomHttpException(

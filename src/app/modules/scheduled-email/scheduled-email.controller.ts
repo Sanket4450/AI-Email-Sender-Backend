@@ -12,6 +12,7 @@ import {
 import { ScheduledEmailService } from './scheduled-email.service';
 import { CreateScheduledEmailDto } from './dto/create-scheduled-email.dto';
 import { UpdateScheduledEmailDto } from './dto/update-scheduled-email.dto';
+import { GetScheduledEmailsDto } from './dto/get-scheduled-emails.dto';
 
 @Controller('api/scheduled-emails')
 export class ScheduledEmailController {
@@ -40,9 +41,9 @@ export class ScheduledEmailController {
   }
 
   // Get all drafts
-  @Get()
-  async getScheduledEmails() {
-    return this.draftService.getScheduledEmails();
+  @Post('get')
+  async getScheduledEmails(@Body() query: GetScheduledEmailsDto) {
+    return this.draftService.getScheduledEmails(query);
   }
 
   // Get a draft by ID
