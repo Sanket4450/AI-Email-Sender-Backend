@@ -22,14 +22,34 @@ export class FollowUpService {
   async createFollowUp(body: CreateFollowUpDto) {
     const { emailId, ...createFollowUpData } = body;
 
-    await this.emailService.emailExists(emailId);
+    const email = await this.emailService.emailExists(emailId, {
+      contact: true,
+      sender: true,
+    });
 
-    await this.prisma.followUp.create({
+    if (!email.messageId) {
+      throw new CustomHttpException(
+        HttpStatus.CONFLICT,
+        ERROR_MSG.FOLLOW_UP_CANNOT_SENT,
+      );
+    }
+
+    const followUp = await this.prisma.followUp.create({
       data: {
         ...createFollowUpData,
         email: { connect: { id: emailId } },
       },
     });
+
+    if (!createFollowUpData.scheduledAt) {
+      await this.espService.sendFollowUpEmail({
+        ...createFollowUpData,
+        referenceId: followUp.id,
+        messageId: email.messageId,
+        contact: email.contact,
+        sender: email.sender,
+      });
+    }
 
     return responseBuilder({
       message: SUCCESS_MSG.FOLLOW_UP_CREATED,

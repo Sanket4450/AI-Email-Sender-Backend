@@ -68,7 +68,7 @@ export class SendGridService {
     }
   }
 
-  async sendFollowEmail(props: SendgridFollowUpEmailProps): Promise<void> {
+  async sendFollowUpEmail(props: SendgridFollowUpEmailProps): Promise<void> {
     const {
       to,
       subject,

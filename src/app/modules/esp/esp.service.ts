@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ESPS } from 'src/app/utils/constants';
 import {
   SendgridEmailProps,
+  SendgridFollowUpEmailProps,
   SendGridService,
 } from './sendgrid/sendgrid.service';
 import { Contact, Sender } from '@prisma/client';
@@ -21,8 +22,9 @@ export interface SendEmailProps {
   sender: Sender;
 }
 
-export interface SendFollowUpEmailProps extends SendEmailProps {
+export interface SendFollowUpEmailProps extends EmailProps {
   messageId: string;
+  sender: Sender;
 }
 
 @Injectable()
@@ -59,33 +61,32 @@ export class ESPService {
     }
   }
 
-  // async sendFollowEmail(props: SendFollowUpEmailProps): Promise<void> {
-  //   const {
-  //     to,
-  //     subject,
-  //     body,
-  //     senderName,
-  //     senderEmail,
-  //     referenceId,
-  //     messageId,
-  //     apiKey,
-  //   } = props;
+  async sendFollowUpEmail(payload: SendFollowUpEmailProps): Promise<void> {
+    const { messageId, contact, sender } = payload;
 
-  //   sgMail.setApiKey(apiKey);
+    const apiKey = this.cryptoService.decrypt(sender.apiKey);
 
-  //   const mailOptions: MailDataRequired = {
-  //     from: { email: senderEmail, name: senderName },
-  //     to,
-  //     subject,
-  //     html: body,
-  //     headers: {
-  //       'In-Reply-To': messageId,
-  //       References: messageId,
-  //     },
-  //     customArgs: {
-  //       referenceId,
-  //       type: EMAIL_TYPES.FOLLOW_UP,
-  //     },
-  //   };
-  // }
+    switch (sender.esp) {
+      case ESPS.SENDGRID:
+        const mailOptions: SendgridFollowUpEmailProps = {
+          to: contact.email,
+          subject: payload.subject,
+          body: payload.body,
+          senderName: sender.name,
+          senderEmail: sender.email,
+          referenceId: payload.referenceId,
+          apiKey,
+          messageId,
+        };
+
+        await this.sendGridService.sendFollowUpEmail(mailOptions);
+        break;
+
+      default:
+        throw new CustomHttpException(
+          HttpStatus.CONFLICT,
+          ERROR_MSG.NOT_VALID_ESP,
+        );
+    }
+  }
 }

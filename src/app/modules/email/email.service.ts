@@ -208,8 +208,11 @@ export class EmailService {
   }
 
   // Check if a email exists
-  async emailExists(id: string) {
-    const email = await this.prisma.email.findUnique({ where: { id } });
+  async emailExists(id: string, include?: Prisma.EmailInclude) {
+    const email = await this.prisma.email.findUnique({
+      where: { id },
+      ...(include && { include }),
+    });
 
     if (!email) {
       throw new CustomHttpException(
