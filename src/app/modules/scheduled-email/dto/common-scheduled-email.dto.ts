@@ -17,5 +17,5 @@ export class CommonScheduledEmailDto {
   contactIds: string[];
 
   @IsDateString()
-  scheduledAt: string;
+  scheduledAt: Date;
 }

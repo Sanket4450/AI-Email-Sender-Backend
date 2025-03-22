@@ -9,5 +9,6 @@ import { ESPModule } from '../esp/esp.module';
   imports: [PrismaModule, SenderModule, ESPModule],
   providers: [EmailService],
   controllers: [EmailController],
+  exports: [EmailService],
 })
 export class EmailModule {}

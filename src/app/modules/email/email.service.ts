@@ -5,11 +5,10 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { SenderService } from '../sender/sender.service';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { Email, EmailType, Prisma } from '@prisma/client';
+import { Email, Prisma } from '@prisma/client';
 import { GetEmailsDto } from './dto/get-emails.dto';
 import { getPagination } from 'src/app/utils/common.utils';
 import { ESPService } from '../esp/esp.service';
-import { EMAIL_TYPES } from 'src/app/utils/constants';
 
 @Injectable()
 export class EmailService {
@@ -41,7 +40,6 @@ export class EmailService {
     const createdEmails = await this.prisma.email.createManyAndReturn({
       data: contacts.map((c) => ({
         ...createEmailBody,
-        type: EmailType.email,
         contactId: c.id,
         senderId,
       })),

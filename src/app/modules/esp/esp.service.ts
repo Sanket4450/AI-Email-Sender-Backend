@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { EMAIL_TYPES, ESPS } from 'src/app/utils/constants';
+import { ESPS } from 'src/app/utils/constants';
 import {
   SendgridEmailProps,
   SendGridService,
