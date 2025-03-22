@@ -9,6 +9,7 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { FollowUp, Prisma } from '@prisma/client';
 import { ESPService } from '../esp/esp.service';
+import { getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class FollowUpService {
@@ -90,21 +91,14 @@ export class FollowUpService {
 
     await this.emailService.emailExists(emailId);
 
-    const searchKeyword = `'%${search}%'`;
-
-    const searchKeys = ['fu.subject'];
-
-    const searchWhere = search
-      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-      : Prisma.empty;
-
     const conditions: Prisma.Sql[] = [];
 
     if (emailId) {
       conditions.push(Prisma.sql`fu.id = ${emailId}`);
     }
     if (search) {
-      conditions.push(Prisma.sql`(${searchWhere})`);
+      const searchKeys = ['fu.subject'];
+      conditions.push(getSearchCond(search, searchKeys));
     }
 
     const whereClause = conditions.length

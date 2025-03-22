@@ -8,10 +8,12 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { GetContactsDto } from './dto/get-contacts.dto';
 
 @Controller('api/contacts')
 export class ContactController {
@@ -38,8 +40,8 @@ export class ContactController {
 
   // Get all contacts
   @Get()
-  async getContacts() {
-    return this.contactService.getContacts();
+  async getContacts(@Query() query: GetContactsDto) {
+    return this.contactService.getContacts(query);
   }
 
   // Get a contact by ID

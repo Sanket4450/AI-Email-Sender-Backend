@@ -8,7 +8,7 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { ScheduledEmail, Prisma } from '@prisma/client';
 import { SenderService } from '../sender/sender.service';
 import { GetScheduledEmailsDto } from './dto/get-scheduled-emails.dto';
-import { getPagination } from 'src/app/utils/common.utils';
+import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class ScheduledEmailService {
@@ -125,14 +125,6 @@ export class ScheduledEmailService {
     const { search, contactIds = [], senderId } = query;
     const { offset, limit } = getPagination(query);
 
-    const searchKeyword = `'%${search}%'`;
-
-    const searchKeys = ['e.subject', 'c.name', 's.name'];
-
-    const searchWhere = search
-      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-      : Prisma.empty;
-
     const conditions: Prisma.Sql[] = [];
 
     if (contactIds.length) {
@@ -142,7 +134,8 @@ export class ScheduledEmailService {
       conditions.push(Prisma.sql`s.id = ${senderId}`);
     }
     if (search) {
-      conditions.push(Prisma.sql`(${searchWhere})`);
+      const searchKeys = ['e.subject', 'c.name', 's.name'];
+      conditions.push(getSearchCond(search, searchKeys));
     }
 
     const whereClause = conditions.length

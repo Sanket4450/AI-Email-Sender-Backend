@@ -6,6 +6,8 @@ import { UpdateCompanyyDto } from './dto/update-company.dto';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
+import { GetCompaniesDto } from './dto/get-companies.dto';
+import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class CompanyService {
@@ -101,7 +103,21 @@ export class CompanyService {
   }
 
   // Get all companies
-  async getCompanies() {
+  async getCompanies(query: GetCompaniesDto) {
+    const { search } = query;
+    const { offset, limit } = getPagination(query);
+
+    const conditions: Prisma.Sql[] = [];
+
+    if (search) {
+      const searchKeys = ['c.title', 'c.description', 'c.location', 't.title'];
+      conditions.push(getSearchCond(search, searchKeys));
+    }
+
+    const whereClause = conditions.length
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
+      : Prisma.empty;
+
     const rawQuery = Prisma.sql`
       SELECT
         c.id AS id,
@@ -120,8 +136,13 @@ export class CompanyService {
       FROM company c
       LEFT JOIN company_tag ct ON c.id = ct."companyId"
       LEFT JOIN tag t ON ct."tagId" = t.id
+      ${whereClause}
       GROUP BY c.id
+      OFFSET ${offset}
+      LIMIT ${limit};
     `;
+
+    console.log(rawQuery.sql, rawQuery.values);
 
     const companies = await this.prisma.$queryRaw<Company[]>(rawQuery);
 

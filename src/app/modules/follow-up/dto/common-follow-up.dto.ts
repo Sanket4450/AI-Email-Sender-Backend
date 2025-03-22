@@ -1,4 +1,4 @@
-import { IsDateString, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CommonFollowUpDto {
   @IsString()
@@ -10,6 +10,7 @@ export class CommonFollowUpDto {
   @IsString()
   body: string;
 
+  @IsOptional()
   @IsDateString()
   scheduledAt: Date;
 }

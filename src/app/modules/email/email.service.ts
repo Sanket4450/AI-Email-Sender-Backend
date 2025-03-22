@@ -7,7 +7,7 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { Email, Prisma } from '@prisma/client';
 import { GetEmailsDto } from './dto/get-emails.dto';
-import { getPagination } from 'src/app/utils/common.utils';
+import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { ESPService } from '../esp/esp.service';
 
 @Injectable()
@@ -72,19 +72,6 @@ export class EmailService {
     } = query;
     const { offset, limit } = getPagination(query);
 
-    const searchKeyword = `'%${search}%'`;
-
-    const searchKeys = [
-      'e.subject',
-      'c.name',
-      's.name',
-      ...(isDeepSearch ? ['e.body'] : []),
-    ];
-
-    const searchWhere = search
-      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-      : Prisma.empty;
-
     const conditions: Prisma.Sql[] = [];
 
     if (contactIds.length) {
@@ -105,7 +92,13 @@ export class EmailService {
       );
     }
     if (search) {
-      conditions.push(Prisma.sql`(${searchWhere})`);
+      const searchKeys = [
+        'e.subject',
+        'c.name',
+        's.name',
+        ...(isDeepSearch ? ['e.body'] : []),
+      ];
+      conditions.push(getSearchCond(search, searchKeys));
     }
 
     const whereClause = conditions.length
@@ -116,8 +109,8 @@ export class EmailService {
         SELECT
           e.id AS id,
           e.subject AS subject,
-          e."isBounced" AS isBounced,
-          e."isSpamReported" AS isSpamReported,
+          e."isBounced" AS "isBounced",
+          e."isSpamReported" AS "isSpamReported",
           e."createdAt" AS "createdAt",
           JSON_BUILD_OBJECT(
             'id', c.id,
@@ -144,6 +137,8 @@ export class EmailService {
         OFFSET ${offset}
         LIMIT ${limit};
       `;
+
+    console.log(rawQuery.sql);
 
     const emails = await this.prisma.$queryRaw<Email[]>(rawQuery);
 

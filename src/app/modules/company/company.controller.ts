@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyyDto } from './dto/create-company.dto';
 import { UpdateCompanyyDto } from './dto/update-company.dto';
+import { GetCompaniesDto } from './dto/get-companies.dto';
 
 @Controller('api/companies')
 export class CompanyController {
@@ -38,8 +40,8 @@ export class CompanyController {
 
   // Get all companies
   @Get()
-  async getCompanies() {
-    return this.companyService.getCompanies();
+  async getCompanies(@Query() query: GetCompaniesDto) {
+    return this.companyService.getCompanies(query);
   }
 
   // Get a company by ID

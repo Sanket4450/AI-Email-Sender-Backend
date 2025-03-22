@@ -4,7 +4,7 @@ import { CreateFollowUpDto } from './dto/create-follow-up.dto';
 import { UpdateFollowUpDto } from './dto/update-follow-up.dto';
 import { GetFollowUpsDto } from './dto/get-follow-up.dto';
 
-@Controller('follow-ups')
+@Controller('api/follow-ups')
 export class FollowUpController {
   constructor(private readonly followUpService: FollowUpService) {}
 

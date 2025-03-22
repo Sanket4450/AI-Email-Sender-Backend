@@ -7,7 +7,7 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { Draft, Prisma } from '@prisma/client';
 import { GetDraftsDto } from './dto/get-drafts.dto';
-import { getPagination } from 'src/app/utils/common.utils';
+import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class DraftService {
@@ -108,21 +108,14 @@ export class DraftService {
     const { search, contactIds = [] } = query;
     const { offset, limit } = getPagination(query);
 
-    const searchKeyword = `'%${search}%'`;
-
-    const searchKeys = ['e.subject', 'c.name', 's.name'];
-
-    const searchWhere = search
-      ? searchKeys.map((key) => `${key} ILIKE ${searchKeyword}`).join(' OR ')
-      : Prisma.empty;
-
     const conditions: Prisma.Sql[] = [];
 
     if (contactIds.length) {
       conditions.push(Prisma.sql`c.id IN (${Prisma.join(contactIds)})`);
     }
     if (search) {
-      conditions.push(Prisma.sql`(${searchWhere})`);
+      const searchKeys = ['e.subject', 'c.name', 's.name'];
+      conditions.push(getSearchCond(search, searchKeys));
     }
 
     const whereClause = conditions.length

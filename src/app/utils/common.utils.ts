@@ -1,5 +1,10 @@
+import { Prisma } from '@prisma/client';
 import { Pagination, PaginationQuery } from '../types/common.type';
 import { VALUES } from './constants';
+
+export const removeWhiteSpace = (value: string): string => {
+  return value.trim().replace(/\s+/g, ' ');
+};
 
 export const getPagination = (
   query: Pagination,
@@ -12,6 +17,10 @@ export const getPagination = (
   return { offset, limit };
 };
 
-export const removeWhiteSpace = (value: string): string => {
-  return value.trim().replace(/\s+/g, ' ');
+export const getSearchCond = (keyword: string, keys: string[]) => {
+  const searchConditions = keys.map(
+    (key) => Prisma.sql`${Prisma.raw(key)} ILIKE ${`%${keyword}%`}`,
+  );
+
+  return Prisma.sql`(${Prisma.join(searchConditions, ' OR ')})`;
 };

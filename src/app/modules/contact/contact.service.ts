@@ -7,6 +7,8 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 import { CompanyService } from '../company/company.service';
 import { Contact, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
+import { GetContactsDto } from './dto/get-contacts.dto';
+import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class ContactService {
@@ -119,7 +121,30 @@ export class ContactService {
   }
 
   // Get all contacts
-  async getContacts() {
+  async getContacts(query: GetContactsDto) {
+    const { search } = query;
+    const { offset, limit } = getPagination(query);
+
+    const conditions: Prisma.Sql[] = [];
+
+    if (search) {
+      const searchKeys = [
+        'c.name',
+        'c.position',
+        'c.email',
+        'c.location',
+        'co.title',
+        'co.description',
+        'co.location',
+        't.title',
+      ];
+      conditions.push(getSearchCond(search, searchKeys));
+    }
+
+    const whereClause = conditions.length
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
+      : Prisma.empty;
+
     const rawQuery = Prisma.sql`
       SELECT
         c.id AS id,
@@ -151,7 +176,10 @@ export class ContactService {
       JOIN company co ON c."companyId" = co.id
       LEFT JOIN contact_tag ct ON c.id = ct."contactId"
       LEFT JOIN tag t ON ct."tagId" = t.id
+      ${whereClause}
       GROUP BY c.id, co.id
+      OFFSET ${offset}
+      LIMIT ${limit};
     `;
 
     const contacts = await this.prisma.$queryRaw<Contact[]>(rawQuery);
