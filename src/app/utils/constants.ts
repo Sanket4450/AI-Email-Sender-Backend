@@ -19,9 +19,9 @@ export const ESPS = {
   MAILJET: 'mailjet',
 };
 
-export const EMAIL_SEND_TYPES = {
+export const EMAIL_TYPES = {
   EMAIL: 'email',
-  FOLLOW_UP: 'follow-up',
+  FOLLOW_UP: 'followUp',
 };
 
 export const EMAIL_EVENTS = {

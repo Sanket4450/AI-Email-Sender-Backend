@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import sgMail, { MailDataRequired } from '@sendgrid/mail';
-import { EMAIL_SEND_TYPES } from 'src/app/utils/constants';
+import { EMAIL_TYPES } from 'src/app/utils/constants';
 
 export interface SendgridEmailProps {
   to: string | string[];
@@ -8,7 +8,7 @@ export interface SendgridEmailProps {
   body: string;
   senderName: string;
   senderEmail: string;
-  referenceId: number;
+  referenceId: string;
 }
 
 export interface SendEmailFullProps extends SendgridEmailProps {
@@ -16,7 +16,7 @@ export interface SendEmailFullProps extends SendgridEmailProps {
 }
 
 export interface SendgridFollowUpEmailProps extends SendgridEmailProps {
-  message_id: string;
+  messageId: string;
   apiKey: string;
 }
 
@@ -34,7 +34,7 @@ export class SendGridService {
       to,
       subject,
       html: body,
-      customArgs: { referenceId, type: EMAIL_SEND_TYPES.EMAIL },
+      customArgs: { referenceId, type: EMAIL_TYPES.EMAIL },
     };
 
     try {
@@ -57,7 +57,7 @@ export class SendGridService {
       html: p.body,
       customArgs: {
         referenceId: p.referenceId,
-        type: EMAIL_SEND_TYPES.EMAIL,
+        type: EMAIL_TYPES.EMAIL,
       },
     }));
 
@@ -76,7 +76,7 @@ export class SendGridService {
       senderName,
       senderEmail,
       referenceId,
-      message_id,
+      messageId,
       apiKey,
     } = props;
 
@@ -88,12 +88,12 @@ export class SendGridService {
       subject,
       html: body,
       headers: {
-        'In-Reply-To': message_id,
-        References: message_id,
+        'In-Reply-To': messageId,
+        References: messageId,
       },
       customArgs: {
         referenceId,
-        type: EMAIL_SEND_TYPES.FOLLOW_UP,
+        type: EMAIL_TYPES.FOLLOW_UP,
       },
     };
 

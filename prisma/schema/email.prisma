@@ -9,6 +9,7 @@ model Email {
   senderId       String
   sender         Sender         @relation(fields: [senderId], references: [id])
   events         EmailEvent[]
+  followUps      FollowUp[]
   notifications  Notification[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -25,6 +26,32 @@ model EmailEvent {
   createdAt DateTime       @default(now())
 
   @@map("email_event")
+}
+
+model FollowUp {
+  id             String          @id @default(cuid())
+  subject        String
+  body           String
+  emailId        String
+  email          Email           @relation(fields: [emailId], references: [id])
+  isBounced      Boolean         @default(false)
+  isSpamReported Boolean         @default(false)
+  events         FollowUpEvent[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([subject])
+  @@map("follow_up")
+}
+
+model FollowUpEvent {
+  id         String         @id @default(cuid())
+  followUpId String
+  FollowUp   FollowUp       @relation(fields: [followUpId], references: [id])
+  eventType  EmailEventType
+  createdAt  DateTime       @default(now())
+
+  @@map("follow_up_event")
 }
 
 enum EmailEventType {

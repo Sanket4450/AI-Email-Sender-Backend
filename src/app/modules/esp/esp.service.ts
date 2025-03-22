@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { EMAIL_SEND_TYPES, ESPS } from 'src/app/utils/constants';
+import { EMAIL_TYPES, ESPS } from 'src/app/utils/constants';
 import {
   SendgridEmailProps,
   SendGridService,
@@ -13,7 +13,7 @@ export interface EmailProps {
   subject: string;
   body: string;
   contact: Contact;
-  referenceId: number;
+  referenceId: string;
 }
 
 export interface SendEmailProps {
@@ -22,7 +22,7 @@ export interface SendEmailProps {
 }
 
 export interface SendFollowUpEmailProps extends SendEmailProps {
-  message_id: string;
+  messageId: string;
 }
 
 @Injectable()
@@ -59,39 +59,33 @@ export class ESPService {
     }
   }
 
-  async sendFollowEmail(props: SendFollowUpEmailProps): Promise<void> {
-    const {
-      to,
-      subject,
-      body,
-      senderName,
-      senderEmail,
-      referenceId,
-      message_id,
-      apiKey,
-    } = props;
+  // async sendFollowEmail(props: SendFollowUpEmailProps): Promise<void> {
+  //   const {
+  //     to,
+  //     subject,
+  //     body,
+  //     senderName,
+  //     senderEmail,
+  //     referenceId,
+  //     messageId,
+  //     apiKey,
+  //   } = props;
 
-    sgMail.setApiKey(apiKey);
+  //   sgMail.setApiKey(apiKey);
 
-    const mailOptions: MailDataRequired = {
-      from: { email: senderEmail, name: senderName },
-      to,
-      subject,
-      html: body,
-      headers: {
-        'In-Reply-To': message_id,
-        References: message_id,
-      },
-      customArgs: {
-        referenceId,
-        type: EMAIL_SEND_TYPES.FOLLOW_UP,
-      },
-    };
-
-    try {
-      await sgMail.send(mailOptions);
-    } catch (error) {
-      console.error(`Error sending follow-up mail: ${error}`);
-    }
-  }
+  //   const mailOptions: MailDataRequired = {
+  //     from: { email: senderEmail, name: senderName },
+  //     to,
+  //     subject,
+  //     html: body,
+  //     headers: {
+  //       'In-Reply-To': messageId,
+  //       References: messageId,
+  //     },
+  //     customArgs: {
+  //       referenceId,
+  //       type: EMAIL_TYPES.FOLLOW_UP,
+  //     },
+  //   };
+  // }
 }
