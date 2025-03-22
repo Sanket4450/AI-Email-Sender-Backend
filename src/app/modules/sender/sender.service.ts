@@ -19,6 +19,7 @@ export class SenderService {
 
   // Create a new sender
   async createSender(body: CreateSenderDto) {
+    // Validate ESP
     await this.validateESP(body.esp);
 
     // Check if the name is already used with the same ESP
@@ -54,6 +55,9 @@ export class SenderService {
   async updateSender(id: string, body: UpdateSenderDto) {
     // Check if the sender exists
     const sender = await this.senderExists(id);
+
+    // Validate ESP if provided
+    if (body.esp) await this.validateESP(body.esp);
 
     // Check if the name is already used with the same ESP
     if (body.name) {

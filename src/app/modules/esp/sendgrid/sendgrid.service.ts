@@ -2,22 +2,22 @@ import { Injectable } from '@nestjs/common';
 import sgMail, { MailDataRequired } from '@sendgrid/mail';
 import { EMAIL_SEND_TYPES } from 'src/app/utils/constants';
 
-export interface SendEmailProps {
+export interface SendgridEmailProps {
   to: string | string[];
   subject: string;
   body: string;
-  sender_name: string;
-  sender_email: string;
-  reference_id: number;
+  senderName: string;
+  senderEmail: string;
+  referenceId: number;
 }
 
-export interface SendEmailFullProps extends SendEmailProps {
-  api_key: string;
+export interface SendEmailFullProps extends SendgridEmailProps {
+  apiKey: string;
 }
 
-export interface SendFollowUpEmailProps extends SendEmailProps {
+export interface SendgridFollowUpEmailProps extends SendgridEmailProps {
   message_id: string;
-  api_key: string;
+  apiKey: string;
 }
 
 @Injectable()
@@ -25,23 +25,16 @@ export class SendGridService {
   constructor() {}
 
   async sendEmail(props: SendEmailFullProps): Promise<void> {
-    const {
-      to,
-      subject,
-      body,
-      sender_name,
-      sender_email,
-      reference_id,
-      api_key,
-    } = props;
-    sgMail.setApiKey(api_key);
+    const { to, subject, body, senderName, senderEmail, referenceId, apiKey } =
+      props;
+    sgMail.setApiKey(apiKey);
 
     const mailOptions: MailDataRequired = {
-      from: { email: sender_email, name: sender_name },
+      from: { email: senderEmail, name: senderName },
       to,
       subject,
       html: body,
-      customArgs: { reference_id, type: EMAIL_SEND_TYPES.EMAIL },
+      customArgs: { referenceId, type: EMAIL_SEND_TYPES.EMAIL },
     };
 
     try {
@@ -52,18 +45,18 @@ export class SendGridService {
   }
 
   async sendBulkEmails(
-    payload: SendEmailProps[],
-    api_key: string,
+    payload: SendgridEmailProps[],
+    apiKey: string,
   ): Promise<void> {
-    sgMail.setApiKey(api_key);
+    sgMail.setApiKey(apiKey);
 
     const mailOptions: MailDataRequired[] = payload.map((p) => ({
-      from: { email: p.sender_email, name: p.sender_name },
+      from: { email: p.senderEmail, name: p.senderName },
       to: p.to,
       subject: p.subject,
       html: p.body,
       customArgs: {
-        reference_id: p.reference_id,
+        referenceId: p.referenceId,
         type: EMAIL_SEND_TYPES.EMAIL,
       },
     }));
@@ -75,22 +68,22 @@ export class SendGridService {
     }
   }
 
-  async sendFollowEmail(props: SendFollowUpEmailProps): Promise<void> {
+  async sendFollowEmail(props: SendgridFollowUpEmailProps): Promise<void> {
     const {
       to,
       subject,
       body,
-      sender_name,
-      sender_email,
-      reference_id,
+      senderName,
+      senderEmail,
+      referenceId,
       message_id,
-      api_key,
+      apiKey,
     } = props;
 
-    sgMail.setApiKey(api_key);
+    sgMail.setApiKey(apiKey);
 
     const mailOptions: MailDataRequired = {
-      from: { email: sender_email, name: sender_name },
+      from: { email: senderEmail, name: senderName },
       to,
       subject,
       html: body,
@@ -99,7 +92,7 @@ export class SendGridService {
         References: message_id,
       },
       customArgs: {
-        reference_id,
+        referenceId,
         type: EMAIL_SEND_TYPES.FOLLOW_UP,
       },
     };

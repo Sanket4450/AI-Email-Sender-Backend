@@ -25,6 +25,7 @@ export const ERROR_MSG = {
   // ESP
   ESP_NOT_FOUND: 'ESP not found',
   ESP_ALREADY_EXISTS: 'ESP already exists with this name',
+  NOT_VALID_ESP: 'Not a valid ESP',
 
   // Sender
   SENDER_NOT_FOUND: 'Sender not found',

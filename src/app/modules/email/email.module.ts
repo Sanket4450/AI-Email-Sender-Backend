@@ -3,10 +3,10 @@ import { EmailService } from './email.service';
 import { EmailController } from './email.controller';
 import { PrismaModule } from 'src/config/prisma/prisma.module';
 import { SenderModule } from '../sender/sender.module';
-import { SendGridModule } from '../esp/sendgrid/sendgrid.module';
+import { ESPModule } from '../esp/esp.module';
 
 @Module({
-  imports: [PrismaModule, SenderModule, SendGridModule],
+  imports: [PrismaModule, SenderModule, ESPModule],
   providers: [EmailService],
   controllers: [EmailController],
 })

@@ -8,12 +8,14 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { Email, Prisma } from '@prisma/client';
 import { GetEmailsDto } from './dto/get-emails.dto';
 import { getPagination } from 'src/app/utils/common.utils';
+import { ESPService } from '../esp/esp.service';
 
 @Injectable()
 export class EmailService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly senderService: SenderService,
+    private readonly espService: ESPService,
   ) {}
 
   // Create a new email
@@ -21,7 +23,7 @@ export class EmailService {
     const { senderId, contactIds, ...createEmailBody } = body;
 
     // Validate that the sender exists
-    await this.senderService.senderExists(senderId);
+    const sender = await this.senderService.senderExists(senderId);
 
     // Validate that the contact exists
     const contacts = await this.prisma.contact.findMany({
@@ -35,14 +37,20 @@ export class EmailService {
       );
     }
 
-    const createData: Prisma.EmailCreateManyInput[] = contacts.map((c) => ({
-      ...createEmailBody,
-      contactId: c.id,
-      senderId,
-    }));
+    const createdEmails = await this.prisma.email.createManyAndReturn({
+      data: contacts.map((c) => ({
+        ...createEmailBody,
+        contactId: c.id,
+        senderId,
+      })),
+    });
 
-    await this.prisma.email.createMany({
-      data: createData,
+    await this.espService.sendEmails({
+      emails: contacts.map((contact, idx) => ({
+        ...createEmailBody,
+        contact,
+      })),
+      sender,
     });
 
     return responseBuilder({
