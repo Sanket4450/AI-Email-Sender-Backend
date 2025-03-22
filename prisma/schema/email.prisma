@@ -2,6 +2,7 @@ model Email {
   id             String         @id @default(cuid())
   subject        String
   body           String
+  messageId      String?
   contactId      String
   contact        Contact        @relation(fields: [contactId], references: [id])
   isBounced      Boolean        @default(false)
@@ -34,6 +35,7 @@ model FollowUp {
   body           String
   emailId        String
   email          Email           @relation(fields: [emailId], references: [id])
+  scheduledAt    DateTime?
   isBounced      Boolean         @default(false)
   isSpamReported Boolean         @default(false)
   events         FollowUpEvent[]

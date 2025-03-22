@@ -41,6 +41,11 @@ export const ERROR_MSG = {
   // Email
   EMAIL_NOT_FOUND: 'Email not found',
   EMAIL_CANNOT_MODIFY: 'Email cannot be modified',
+
+  // Email
+  FOLLOW_UP_NOT_FOUND: 'Follow Up not found',
+  FOLLOW_UP_CANNOT_SENT: 'Follow Up cannot be sent',
+  FOLLOW_UP_CANNOT_MODIFY: 'Follow Up cannot be modified',
 };
 
 export const VALIDATION_MSG = {
@@ -109,4 +114,11 @@ export const SUCCESS_MSG = {
   EMAIL_DELETED: 'Email deleted successfully',
   EMAILS_FETCHED: 'Emails fetched successfully',
   EMAIL_FETCHED: 'Email fetched successfully',
+
+  // Follow Up
+  FOLLOW_UP_CREATED: 'Follow Up created successfully',
+  FOLLOW_UP_UPDATED: 'Follow Up updated successfully',
+  FOLLOW_UP_DELETED: 'Follow Up deleted successfully',
+  FOLLOW_UPS_FETCHED: 'Follow Ups fetched successfully',
+  FOLLOW_UP_FETCHED: 'Follow Up fetched successfully',
 };
