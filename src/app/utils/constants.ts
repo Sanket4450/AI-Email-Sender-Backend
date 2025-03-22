@@ -1,3 +1,5 @@
+import { Company, Contact } from '@prisma/client';
+
 export const CONSTANTS = {};
 
 export const APP_ENV = {
@@ -7,6 +9,9 @@ export const APP_ENV = {
 };
 
 export const VALUES = {
+  OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
+  OPENAI_MODEL: 'deepseek/deepseek-r1-distill-llama-70b:free',
+
   DEFAULT_PAGE_SIZE: 10,
 };
 
@@ -30,3 +35,15 @@ export const EMAIL_EVENTS = {
   OPENED: 'opened',
   CLICKED: 'clicked',
 };
+
+export const EMAIL_PLACEHOLDERS: Record<string, keyof Company | keyof Contact> =
+  {
+    '{{COMPANY_NAME}}': 'title',
+    '{{COMPANY_LOCATION}}': 'location',
+    '{{CONTACT_NAME}}': 'name',
+    '{{CONTACT_POSITION}}': 'position',
+    '{{CONTACT_EMAIL}}': 'email',
+    '{{CONTACT_PHONE}}': 'phone',
+    '{{CONTACT_LINKEDIN_URL}}': 'linkedInUrl',
+    '{{CONTACT_LOCATION}}': 'location',
+  };
