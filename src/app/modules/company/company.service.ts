@@ -142,8 +142,6 @@ export class CompanyService {
       LIMIT ${limit};
     `;
 
-    console.log(rawQuery.sql, rawQuery.values);
-
     const companies = await this.prisma.$queryRaw<Company[]>(rawQuery);
 
     return responseBuilder({

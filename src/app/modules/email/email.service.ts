@@ -146,8 +146,6 @@ export class EmailService {
         LIMIT ${limit};
       `;
 
-    console.log(rawQuery.sql);
-
     const emails = await this.prisma.$queryRaw<Email[]>(rawQuery);
 
     return responseBuilder({
@@ -212,9 +210,6 @@ export class EmailService {
 
   async handleEmailEventWebhook(headers: any, body: any[]) {
     try {
-      console.log('headers', headers);
-      console.log('body', body);
-
       if (headers['user-agent'] !== VALUES.SENDGRID_USER_AGENT) {
         throw new CustomHttpException(
           HttpStatus.FORBIDDEN,
@@ -236,7 +231,7 @@ export class EmailService {
             if (!isBounced && !isSpamReported) {
               const eventField = EMAIL_EVENTS[obj.event];
 
-              if (!eventField) {
+              if (eventField) {
                 followUpEvents.push({
                   eventType: eventField,
                   createdAt: new Date(obj.timestamp),
@@ -244,28 +239,27 @@ export class EmailService {
               }
             }
 
-            const existingEmail = followUpData.find(
+            const existingFollowUp = followUpData.find(
               (e) => e.id === obj.referenceId,
             );
 
-            if (existingEmail) {
-              const existingEmailIndex = followUpData.findIndex(
-                (ed) => ed.id === existingEmail.id,
+            if (existingFollowUp) {
+              const existingFollowUpIndex = followUpData.findIndex(
+                (ed) => ed.id === existingFollowUp.id,
               );
 
-              followUpData[existingEmailIndex] = followUpData.map((ed) =>
-                ed.id === obj.referenceId
-                  ? {
-                      ...ed,
-                      email: {
-                        ...ed.email,
-                        ...(isBounced && { isBounced }),
-                        ...(isSpamReported && { isSpamReported }),
-                      },
-                      followUpEvents: [...ed.followUpEvents, ...followUpEvents],
-                    }
-                  : ed,
-              );
+              followUpData[existingFollowUpIndex] = {
+                ...existingFollowUp,
+                email: {
+                  ...existingFollowUp.email,
+                  ...(isBounced && { isBounced }),
+                  ...(isSpamReported && { isSpamReported }),
+                },
+                followUpEvents: [
+                  ...existingFollowUp.followUpEvents,
+                  ...followUpEvents,
+                ],
+              };
             } else {
               followUpData.push({
                 id: obj.referenceId,
@@ -283,7 +277,7 @@ export class EmailService {
             if (!isBounced && !isSpamReported) {
               const eventField = EMAIL_EVENTS[obj.event];
 
-              if (!eventField) {
+              if (eventField) {
                 emailEvents.push({
                   eventType: eventField,
                   createdAt: new Date(obj.timestamp),
@@ -300,25 +294,21 @@ export class EmailService {
                 (ed) => ed.id === existingEmail.id,
               );
 
-              emailData[existingEmailIndex] = emailData.map((ed) =>
-                ed.id === obj.referenceId
-                  ? {
-                      ...ed,
-                      email: {
-                        ...ed.email,
-                        ...(isBounced && { isBounced }),
-                        ...(isSpamReported && { isSpamReported }),
-                      },
-                      emailEvents: [...ed.emailEvents, ...emailEvents],
-                    }
-                  : ed,
-              );
+              emailData[existingEmailIndex] = {
+                ...existingEmail,
+                email: {
+                  ...existingEmail.email,
+                  ...(isBounced && { isBounced }),
+                  ...(isSpamReported && { isSpamReported }),
+                },
+                emailEvents: [...existingEmail.emailEvents, ...emailEvents],
+              };
             } else {
               emailData.push({
                 id: obj.referenceId,
-                messageId: obj['smtp-id'] || null,
                 senderId: obj.senderId,
                 email: {
+                  messageId: obj['smtp-id'] || obj.sg_message_id || null,
                   ...(isBounced && { isBounced }),
                   ...(isSpamReported && { isSpamReported }),
                 },
@@ -336,9 +326,7 @@ export class EmailService {
             data: {
               ...ed.email,
               events: {
-                createMany: {
-                  data: ed.emailEvents,
-                },
+                createMany: { data: ed.emailEvents },
               },
             },
           });
