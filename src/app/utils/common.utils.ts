@@ -24,3 +24,7 @@ export const getSearchCond = (keyword: string, keys: string[]) => {
 
   return Prisma.sql`(${Prisma.join(searchConditions, ' OR ')})`;
 };
+
+export const getFollowUpSubject = (subject: string): string => {
+  return `Re: ${subject}`;
+};

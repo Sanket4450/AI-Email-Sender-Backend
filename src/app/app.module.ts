@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaModule } from '../config/prisma/prisma.module';
 import { CompanyModule } from './modules/company/company.module';
 import { TagModule } from './modules/tag/tag.module';
 import { ContactModule } from './modules/contact/contact.module';
@@ -14,7 +13,6 @@ import { AIModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
-    PrismaModule,
     CompanyModule,
     ContactModule,
     TagModule,

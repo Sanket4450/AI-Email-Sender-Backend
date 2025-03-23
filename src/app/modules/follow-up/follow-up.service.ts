@@ -9,7 +9,7 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { FollowUp, Prisma } from '@prisma/client';
 import { ESPService } from '../esp/esp.service';
-import { getSearchCond } from 'src/app/utils/common.utils';
+import { getFollowUpSubject, getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class FollowUpService {
@@ -38,13 +38,15 @@ export class FollowUpService {
     const followUp = await this.prisma.followUp.create({
       data: {
         ...createFollowUpData,
+        subject: getFollowUpSubject(email.subject),
         email: { connect: { id: emailId } },
       },
     });
 
     if (!createFollowUpData.scheduledAt) {
       await this.espService.sendFollowUpEmail({
-        ...createFollowUpData,
+        subject: followUp.subject,
+        body: followUp.body,
         referenceId: followUp.id,
         messageId: email.messageId,
         contact: email.contact,

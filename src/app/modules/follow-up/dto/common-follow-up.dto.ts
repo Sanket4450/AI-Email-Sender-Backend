@@ -5,9 +5,6 @@ export class CommonFollowUpDto {
   emailId: string;
 
   @IsString()
-  subject: string;
-
-  @IsString()
   body: string;
 
   @IsOptional()

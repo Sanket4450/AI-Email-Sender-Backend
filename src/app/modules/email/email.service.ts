@@ -134,6 +134,7 @@ export class EmailService {
         LEFT JOIN email_event ev ON ev."emailId" = e.id
         ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
         GROUP BY e.id, c.id, s.id
+        ORDER BY e."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit};
       `;
