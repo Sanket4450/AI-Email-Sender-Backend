@@ -250,8 +250,8 @@ export class EmailService {
 
               followUpData[existingFollowUpIndex] = {
                 ...existingFollowUp,
-                email: {
-                  ...existingFollowUp.email,
+                followUp: {
+                  ...existingFollowUp.followUp,
                   ...(isBounced && { isBounced }),
                   ...(isSpamReported && { isSpamReported }),
                 },
@@ -348,33 +348,31 @@ export class EmailService {
       }
 
       if (followUpData.length) {
-        if (followUpData.length) {
-          for (let fud of followUpData) {
-            await this.prisma.email.update({
-              where: { id: fud.id },
-              data: {
-                ...fud.email,
-                events: {
-                  createMany: {
-                    data: fud.emailEvents,
-                  },
+        for (let fud of followUpData) {
+          await this.prisma.followUp.update({
+            where: { id: fud.id },
+            data: {
+              ...fud.followUp,
+              events: {
+                createMany: {
+                  data: fud.followUpEvents,
                 },
               },
-            });
+            },
+          });
 
-            if (
-              fud.emailEvents.some(
-                (ee: any) => ee.eventType === EMAIL_EVENTS.DELIVERED,
-              )
-            ) {
-              const rawQuery = Prisma.sql`
+          if (
+            fud.followUpEvents.some(
+              (ee: any) => ee.eventType === EMAIL_EVENTS.DELIVERED,
+            )
+          ) {
+            const rawQuery = Prisma.sql`
               UPDATE sender
               SET "sentCount" = "sentCount" + 1
               WHERE id = ${fud.senderId};
             `;
 
-              await this.prisma.$executeRaw(rawQuery);
-            }
+            await this.prisma.$executeRaw(rawQuery);
           }
         }
       }
