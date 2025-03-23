@@ -9,6 +9,7 @@ export interface SendgridEmailProps {
   senderName: string;
   senderEmail: string;
   referenceId: string;
+  senderId: string;
 }
 
 export interface SendEmailFullProps extends SendgridEmailProps {
@@ -25,8 +26,16 @@ export class SendGridService {
   constructor() {}
 
   async sendEmail(props: SendEmailFullProps): Promise<void> {
-    const { to, subject, body, senderName, senderEmail, referenceId, apiKey } =
-      props;
+    const {
+      to,
+      subject,
+      body,
+      senderName,
+      senderEmail,
+      senderId,
+      referenceId,
+      apiKey,
+    } = props;
     sgMail.setApiKey(apiKey);
 
     const mailOptions: MailDataRequired = {
@@ -34,7 +43,11 @@ export class SendGridService {
       to,
       subject,
       html: body,
-      customArgs: { referenceId, type: EMAIL_TYPES.EMAIL },
+      customArgs: {
+        type: EMAIL_TYPES.EMAIL,
+        senderId,
+        referenceId,
+      },
     };
 
     try {
@@ -56,8 +69,9 @@ export class SendGridService {
       subject: p.subject,
       html: p.body,
       customArgs: {
-        referenceId: p.referenceId,
         type: EMAIL_TYPES.EMAIL,
+        senderId: p.senderId,
+        referenceId: p.referenceId,
       },
     }));
 
@@ -75,6 +89,7 @@ export class SendGridService {
       body,
       senderName,
       senderEmail,
+      senderId,
       referenceId,
       messageId,
       apiKey,
@@ -92,8 +107,9 @@ export class SendGridService {
         References: messageId,
       },
       customArgs: {
-        referenceId,
         type: EMAIL_TYPES.FOLLOW_UP,
+        senderId,
+        referenceId,
       },
     };
 

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Headers } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { GetEmailsDto } from './dto/get-emails.dto';
@@ -23,5 +23,10 @@ export class EmailController {
   @Get(':id')
   async getSingleEmail(@Param('id') id: string) {
     return this.emailService.getSingleEmail(id);
+  }
+
+  @Post('event/webhook')
+  handleEmailEventWebhook(@Headers() headers: any, @Body() body: any[]) {
+    return this.emailService.handleEmailEventWebhook(headers, body);
   }
 }

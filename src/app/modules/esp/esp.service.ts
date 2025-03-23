@@ -48,6 +48,7 @@ export class ESPService {
           senderName: sender.name,
           senderEmail: sender.email,
           referenceId: e.referenceId,
+          senderId: sender.id,
         }));
 
         await this.sendGridService.sendBulkEmails(mailOptions, apiKey);
@@ -72,6 +73,7 @@ export class ESPService {
           to: contact.email,
           subject: payload.subject,
           body: payload.body,
+          senderId: sender.id,
           senderName: sender.name,
           senderEmail: sender.email,
           referenceId: payload.referenceId,

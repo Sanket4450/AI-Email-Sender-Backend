@@ -1,4 +1,4 @@
-import { Company, Contact, Sender } from '@prisma/client';
+import { Company, Contact, EmailEventType, Sender } from '@prisma/client';
 
 export const CONSTANTS = {};
 
@@ -11,6 +11,8 @@ export const APP_ENV = {
 export const VALUES = {
   OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
   OPENAI_MODEL: 'deepseek/deepseek-r1-distill-qwen-32b:free',
+
+  SENDGRID_USER_AGENT: 'SendGrid Event API',
 
   DEFAULT_PAGE_SIZE: 10,
 };
@@ -29,12 +31,15 @@ export const EMAIL_TYPES = {
   FOLLOW_UP: 'followUp',
 };
 
-export const EMAIL_EVENTS = {
-  PROCESSED: 'processed',
-  DELIVERED: 'delivered',
-  OPENED: 'opened',
-  CLICKED: 'clicked',
+export const EMAIL_EVENTS: Record<string, EmailEventType> = {
+  processed: 'processed',
+  delivered: 'delivered',
+  open: 'opened',
+  click: 'clicked',
 };
+
+export const EMAIL_BOUNCE_EVENTS: string[] = ['dropped', 'bounce'];
+export const EMAIL_SPAM_REPORT_EVENTS: string[] = ['spamreport'];
 
 export const EMAIL_PLACEHOLDERS: Record<
   string,

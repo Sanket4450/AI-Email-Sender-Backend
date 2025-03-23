@@ -1,6 +1,7 @@
 export const ERROR_MSG = {
   // General
   INTERNAL_SERVER_ERROR: 'Internal server error',
+  INVALID_USER_AGENT: 'Invalid User Agent',
 
   // Auth
   UNAUTHORIZED: 'Unauthorized!',
@@ -114,6 +115,7 @@ export const SUCCESS_MSG = {
   EMAIL_DELETED: 'Email deleted successfully',
   EMAILS_FETCHED: 'Emails fetched successfully',
   EMAIL_FETCHED: 'Email fetched successfully',
+  EMAIL_EVENT_HANDLED: 'Email event handled successfully',
 
   // Follow Up
   FOLLOW_UP_CREATED: 'Follow Up created successfully',

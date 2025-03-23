@@ -1,7 +1,7 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
+import { ERROR_MSG, SUCCESS_MSG, VALIDATION_MSG } from 'src/app/utils/messages';
 import { SenderService } from '../sender/sender.service';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
@@ -9,6 +9,13 @@ import { Email, Prisma } from '@prisma/client';
 import { GetEmailsDto } from './dto/get-emails.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { ESPService } from '../esp/esp.service';
+import {
+  EMAIL_BOUNCE_EVENTS,
+  EMAIL_EVENTS,
+  EMAIL_SPAM_REPORT_EVENTS,
+  EMAIL_TYPES,
+  VALUES,
+} from 'src/app/utils/constants';
 
 @Injectable()
 export class EmailService {
@@ -201,6 +208,196 @@ export class EmailService {
       message: SUCCESS_MSG.EMAIL_FETCHED,
       result: email,
     });
+  }
+
+  async handleEmailEventWebhook(headers: any, body: any[]) {
+    try {
+      console.log('headers', headers);
+      console.log('body', body);
+
+      if (headers['user-agent'] !== VALUES.SENDGRID_USER_AGENT) {
+        throw new CustomHttpException(
+          HttpStatus.FORBIDDEN,
+          ERROR_MSG.INVALID_USER_AGENT,
+        );
+      }
+
+      const emailData = [];
+      const followUpData = [];
+
+      for (let obj of body) {
+        if (obj.event && obj.referenceId) {
+          const isBounced = EMAIL_BOUNCE_EVENTS.includes(obj.event);
+          const isSpamReported = EMAIL_SPAM_REPORT_EVENTS.includes(obj.event);
+
+          if (obj.type === EMAIL_TYPES.FOLLOW_UP) {
+            const followUpEvents = [];
+
+            if (!isBounced && !isSpamReported) {
+              const eventField = EMAIL_EVENTS[obj.event];
+
+              if (!eventField) {
+                followUpEvents.push({
+                  eventType: eventField,
+                  createdAt: new Date(obj.timestamp),
+                });
+              }
+            }
+
+            const existingEmail = followUpData.find(
+              (e) => e.id === obj.referenceId,
+            );
+
+            if (existingEmail) {
+              const existingEmailIndex = followUpData.findIndex(
+                (ed) => ed.id === existingEmail.id,
+              );
+
+              followUpData[existingEmailIndex] = followUpData.map((ed) =>
+                ed.id === obj.referenceId
+                  ? {
+                      ...ed,
+                      email: {
+                        ...ed.email,
+                        ...(isBounced && { isBounced }),
+                        ...(isSpamReported && { isSpamReported }),
+                      },
+                      followUpEvents: [...ed.followUpEvents, ...followUpEvents],
+                    }
+                  : ed,
+              );
+            } else {
+              followUpData.push({
+                id: obj.referenceId,
+                senderId: obj.senderId,
+                followUp: {
+                  ...(isBounced && { isBounced }),
+                  ...(isSpamReported && { isSpamReported }),
+                },
+                followUpEvents,
+              });
+            }
+          } else {
+            const emailEvents = [];
+
+            if (!isBounced && !isSpamReported) {
+              const eventField = EMAIL_EVENTS[obj.event];
+
+              if (!eventField) {
+                emailEvents.push({
+                  eventType: eventField,
+                  createdAt: new Date(obj.timestamp),
+                });
+              }
+            }
+
+            const existingEmail = emailData.find(
+              (e) => e.id === obj.referenceId,
+            );
+
+            if (existingEmail) {
+              const existingEmailIndex = emailData.findIndex(
+                (ed) => ed.id === existingEmail.id,
+              );
+
+              emailData[existingEmailIndex] = emailData.map((ed) =>
+                ed.id === obj.referenceId
+                  ? {
+                      ...ed,
+                      email: {
+                        ...ed.email,
+                        ...(isBounced && { isBounced }),
+                        ...(isSpamReported && { isSpamReported }),
+                      },
+                      emailEvents: [...ed.emailEvents, ...emailEvents],
+                    }
+                  : ed,
+              );
+            } else {
+              emailData.push({
+                id: obj.referenceId,
+                messageId: obj['smtp-id'] || null,
+                senderId: obj.senderId,
+                email: {
+                  ...(isBounced && { isBounced }),
+                  ...(isSpamReported && { isSpamReported }),
+                },
+                emailEvents,
+              });
+            }
+          }
+        }
+      }
+
+      if (emailData.length) {
+        for (let ed of emailData) {
+          await this.prisma.email.update({
+            where: { id: ed.id },
+            data: {
+              ...ed.email,
+              events: {
+                createMany: {
+                  data: ed.emailEvents,
+                },
+              },
+            },
+          });
+
+          if (
+            ed.emailEvents.some(
+              (ee: any) => ee.eventType === EMAIL_EVENTS.DELIVERED,
+            )
+          ) {
+            const rawQuery = Prisma.sql`
+              UPDATE sender
+              SET "sentCount" = "sentCount" + 1
+              WHERE id = ${ed.senderId};
+            `;
+
+            await this.prisma.$executeRaw(rawQuery);
+          }
+        }
+      }
+
+      if (followUpData.length) {
+        if (followUpData.length) {
+          for (let fud of followUpData) {
+            await this.prisma.email.update({
+              where: { id: fud.id },
+              data: {
+                ...fud.email,
+                events: {
+                  createMany: {
+                    data: fud.emailEvents,
+                  },
+                },
+              },
+            });
+
+            if (
+              fud.emailEvents.some(
+                (ee: any) => ee.eventType === EMAIL_EVENTS.DELIVERED,
+              )
+            ) {
+              const rawQuery = Prisma.sql`
+              UPDATE sender
+              SET "sentCount" = "sentCount" + 1
+              WHERE id = ${fud.senderId};
+            `;
+
+              await this.prisma.$executeRaw(rawQuery);
+            }
+          }
+        }
+      }
+
+      return responseBuilder({ message: SUCCESS_MSG.EMAIL_EVENT_HANDLED });
+    } catch (error) {
+      console.log({
+        statusCode: error.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error.message,
+      });
+    }
   }
 
   // Check if a email exists
