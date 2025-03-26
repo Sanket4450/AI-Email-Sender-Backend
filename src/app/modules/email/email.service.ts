@@ -16,6 +16,7 @@ import {
   EMAIL_TYPES,
   VALUES,
 } from 'src/app/utils/constants';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class EmailService {
@@ -109,10 +110,25 @@ export class EmailService {
     }
 
     const whereClause = conditions.length
-      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
+    const joinClause = Prisma.sql`
+      JOIN contact c ON c.id = e."contactId"
+      JOIN sender s ON s.id = e."senderId"
+      LEFT JOIN email_event ev ON ev."emailId" = e.id
+    `;
+
     const rawQuery = Prisma.sql`
+      WITH "EmailsCount" AS (
+        SELECT
+          COUNT(DISTINCT e.id)::INT AS "count"
+        FROM email e
+        ${joinClause}
+        ${whereClause}
+      ),
+
+      "EmailsData" AS (
         SELECT
           e.id AS id,
           e.subject AS subject,
@@ -136,21 +152,24 @@ export class EmailService {
             ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
           )  AS events
         FROM email e
-        JOIN contact c ON c.id = e."contactId"
-        JOIN sender s ON s.id = e."senderId"
-        LEFT JOIN email_event ev ON ev."emailId" = e.id
-        ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
+        ${joinClause}
+        ${whereClause}
         GROUP BY e.id, c.id, s.id
         ORDER BY e."createdAt" DESC
         OFFSET ${offset}
-        LIMIT ${limit};
-      `;
+        LIMIT ${limit}
+      )
+      
+      SELECT
+        (SELECT "count" FROM "EmailsCount") AS "count",
+        COALESCE((SELECT JSON_AGG("EmailsData") FROM "EmailsData"), '[]'::JSON) AS "data";
+    `;
 
-    const emails = await this.prisma.$queryRaw<Email[]>(rawQuery);
+    const [emailsResponse] = await this.prisma.$queryRaw<QueryResponse<Email>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAILS_FETCHED,
-      result: emails,
+      result: emailsResponse,
     });
   }
 

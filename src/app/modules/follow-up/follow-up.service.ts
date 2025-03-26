@@ -10,6 +10,7 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { FollowUp, Prisma } from '@prisma/client';
 import { ESPService } from '../esp/esp.service';
 import { getFollowUpSubject, getSearchCond } from 'src/app/utils/common.utils';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class FollowUpService {
@@ -104,38 +105,57 @@ export class FollowUpService {
     }
 
     const whereClause = conditions.length
-      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const rawQuery = Prisma.sql`
-      SELECT
-        fu.id AS id,
-        fu.subject AS subject,
-        fu.body AS body,
-        fu."scheduledAt" AS "scheduledAt",
-        fu."isBounced" AS "isBounced",
-        fu."isSpamReported" AS "isSpamReported",
-        fu."createdAt" AS "createdAt",
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', fuev.id,
-              'eventType', fuev."eventType"
-            )
-          ) FILTER (WHERE fuev.id IS NOT NULL), '[]'::JSON
-        )  AS events
-      FROM follow_up fu
+    const joinClause = Prisma.sql`
       JOIN email e ON fu."emailId" = e.id
       LEFT JOIN follow_up_event fuev ON fuev."followUpId" = fu.id
-      ${Prisma.sql`WHERE ${whereClause}`}
-      GROUP BY fu.id, e.id;
     `;
 
-    const followUp = await this.prisma.$queryRaw<FollowUp[]>(rawQuery);
+    const rawQuery = Prisma.sql`
+      WITH "FollowUpsCount" AS (
+        SELECT
+          COUNT(DISTINCT fu.id)::INT AS "count"
+        FROM follow_up fu
+        ${joinClause}
+        ${whereClause}
+      ),
+
+      "FollowUpsData" AS (
+        SELECT
+          fu.id AS id,
+          fu.subject AS subject,
+          fu.body AS body,
+          fu."scheduledAt" AS "scheduledAt",
+          fu."isBounced" AS "isBounced",
+          fu."isSpamReported" AS "isSpamReported",
+          fu."createdAt" AS "createdAt",
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', fuev.id,
+                'eventType', fuev."eventType"
+              )
+            ) FILTER (WHERE fuev.id IS NOT NULL), '[]'::JSON
+          )  AS events
+        FROM follow_up fu
+        ${joinClause}
+        ${whereClause}
+        GROUP BY fu.id, e.id
+      )
+      
+      SELECT
+        (SELECT "count" FROM "FollowUpsCount") AS "count",
+        COALESCE((SELECT JSON_AGG("FollowUpsData") FROM "FollowUpsData"), '[]'::JSON) AS "data";
+    `;
+
+    const [followUpResponse] =
+      await this.prisma.$queryRaw<QueryResponse<FollowUp>>(rawQuery);
 
     return responseBuilder({
-      message: SUCCESS_MSG.EMAILS_FETCHED,
-      result: followUp,
+      message: SUCCESS_MSG.FOLLOW_UPS_FETCHED,
+      result: followUpResponse,
     });
   }
 

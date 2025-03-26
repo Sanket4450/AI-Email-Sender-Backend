@@ -9,6 +9,7 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { CryptoService } from '../crypto/crypto.service';
 import { ESPS } from 'src/app/utils/constants';
 import { GetSendersDto } from './dto/get-senders.dto';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class SenderService {
@@ -105,25 +106,43 @@ export class SenderService {
   async getSenders(query: GetSendersDto) {
     const { search } = query;
 
+    const whereClause = search
+      ? Prisma.sql`WHERE s."displayName" ILIKE ${search}`
+      : Prisma.empty;
+
     const sql = Prisma.sql`
+      WITH "SendersCount" AS (
+        SELECT
+          COUNT(DISTINCT s.id)::INT AS "count"
+        FROM sender s
+        ${whereClause}
+      ),
+
+      "SendersData" AS (
+        SELECT
+          s.id AS id,
+          s."displayName" AS "displayName",
+          s.esp AS esp,
+          s.priority AS priority,
+          s.target AS target,
+          s."sentCount" AS "sentCount",
+          s."createdAt" AS "createdAt"
+        FROM sender s
+        ${whereClause}
+        ORDER BY s.priority ASC, s."createdAt" ASC
+      )
+
       SELECT
-        s.id AS id,
-        s."displayName" AS "displayName",
-        s.esp AS esp,
-        s.priority AS priority,
-        s.target AS target,
-        s."sentCount" AS "sentCount",
-        s."createdAt" AS "createdAt"
-      FROM sender S
-      ${search ? Prisma.sql`WHERE s."displayName" ILIKE ${search}` : Prisma.empty}
-      ORDER BY s.priority ASC, s."createdAt" ASC
+        (SELECT "count" FROM "SendersCount") AS "count",
+        COALESCE(SELECT JSON_AGG("SendersData"), , '[]'::JSON) FROM "SendersData") AS "data";
     `;
 
-    const senders = await this.prisma.$queryRaw<Sender[]>(sql);
+    const [sendersResponse] =
+      await this.prisma.$queryRaw<QueryResponse<Sender>>(sql);
 
     return responseBuilder({
       message: SUCCESS_MSG.SENDERS_FETCHED,
-      result: senders,
+      result: sendersResponse,
     });
   }
 

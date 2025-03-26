@@ -11,3 +11,8 @@ export interface PaginationQuery {
   offset: number;
   limit: number;
 }
+
+export type QueryResponse<T> = Array<{
+  count: number;
+  data: T[];
+}>;

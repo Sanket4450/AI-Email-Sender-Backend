@@ -9,6 +9,7 @@ import { Contact, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { GetContactsDto } from './dto/get-contacts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class ContactService {
@@ -145,48 +146,67 @@ export class ContactService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const rawQuery = Prisma.sql`
-      SELECT
-        c.id AS id,
-        c.name AS name,
-        c.position AS position,
-        c.email AS email,
-        c."linkedInUrl" AS "linkedInUrl",
-        c.location AS location,
-        c."createdAt" AS "createdAt",
-
-        JSON_BUILD_OBJECT(
-          'id', co.id,
-          'title', co.title,
-          'description', co.description,
-          'location', co.location,
-          'createdAt', co."createdAt"
-        ) AS company,
-
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', t.id,
-              'title', t.title
-            )
-          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-        )  AS tags
-
-      FROM contact c
+    const joinClause = Prisma.sql`
       JOIN company co ON c."companyId" = co.id
       LEFT JOIN contact_tag ct ON c.id = ct."contactId"
       LEFT JOIN tag t ON ct."tagId" = t.id
-      ${whereClause}
-      GROUP BY c.id, co.id
-      OFFSET ${offset}
-      LIMIT ${limit};
     `;
 
-    const contacts = await this.prisma.$queryRaw<Contact[]>(rawQuery);
+    const rawQuery = Prisma.sql`
+      WITH "ContactsCount" AS (
+        SELECT
+          COUNT(DISTINCT c.id)::INT AS "count"
+        FROM contact c
+        ${joinClause}
+        ${whereClause}
+      ),
+
+      "ContactsData" AS (
+        SELECT
+          c.id AS id,
+          c.name AS name,
+          c.position AS position,
+          c.email AS email,
+          c."linkedInUrl" AS "linkedInUrl",
+          c.location AS location,
+          c."createdAt" AS "createdAt",
+
+          JSON_BUILD_OBJECT(
+            'id', co.id,
+            'title', co.title,
+            'description', co.description,
+            'location', co.location,
+            'createdAt', co."createdAt"
+          ) AS company,
+
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', t.id,
+                'title', t.title
+              )
+            ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+          )  AS tags
+
+        FROM contact c
+        ${joinClause}
+        ${whereClause}
+        GROUP BY c.id, co.id
+        OFFSET ${offset}
+        LIMIT ${limit}
+      )
+      
+      SELECT
+        (SELECT "count" FROM "ContactsCount") AS "count",
+        COALESCE((SELECT JSON_AGG("ContactsData") FROM "ContactsData"), '[]'::JSON) AS "data"
+      ;
+    `;
+
+    const [contactsResponse] = await this.prisma.$queryRaw<QueryResponse<Contact>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.CONTACTS_FETCHED,
-      result: contacts,
+      result: contactsResponse,
     });
   }
 

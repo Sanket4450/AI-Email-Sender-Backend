@@ -9,6 +9,7 @@ import { ScheduledEmail, Prisma } from '@prisma/client';
 import { SenderService } from '../sender/sender.service';
 import { GetScheduledEmailsDto } from './dto/get-scheduled-emails.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class ScheduledEmailService {
@@ -139,43 +140,61 @@ export class ScheduledEmailService {
     }
 
     const whereClause = conditions.length
-      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const rawQuery = Prisma.sql`
-      SELECT
-        e.id AS id,
-        e.subject AS subject,
-        e."scheduledAt" AS "scheduledAt",
-        e."createdAt" AS "createdAt",
-        JSON_BUILD_OBJECT(
-          'id', s.id,
-          'displayName', s."displayName"
-        ) AS sender,
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', c.id,
-              'name', c.name
-            )
-          ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        )  AS contacts
-      FROM scheduled_email e
+    const joinClause = Prisma.sql`
       JOIN sender s ON s.id = e."senderId"
       LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
       LEFT JOIN contact c ON dc."contactId" = c.id
-      ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
-      GROUP BY e.id, s.id
-      OFFSET ${offset}
-      LIMIT ${limit};
     `;
 
-    const scheduledEmails =
-      await this.prisma.$queryRaw<ScheduledEmail[]>(rawQuery);
+    const rawQuery = Prisma.sql`
+      WITH "scheduledEmailSCount" AS (
+        SELECT
+          COUNT(DISTINCT e.id)::INT AS "count"
+        FROM scheduled_email e
+        ${joinClause}
+        ${whereClause}
+      ),
+      
+      "ScheduledEmails" AS (
+        SELECT
+          e.id AS id,
+          e.subject AS subject,
+          e."scheduledAt" AS "scheduledAt",
+          e."createdAt" AS "createdAt",
+          JSON_BUILD_OBJECT(
+            'id', s.id,
+            'displayName', s."displayName"
+          ) AS sender,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', c.id,
+                'name', c.name
+              )
+            ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
+          )  AS contacts
+        FROM scheduled_email e
+        ${joinClause}
+        ${whereClause}
+        GROUP BY e.id, s.id
+        OFFSET ${offset}
+        LIMIT ${limit}
+      )
+      
+      SELECT
+        (SELECT "count" FROM "scheduledEmailSCount") AS "count",
+        COALESCE((SELECT JSON_AGG("ScheduledEmails") FROM "ScheduledEmails"), '[]'::JSON) AS "data";
+    `;
+
+    const [scheduledEmails] =
+      await this.prisma.$queryRaw<QueryResponse<ScheduledEmail>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAILS_FETCHED,
-      result: scheduledEmails,
+      result: [scheduledEmails],
     });
   }
 

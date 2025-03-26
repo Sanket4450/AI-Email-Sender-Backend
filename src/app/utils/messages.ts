@@ -106,7 +106,7 @@ export const SUCCESS_MSG = {
   DRAFT_CREATED: 'Draft created successfully',
   DRAFT_UPDATED: 'Draft updated successfully',
   DRAFT_DELETED: 'Draft deleted successfully',
-  DRAFTS_FETCHED: 'Draftss fetched successfully',
+  DRAFTS_FETCHED: 'Drafts fetched successfully',
   DRAFT_FETCHED: 'Draft fetched successfully',
 
   // Email

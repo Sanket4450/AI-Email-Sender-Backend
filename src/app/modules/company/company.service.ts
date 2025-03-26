@@ -8,6 +8,7 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { GetCompaniesDto } from './dto/get-companies.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class CompanyService {
@@ -118,35 +119,54 @@ export class CompanyService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const rawQuery = Prisma.sql`
-      SELECT
-        c.id AS id,
-        c.title AS title,
-        c.description AS description,
-        c.location AS location,
-        c."createdAt" AS "createdAt",
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', t.id,
-              'title', t.title
-            )
-          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-        )  AS tags
-      FROM company c
+    const joinClause = Prisma.sql`
       LEFT JOIN company_tag ct ON c.id = ct."companyId"
       LEFT JOIN tag t ON ct."tagId" = t.id
-      ${whereClause}
-      GROUP BY c.id
-      OFFSET ${offset}
-      LIMIT ${limit};
     `;
 
-    const companies = await this.prisma.$queryRaw<Company[]>(rawQuery);
+    const rawQuery = Prisma.sql`
+      WITH "CompaniesCount" AS (
+        SELECT
+          COUNT(DISTINCT c.id)::INT AS "count"
+        FROM company c
+        ${joinClause}
+        ${whereClause}
+      ),
+
+      "CompaniesData" AS (
+        SELECT
+          c.id AS id,
+          c.title AS title,
+          c.description AS description,
+          c.location AS location,
+          c."createdAt" AS "createdAt",
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', t.id,
+                'title', t.title
+              )
+            ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+          )  AS tags
+        FROM company c
+        ${joinClause}
+        ${whereClause}
+        GROUP BY c.id
+        OFFSET ${offset}
+        LIMIT ${limit}
+      )
+      
+      SELECT
+        (SELECT "count" FROM "CompaniesCount") AS "count",
+        COALESCE((SELECT JSON_AGG("CompaniesData") FROM "CompaniesData"), '[]'::JSON) AS "data";
+    `;
+
+    const [companiesResponse] =
+      await this.prisma.$queryRaw<QueryResponse<Company>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.COMPANIES_FETCHED,
-      result: companies,
+      result: companiesResponse,
     });
   }
 

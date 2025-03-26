@@ -8,6 +8,7 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { Draft, Prisma } from '@prisma/client';
 import { GetDraftsDto } from './dto/get-drafts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
+import { QueryResponse } from 'src/app/types/common.type';
 
 @Injectable()
 export class DraftService {
@@ -119,36 +120,56 @@ export class DraftService {
     }
 
     const whereClause = conditions.length
-      ? Prisma.sql`${Prisma.join(conditions, ` AND `)}`
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const rawQuery = Prisma.sql`
-      SELECT
-        d.id AS id,
-        d.subject AS subject,
-        d."createdAt" AS "createdAt",
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', c.id,
-              'name', c.name
-            )
-          ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        )  AS contacts
-      FROM draft d
+    const joinClause = Prisma.sql`
       LEFT JOIN draft_contact dc ON d.id = dc."draftId"
       LEFT JOIN contact c ON dc."contactId" = c.id
-      ${whereClause.sql.trim().length ? Prisma.sql`WHERE ${whereClause}` : Prisma.empty}
-      GROUP BY d.id
-      OFFSET ${offset}
-      LIMIT ${limit};
     `;
 
-    const drafts = await this.prisma.$queryRaw<Draft[]>(rawQuery);
+    const rawQuery = Prisma.sql`
+      WITH "DraftsCount" AS (
+        SELECT
+          COUNT(DISTINCT d.id)::INT AS "count"
+        FROM draft d
+        ${joinClause}
+        ${whereClause}
+      ),
+
+      "DraftsData" AS (
+        SELECT
+          d.id AS id,
+          d.subject AS subject,
+          d."createdAt" AS "createdAt",
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'id', c.id,
+                'name', c.name
+              )
+            ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
+          )  AS contacts
+        FROM draft d
+        ${joinClause}
+        ${whereClause}
+        GROUP BY d.id
+        OFFSET ${offset}
+        LIMIT ${limit}
+      )
+      
+      SELECT
+        (SELECT "count" FROM "DraftsCount") AS "count",
+        COALESCE((SELECT JSON_AGG("DraftsData") FROM "DraftsData"), '[]'::JSON) AS "data";
+      ;
+    `;
+
+    const [draftsResponse] =
+      await this.prisma.$queryRaw<QueryResponse<Draft>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.DRAFTS_FETCHED,
-      result: drafts,
+      result: [draftsResponse],
     });
   }
 
