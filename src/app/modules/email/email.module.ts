@@ -4,10 +4,11 @@ import { EmailController } from './email.controller';
 import { PrismaModule } from 'src/config/prisma/prisma.module';
 import { SenderModule } from '../sender/sender.module';
 import { ESPModule } from '../esp/esp.module';
+import { EmailQuery } from './email.query';
 
 @Module({
   imports: [PrismaModule, SenderModule, ESPModule],
-  providers: [EmailService],
+  providers: [EmailService, EmailQuery],
   controllers: [EmailController],
   exports: [EmailService],
 })

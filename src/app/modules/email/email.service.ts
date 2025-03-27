@@ -1,7 +1,7 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { ERROR_MSG, SUCCESS_MSG, VALIDATION_MSG } from 'src/app/utils/messages';
+import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { SenderService } from '../sender/sender.service';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
@@ -17,6 +17,7 @@ import {
   VALUES,
 } from 'src/app/utils/constants';
 import { QueryResponse } from 'src/app/types/common.type';
+import { EmailQuery } from './email.query';
 
 @Injectable()
 export class EmailService {
@@ -24,6 +25,7 @@ export class EmailService {
     private readonly prisma: PrismaService,
     private readonly senderService: SenderService,
     private readonly espService: ESPService,
+    private readonly emailQuery: EmailQuery,
   ) {}
 
   // Create a new email
@@ -130,27 +132,7 @@ export class EmailService {
 
       "EmailsData" AS (
         SELECT
-          e.id AS id,
-          e.subject AS subject,
-          e."isBounced" AS "isBounced",
-          e."isSpamReported" AS "isSpamReported",
-          e."createdAt" AS "createdAt",
-          JSON_BUILD_OBJECT(
-            'id', c.id,
-            'name', c."name"
-          ) AS contact,
-          JSON_BUILD_OBJECT(
-            'id', s.id,
-            'displayName', s."displayName"
-          ) AS sender,
-          COALESCE(
-            JSON_AGG(
-              JSON_BUILD_OBJECT(
-                'id', ev.id,
-                'eventType', ev."eventType"
-              )
-            ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
-          )  AS events
+          ${this.emailQuery.getEmailSelectFields()}
         FROM email e
         ${joinClause}
         ${whereClause}
@@ -165,7 +147,10 @@ export class EmailService {
         COALESCE((SELECT JSON_AGG("EmailsData") FROM "EmailsData"), '[]'::JSON) AS "data";
     `;
 
-    const [emailsResponse] = await this.prisma.$queryRaw<QueryResponse<Email>>(rawQuery);
+    console.log(rawQuery.sql)
+
+    const [emailsResponse] =
+      await this.prisma.$queryRaw<QueryResponse<Email>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAILS_FETCHED,
@@ -177,33 +162,7 @@ export class EmailService {
   async getSingleEmail(id: string) {
     const rawQuery = Prisma.sql`
         SELECT
-          e.id AS id,
-          e.subject AS subject,
-          e.body AS body,
-          e."isBounced" AS isBounced,
-          e."isSpamReported" AS isSpamReported,
-          e."createdAt" AS "createdAt",
-          JSON_BUILD_OBJECT(
-            'id', c.id,
-            'name', c."name",
-            'position', c.position,
-            'email', c.email,
-            'phone', c.phone,
-            'linkedInUrl', c."linkedInUrl",
-            'location', c.location
-          ) AS contact,
-          JSON_BUILD_OBJECT(
-            'id', s.id,
-            'displayName', s."displayName"
-          ) AS sender,
-          COALESCE(
-            JSON_AGG(
-              JSON_BUILD_OBJECT(
-                'id', ev.id,
-                'eventType', ev."eventType"
-              )
-            ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
-          )  AS events
+          ${this.emailQuery.getEmailSelectFields(true)}
         FROM email e
         JOIN contact c ON c.id = e."contactId"
         JOIN sender s ON s.id = e."senderId"
