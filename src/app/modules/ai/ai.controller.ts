@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AIService } from './ai.service';
 import { GenerateEmailDto } from './dto/generate-email.dto';
 import { Response } from 'express';
@@ -7,7 +7,7 @@ import { Response } from 'express';
 export class AIController {
   constructor(private readonly aiService: AIService) {}
 
-  @Get('generate/email')
+  @Post('generate/email')
   async generateEmail(@Body() body: GenerateEmailDto, @Res() res: Response) {
     const stream = await this.aiService.generateEmail(body);
 

@@ -9,10 +9,14 @@ import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { GetCompaniesDto } from './dto/get-companies.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
+import { CompanyQuery } from './company.query';
 
 @Injectable()
 export class CompanyService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly companyQuery: CompanyQuery,
+  ) {}
 
   // Create a new company
   async createCompany(body: CreateCompanyyDto) {
@@ -135,19 +139,7 @@ export class CompanyService {
 
       "CompaniesData" AS (
         SELECT
-          c.id AS id,
-          c.title AS title,
-          c.description AS description,
-          c.location AS location,
-          c."createdAt" AS "createdAt",
-          COALESCE(
-            JSON_AGG(
-              JSON_BUILD_OBJECT(
-                'id', t.id,
-                'title', t.title
-              )
-            ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-          )  AS tags
+          ${this.companyQuery.getCompanySelectFields()}
         FROM company c
         ${joinClause}
         ${whereClause}
@@ -174,19 +166,7 @@ export class CompanyService {
   async getSingleCompany(id: string) {
     const rawQuery = Prisma.sql`
       SELECT
-        c.id AS id,
-        c.title AS title,
-        c.description AS description,
-        c.location AS location,
-        c."createdAt" AS "createdAt",
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', t.id,
-              'title', t.title
-            )
-          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-        )  AS tags
+        ${this.companyQuery.getCompanySelectFields()}
       FROM company c
       LEFT JOIN company_tag ct ON c.id = ct."companyId"
       LEFT JOIN tag t ON ct."tagId" = t.id
