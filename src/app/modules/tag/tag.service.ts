@@ -5,12 +5,18 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { GetTagsDto } from './dto/get-tags.dto';
-import { getPagination } from 'src/app/utils/common.utils';
+import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
+import { Prisma, Tag } from '@prisma/client';
+import { QueryResponse } from 'src/app/types/common.type';
+import { TagQuery } from './tag.query';
 
 @Injectable()
 export class TagService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly tagQuery: TagQuery,
+  ) {}
 
   // Create a new tag
   async createTag(body: CreateTagDto) {
@@ -69,17 +75,50 @@ export class TagService {
 
   // Get all tags
   async getTags(query: GetTagsDto) {
+    const { search } = query;
     const { offset, limit } = getPagination(query);
 
-    const tags = await this.prisma.tag.findMany({
-      where: { ...(query.search && { title: { contains: query.search } }) },
-      select: { id: true, title: true },
-      orderBy: { title: 'asc' },
-      skip: offset,
-      take: limit,
-    });
+    const conditions: Prisma.Sql[] = [];
 
-    return responseBuilder({ message: SUCCESS_MSG.TAGS_FETCHED, result: tags });
+    if (search) {
+      const searchKeys = ['t.title'];
+      conditions.push(getSearchCond(search, searchKeys));
+    }
+
+    const whereClause = conditions.length
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
+      : Prisma.empty;
+
+    const rawQuery = Prisma.sql`
+      WITH "TagsCount" AS (
+        SELECT
+          COUNT(t.id)::INT AS "count"
+        FROM tag t
+        ${whereClause}
+      ),
+      
+      "Tags" AS (
+        SELECT
+          ${this.tagQuery.getTagSelectFields()}
+        FROM tag t
+        ${whereClause}
+        ORDER BY t.title
+        OFFSET ${offset}
+        LIMIT ${limit}
+      )
+      
+      SELECT
+        (SELECT "count" FROM "TagsCount") AS "count",
+        COALESCE((SELECT JSON_AGG("Tags") FROM "Tags"), '[]'::JSON) AS "data";
+    `;
+
+    const [TagResponse] =
+      await this.prisma.$queryRaw<QueryResponse<Tag>>(rawQuery);
+
+    return responseBuilder({
+      message: SUCCESS_MSG.TAGS_FETCHED,
+      result: TagResponse,
+    });
   }
 
   // Check if a tag exists

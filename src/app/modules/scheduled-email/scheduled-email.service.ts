@@ -10,12 +10,14 @@ import { SenderService } from '../sender/sender.service';
 import { GetScheduledEmailsDto } from './dto/get-scheduled-emails.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
+import { ScheduledEmailQuery } from './scheduled-email.query';
 
 @Injectable()
 export class ScheduledEmailService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly senderService: SenderService,
+    private readonly scheduledEmailQuery: ScheduledEmailQuery,
   ) {}
 
   // Create a new scheduledEmail
@@ -160,22 +162,7 @@ export class ScheduledEmailService {
       
       "ScheduledEmails" AS (
         SELECT
-          e.id AS id,
-          e.subject AS subject,
-          e."scheduledAt" AS "scheduledAt",
-          e."createdAt" AS "createdAt",
-          JSON_BUILD_OBJECT(
-            'id', s.id,
-            'displayName', s."displayName"
-          ) AS sender,
-          COALESCE(
-            JSON_AGG(
-              JSON_BUILD_OBJECT(
-                'id', c.id,
-                'name', c.name
-              )
-            ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-          )  AS contacts
+          ${this.scheduledEmailQuery.getScheduledEmailSelectFields()}
         FROM scheduled_email e
         ${joinClause}
         ${whereClause}
@@ -189,12 +176,12 @@ export class ScheduledEmailService {
         COALESCE((SELECT JSON_AGG("ScheduledEmails") FROM "ScheduledEmails"), '[]'::JSON) AS "data";
     `;
 
-    const [scheduledEmails] =
+    const [scheduledEmailResponse] =
       await this.prisma.$queryRaw<QueryResponse<ScheduledEmail>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.EMAILS_FETCHED,
-      result: [scheduledEmails],
+      result: scheduledEmailResponse,
     });
   }
 
@@ -202,28 +189,7 @@ export class ScheduledEmailService {
   async getSingleScheduledEmail(id: string) {
     const rawQuery = Prisma.sql`
       SELECT
-        e.id AS id,
-        e.subject AS subject,
-        e.body AS body,
-        e."scheduledAt" AS "scheduledAt",
-        e."createdAt" AS "createdAt",
-        JSON_BUILD_OBJECT(
-          'id', s.id,
-          'displayName', s."displayName"
-        ) AS sender,
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', c.id,
-              'name', c.name,
-              'position', c.position,
-              'email', c.email,
-              'phone', c.phone,
-              'linkedInUrl', c."linkedInUrl",
-              'location', c.location
-            )
-          ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        ) AS contacts
+        ${this.scheduledEmailQuery.getScheduledEmailSelectFields(true)}
       FROM scheduled_email e
       JOIN sender s ON s.id = e."senderId"
       LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"

@@ -39,9 +39,9 @@ export class SenderController {
   }
 
   // Get all contacts
-  @Get()
-  async getSenders(@Query() query: GetSendersDto) {
-    return this.contactService.getSenders(query);
+  @Post('get')
+  async getSenders(@Body() body: GetSendersDto) {
+    return this.contactService.getSenders(body);
   }
 
   // Get a contact by ID

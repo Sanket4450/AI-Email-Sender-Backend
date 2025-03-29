@@ -147,8 +147,6 @@ export class EmailService {
         COALESCE((SELECT JSON_AGG("EmailsData") FROM "EmailsData"), '[]'::JSON) AS "data";
     `;
 
-    console.log(rawQuery.sql)
-
     const [emailsResponse] =
       await this.prisma.$queryRaw<QueryResponse<Email>>(rawQuery);
 

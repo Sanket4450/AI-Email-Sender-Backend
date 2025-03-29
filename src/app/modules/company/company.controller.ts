@@ -39,9 +39,9 @@ export class CompanyController {
   }
 
   // Get all companies
-  @Get()
-  async getCompanies(@Query() query: GetCompaniesDto) {
-    return this.companyService.getCompanies(query);
+  @Post('get')
+  async getCompanies(@Body() body: GetCompaniesDto) {
+    return this.companyService.getCompanies(body);
   }
 
   // Get a company by ID

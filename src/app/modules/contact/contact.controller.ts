@@ -39,9 +39,9 @@ export class ContactController {
   }
 
   // Get all contacts
-  @Get()
-  async getContacts(@Query() query: GetContactsDto) {
-    return this.contactService.getContacts(query);
+  @Post('get')
+  async getContacts(@Body() body: GetContactsDto) {
+    return this.contactService.getContacts(body);
   }
 
   // Get a contact by ID

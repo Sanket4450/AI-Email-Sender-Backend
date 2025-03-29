@@ -9,7 +9,7 @@ export class EmailQuery {
     getAllFields: boolean = false,
   ): Prisma.Sql => Prisma.sql`
     e.id AS id,
-    ${Prisma.raw(getAllFields ? 'e.body AS body,' : '')}
+    ${getAllFields ? Prisma.sql`e.body AS body,` : Prisma.empty}
     e.subject AS subject,
     e."isBounced" AS "isBounced",
     e."isSpamReported" AS "isSpamReported",
@@ -17,17 +17,17 @@ export class EmailQuery {
     JSON_BUILD_OBJECT(
       'id', c.id,
       'name', c."name"
-      ${Prisma.raw(
+      ${
         getAllFields
-          ? `,
+          ? Prisma.sql`,
             'position', c.position,
             'email', c.email,
             'phone', c.phone,
             'linkedInUrl', c."linkedInUrl",
             'location', c.location
             `
-          : '',
-      )}
+          : Prisma.empty
+      }
     ) AS contact,
     JSON_BUILD_OBJECT(
       'id', s.id,

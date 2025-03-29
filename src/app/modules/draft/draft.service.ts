@@ -169,7 +169,7 @@ export class DraftService {
 
     return responseBuilder({
       message: SUCCESS_MSG.DRAFTS_FETCHED,
-      result: [draftsResponse],
+      result: draftsResponse,
     });
   }
 

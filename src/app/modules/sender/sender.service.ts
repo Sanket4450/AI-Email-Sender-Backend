@@ -10,12 +10,14 @@ import { CryptoService } from '../crypto/crypto.service';
 import { ESPS } from 'src/app/utils/constants';
 import { GetSendersDto } from './dto/get-senders.dto';
 import { QueryResponse } from 'src/app/types/common.type';
+import { SenderQuery } from './sender.query';
 
 @Injectable()
 export class SenderService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cryptoService: CryptoService,
+    private readonly senderQuery: SenderQuery,
   ) {}
 
   // Create a new sender
@@ -110,7 +112,7 @@ export class SenderService {
       ? Prisma.sql`WHERE s."displayName" ILIKE ${search}`
       : Prisma.empty;
 
-    const sql = Prisma.sql`
+    const rawQuery = Prisma.sql`
       WITH "SendersCount" AS (
         SELECT
           COUNT(DISTINCT s.id)::INT AS "count"
@@ -120,13 +122,7 @@ export class SenderService {
 
       "SendersData" AS (
         SELECT
-          s.id AS id,
-          s."displayName" AS "displayName",
-          s.esp AS esp,
-          s.priority AS priority,
-          s.target AS target,
-          s."sentCount" AS "sentCount",
-          s."createdAt" AS "createdAt"
+          ${this.senderQuery.getSenderSelectFields()}
         FROM sender s
         ${whereClause}
         ORDER BY s.priority ASC, s."createdAt" ASC
@@ -134,11 +130,11 @@ export class SenderService {
 
       SELECT
         (SELECT "count" FROM "SendersCount") AS "count",
-        COALESCE(SELECT JSON_AGG("SendersData"), , '[]'::JSON) FROM "SendersData") AS "data";
+        COALESCE((SELECT JSON_AGG("SendersData") FROM "SendersData"), '[]'::JSON) AS "data";
     `;
 
     const [sendersResponse] =
-      await this.prisma.$queryRaw<QueryResponse<Sender>>(sql);
+      await this.prisma.$queryRaw<QueryResponse<Sender>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.SENDERS_FETCHED,
@@ -150,16 +146,8 @@ export class SenderService {
   async getSingleSender(id: string) {
     const rawQuery = Prisma.sql`
       SELECT
-        s.id AS id,
-        s."displayName" AS "displayName",
-        s.name AS name,
-        s.email AS email,
-        s.esp AS esp,
-        s.priority AS priority,
-        s.target AS target,
-        s."sentCount" AS "sentCount",
-        s."createdAt" AS "createdAt"
-      FROM sender S
+        ${this.senderQuery.getSenderSelectFields(true)}
+      FROM sender s
       WHERE s.id = ${id}
     `;
 
