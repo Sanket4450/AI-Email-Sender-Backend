@@ -2,44 +2,41 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class EmailQuery {
+export class ContactQuery {
   constructor() {}
 
-  getEmailSelectFields = (
+  getContactSelectFields = (
     getAllFields: boolean = false,
   ): Prisma.Sql => Prisma.sql`
-    e.id AS id,
-    ${getAllFields ? Prisma.sql`e.body AS body,` : Prisma.empty}
-    e.subject AS subject,
-    e."isBounced" AS "isBounced",
-    e."isSpamReported" AS "isSpamReported",
-    e."createdAt" AS "createdAt",
+    c.id AS id,
+    c.name AS name,
+    c.position AS position,
+    c.email AS email,
+    c."linkedInUrl" AS "linkedInUrl",
+    c.location AS location,
+    c."createdAt" AS "createdAt",
+
     JSON_BUILD_OBJECT(
-      'id', c.id,
-      'name', c."name"
+      'id', co.id,
+      'title', co.title
       ${
         getAllFields
           ? Prisma.sql`,
-            'position', c.position,
-            'email', c.email,
-            'phone', c.phone,
-            'linkedInUrl', c."linkedInUrl",
-            'location', c.location
-            `
+            'description', co.description,
+            'location', co.location,
+            'createdAt', co."createdAt"
+          `
           : Prisma.empty
       }
-    ) AS contact,
-    JSON_BUILD_OBJECT(
-      'id', s.id,
-      'displayName', s."displayName"
-    ) AS sender,
+    ) AS company,
+
     COALESCE(
       JSON_AGG(
         JSON_BUILD_OBJECT(
-          'id', ev.id,
-          'eventType', ev."eventType"
+          'id', t.id,
+          'title', t.title
         )
-      ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
-    ) AS events
+      ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+    ) AS tags
   `;
 }

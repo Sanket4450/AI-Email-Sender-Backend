@@ -10,12 +10,14 @@ import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { GetContactsDto } from './dto/get-contacts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
+import { ContactQuery } from './contact.query';
 
 @Injectable()
 export class ContactService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly companyService: CompanyService,
+    private readonly contactQuery: ContactQuery,
   ) {}
 
   // Create a new contact
@@ -163,31 +165,7 @@ export class ContactService {
 
       "ContactsData" AS (
         SELECT
-          c.id AS id,
-          c.name AS name,
-          c.position AS position,
-          c.email AS email,
-          c."linkedInUrl" AS "linkedInUrl",
-          c.location AS location,
-          c."createdAt" AS "createdAt",
-
-          JSON_BUILD_OBJECT(
-            'id', co.id,
-            'title', co.title,
-            'description', co.description,
-            'location', co.location,
-            'createdAt', co."createdAt"
-          ) AS company,
-
-          COALESCE(
-            JSON_AGG(
-              JSON_BUILD_OBJECT(
-                'id', t.id,
-                'title', t.title
-              )
-            ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-          )  AS tags
-
+          ${this.contactQuery.getContactSelectFields()}
         FROM contact c
         ${joinClause}
         ${whereClause}
@@ -202,7 +180,8 @@ export class ContactService {
       ;
     `;
 
-    const [contactsResponse] = await this.prisma.$queryRaw<QueryResponse<Contact>>(rawQuery);
+    const [contactsResponse] =
+      await this.prisma.$queryRaw<QueryResponse<Contact>>(rawQuery);
 
     return responseBuilder({
       message: SUCCESS_MSG.CONTACTS_FETCHED,
@@ -214,32 +193,7 @@ export class ContactService {
   async getSingleContact(id: string) {
     const rawQuery = Prisma.sql`
       SELECT
-        c.id AS id,
-        c.name AS name,
-        c.position AS position,
-        c.email AS email,
-        c."linkedInUrl" AS "linkedInUrl",
-        c.location AS location,
-        c.status AS status,
-        c."createdAt" AS "createdAt",
-
-        JSON_BUILD_OBJECT(
-          'id', co.id,
-          'title', co.title,
-          'description', co.description,
-          'location', co.location,
-          'createdAt', co."createdAt"
-        ) AS company,
-
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', t.id,
-              'title', t.title
-            )
-          ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-        )  AS tags
-
+        ${this.contactQuery.getContactSelectFields(true)}
       FROM contact c
       JOIN company co ON c."companyId" = co.id
       LEFT JOIN contact_tag ct ON c.id = ct."contactId"
