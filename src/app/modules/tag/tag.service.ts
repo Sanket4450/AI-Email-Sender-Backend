@@ -21,7 +21,10 @@ export class TagService {
   // Create a new tag
   async createTag(body: CreateTagDto) {
     const existingTag = await this.prisma.tag.findFirst({
-      where: { title: { equals: body.title, mode: 'insensitive' } },
+      where: {
+        title: { equals: body.title, mode: 'insensitive' },
+        isDeleted: false,
+      },
     });
 
     if (existingTag) {
@@ -45,6 +48,7 @@ export class TagService {
         where: {
           title: { equals: body.title, mode: 'insensitive' },
           id: { not: id },
+          isDeleted: false,
         },
       });
 
@@ -68,7 +72,7 @@ export class TagService {
   async deleteTag(id: string) {
     await this.tagExists(id);
 
-    await this.prisma.tag.delete({ where: { id } });
+    await this.prisma.tag.update({ where: { id }, data: { isDeleted: true } });
 
     return responseBuilder({ message: SUCCESS_MSG.TAG_DELETED });
   }
@@ -84,6 +88,8 @@ export class TagService {
       const searchKeys = ['t.title'];
       conditions.push(getSearchCond(search, searchKeys));
     }
+
+    conditions.push(Prisma.sql`t."isDeleted" = false`);
 
     const whereClause = conditions.length
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
@@ -123,7 +129,9 @@ export class TagService {
 
   // Check if a tag exists
   async tagExists(id: string) {
-    const tag = await this.prisma.tag.findUnique({ where: { id } });
+    const tag = await this.prisma.tag.findUnique({
+      where: { id, isDeleted: false },
+    });
 
     if (!tag) {
       throw new CustomHttpException(

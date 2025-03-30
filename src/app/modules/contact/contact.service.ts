@@ -25,8 +25,8 @@ export class ContactService {
     const { companyId, tags, ...createContactBody } = body;
 
     // Check if the email is already used
-    const existingContact = await this.prisma.contact.findUnique({
-      where: { email: body.email },
+    const existingContact = await this.prisma.contact.findFirst({
+      where: { email: body.email, isDeleted: false },
     });
 
     if (existingContact) {
@@ -42,7 +42,7 @@ export class ContactService {
     // Validate tags if provided
     if (tags?.length) {
       const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags } },
+        where: { id: { in: tags }, isDeleted: false },
       });
 
       if (existingTags.length !== tags.length) {
@@ -75,6 +75,8 @@ export class ContactService {
   async updateContact(id: string, body: UpdateContactDto) {
     const { companyId, tags, ...updateContactBody } = body;
 
+    await this.contactExists(id);
+
     // Validate companyId if provided
     if (companyId) {
       await this.companyService.companyExists(companyId);
@@ -83,7 +85,7 @@ export class ContactService {
     // Validate tags if provided
     if (tags?.length) {
       const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags } },
+        where: { id: { in: tags }, isDeleted: false },
       });
 
       if (existingTags.length !== tags.length) {
@@ -118,7 +120,10 @@ export class ContactService {
   async deleteContact(id: string) {
     await this.contactExists(id);
 
-    await this.prisma.contact.delete({ where: { id } });
+    await this.prisma.contact.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
 
     return responseBuilder({ message: SUCCESS_MSG.CONTACT_DELETED });
   }
@@ -144,15 +149,13 @@ export class ContactService {
       conditions.push(getSearchCond(search, searchKeys));
     }
 
+    conditions.push(Prisma.sql`c."isDeleted" = false`);
+
     const whereClause = conditions.length
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const joinClause = Prisma.sql`
-      JOIN company co ON c."companyId" = co.id
-      LEFT JOIN contact_tag ct ON c.id = ct."contactId"
-      LEFT JOIN tag t ON ct."tagId" = t.id
-    `;
+    const joinClause = this.contactQuery.getContactJoinClause();
 
     const rawQuery = Prisma.sql`
       WITH "ContactsCount" AS (
@@ -191,14 +194,16 @@ export class ContactService {
 
   // Get a contact by ID
   async getSingleContact(id: string) {
+    const joinClause = this.contactQuery.getContactJoinClause();
+
+    const whereClause = Prisma.sql`WHERE c.id = ${id} AND c."isDeleted" = false`;
+
     const rawQuery = Prisma.sql`
       SELECT
         ${this.contactQuery.getContactSelectFields(true)}
       FROM contact c
-      JOIN company co ON c."companyId" = co.id
-      LEFT JOIN contact_tag ct ON c.id = ct."contactId"
-      LEFT JOIN tag t ON ct."tagId" = t.id
-      WHERE c.id = ${id}
+      ${joinClause}
+      ${whereClause}
       GROUP BY c.id, co.id
     `;
 
@@ -219,7 +224,9 @@ export class ContactService {
 
   // Check if a contact exists
   async contactExists(id: string) {
-    const contact = await this.prisma.contact.findUnique({ where: { id } });
+    const contact = await this.prisma.contact.findUnique({
+      where: { id, isDeleted: false },
+    });
 
     if (!contact) {
       throw new CustomHttpException(

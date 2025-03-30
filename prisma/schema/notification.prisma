@@ -4,6 +4,7 @@ model Notification {
   email     Email            @relation(fields: [emailId], references: [id])
   type      NotificationType
   isRead    Boolean          @default(false)
+  isDeleted Boolean          @default(false)
   createdAt DateTime         @default(now())
 
   @@map("notification")

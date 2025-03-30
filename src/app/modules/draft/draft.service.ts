@@ -9,10 +9,14 @@ import { Draft, Prisma } from '@prisma/client';
 import { GetDraftsDto } from './dto/get-drafts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
+import { DraftQuery } from './draft.query';
 
 @Injectable()
 export class DraftService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly draftQuery: DraftQuery,
+  ) {}
 
   // Create a new draft
   async createDraft(body: CreateDraftDto) {
@@ -123,10 +127,9 @@ export class DraftService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const joinClause = Prisma.sql`
-      LEFT JOIN draft_contact dc ON d.id = dc."draftId"
-      LEFT JOIN contact c ON dc."contactId" = c.id
-    `;
+    const joinClause = this.draftQuery.getDraftJoinClause();
+
+    const selectClause = this.draftQuery.getDraftSelectFields();
 
     const rawQuery = Prisma.sql`
       WITH "DraftsCount" AS (
@@ -139,17 +142,7 @@ export class DraftService {
 
       "DraftsData" AS (
         SELECT
-          d.id AS id,
-          d.subject AS subject,
-          d."createdAt" AS "createdAt",
-          COALESCE(
-            JSON_AGG(
-              JSON_BUILD_OBJECT(
-                'id', c.id,
-                'name', c.name
-              )
-            ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-          )  AS contacts
+          ${selectClause}
         FROM draft d
         ${joinClause}
         ${whereClause}
@@ -175,29 +168,18 @@ export class DraftService {
 
   // Get a draft by ID
   async getSingleDraft(id: string) {
+    const whereClause = Prisma.sql`WHERE d.id = ${id}`;
+
+    const joinClause = this.draftQuery.getDraftJoinClause();
+
+    const selectClause = this.draftQuery.getDraftSelectFields(true);
+
     const rawQuery = Prisma.sql`
       SELECT
-        d.id AS id,
-        d.subject AS subject,
-        d.body AS body,
-        d."createdAt" AS "createdAt",
-        COALESCE(
-          JSON_AGG(
-            JSON_BUILD_OBJECT(
-              'id', c.id,
-              'name', c.name,
-              'position', c.position,
-              'email', c.email,
-              'phone', c.phone,
-              'linkedInUrl', c."linkedInUrl",
-              'location', c.location
-            )
-          ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-        )  AS contacts
+        ${selectClause}
       FROM draft d
-      LEFT JOIN draft_contact dc ON d.id = dc."draftId"
-      LEFT JOIN contact c ON dc."contactId" = c.id
-      WHERE d.id = ${id}
+      ${joinClause}
+      ${whereClause}
       GROUP BY d.id
     `;
 

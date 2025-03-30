@@ -35,4 +35,10 @@ export class ScheduledEmailQuery {
       ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
     ) AS contacts
   `;
+
+  getScheduledEmailJoinClause = (): Prisma.Sql => Prisma.sql`
+    JOIN sender s ON s.id = e."senderId"
+    LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
+    LEFT JOIN contact c ON dc."contactId" = c.id
+  `;
 }

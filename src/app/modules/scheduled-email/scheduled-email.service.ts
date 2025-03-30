@@ -145,11 +145,7 @@ export class ScheduledEmailService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const joinClause = Prisma.sql`
-      JOIN sender s ON s.id = e."senderId"
-      LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
-      LEFT JOIN contact c ON dc."contactId" = c.id
-    `;
+    const joinClause = this.scheduledEmailQuery.getScheduledEmailJoinClause();
 
     const rawQuery = Prisma.sql`
       WITH "scheduledEmailSCount" AS (
@@ -187,14 +183,16 @@ export class ScheduledEmailService {
 
   // Get a scheduledEmail by ID
   async getSingleScheduledEmail(id: string) {
+    const joinClause = this.scheduledEmailQuery.getScheduledEmailJoinClause();
+
+    const whereClause = Prisma.sql`WHERE e.id = ${id}`;
+
     const rawQuery = Prisma.sql`
       SELECT
         ${this.scheduledEmailQuery.getScheduledEmailSelectFields(true)}
       FROM scheduled_email e
-      JOIN sender s ON s.id = e."senderId"
-      LEFT JOIN scheduled_email_contact dc ON e.id = dc."emailId"
-      LEFT JOIN contact c ON dc."contactId" = c.id
-      WHERE e.id = ${id}
+      ${joinClause}
+      ${whereClause}
       GROUP BY e.id, s.id;
     `;
 

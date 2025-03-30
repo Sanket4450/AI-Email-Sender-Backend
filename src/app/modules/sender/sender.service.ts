@@ -11,6 +11,7 @@ import { ESPS } from 'src/app/utils/constants';
 import { GetSendersDto } from './dto/get-senders.dto';
 import { QueryResponse } from 'src/app/types/common.type';
 import { SenderQuery } from './sender.query';
+import { getSearchCond } from 'src/app/utils/common.utils';
 
 @Injectable()
 export class SenderService {
@@ -30,6 +31,7 @@ export class SenderService {
       where: {
         name: { equals: body.name, mode: 'insensitive' },
         esp: body.esp,
+        isDeleted: false,
       },
     });
 
@@ -69,6 +71,7 @@ export class SenderService {
           name: { equals: body.name, mode: 'insensitive' },
           esp: sender.esp,
           id: { not: id },
+          isDeleted: false,
         },
       });
 
@@ -99,7 +102,10 @@ export class SenderService {
   async deleteSender(id: string) {
     await this.senderExists(id);
 
-    await this.prisma.sender.delete({ where: { id } });
+    await this.prisma.sender.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
 
     return responseBuilder({ message: SUCCESS_MSG.SENDER_DELETED });
   }
@@ -108,14 +114,23 @@ export class SenderService {
   async getSenders(query: GetSendersDto) {
     const { search } = query;
 
-    const whereClause = search
-      ? Prisma.sql`WHERE s."displayName" ILIKE ${search}`
+    const conditions: Prisma.Sql[] = [];
+
+    if (search) {
+      const searchKeys = ['s."displayName"'];
+      conditions.push(getSearchCond(search, searchKeys));
+    }
+
+    conditions.push(Prisma.sql`s."isDeleted" = false`);
+
+    const whereClause = conditions.length
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
     const rawQuery = Prisma.sql`
       WITH "SendersCount" AS (
         SELECT
-          COUNT(DISTINCT s.id)::INT AS "count"
+          COUNT(s.id)::INT AS "count"
         FROM sender s
         ${whereClause}
       ),
@@ -144,11 +159,13 @@ export class SenderService {
 
   // Get a sender by ID
   async getSingleSender(id: string) {
+    const whereClause = Prisma.sql`WHERE s.id = ${id} AND s."isDeleted" = false`;
+
     const rawQuery = Prisma.sql`
       SELECT
         ${this.senderQuery.getSenderSelectFields(true)}
       FROM sender s
-      WHERE s.id = ${id}
+      ${whereClause}
     `;
 
     const [sender] = await this.prisma.$queryRaw<Sender[]>(rawQuery);
@@ -168,7 +185,9 @@ export class SenderService {
 
   // Check if a sender exists
   async senderExists(id: string) {
-    const sender = await this.prisma.sender.findUnique({ where: { id } });
+    const sender = await this.prisma.sender.findUnique({
+      where: { id, isDeleted: false },
+    });
 
     if (!sender) {
       throw new CustomHttpException(

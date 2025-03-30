@@ -1,10 +1,11 @@
 model Company {
   id          String       @id @default(cuid())
-  title       String       @unique
+  title       String
   companyTags CompanyTag[]
   description String?
   location    String
   contacts    Contact[]
+  isDeleted   Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
@@ -24,9 +25,10 @@ model CompanyTag {
 
 model Tag {
   id           String       @id @default(cuid())
-  title        String       @unique
+  title        String
   tagCompanies CompanyTag[]
   tagContacts  ContactTag[]
+  isDeleted    Boolean      @default(false)
 
   @@index([title])
   @@map("tag")

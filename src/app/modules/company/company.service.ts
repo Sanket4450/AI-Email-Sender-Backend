@@ -23,7 +23,10 @@ export class CompanyService {
     const { tags, ...createCompanyBody } = body;
 
     const existingCompany = await this.prisma.company.findFirst({
-      where: { title: body.title },
+      where: {
+        title: { equals: body.title, mode: 'insensitive' },
+        isDeleted: false,
+      },
     });
 
     if (existingCompany) {
@@ -36,7 +39,7 @@ export class CompanyService {
     // Validate tags if provided
     if (tags?.length) {
       const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags } },
+        where: { id: { in: tags }, isDeleted: false },
       });
 
       if (existingTags.length !== tags.length) {
@@ -71,7 +74,7 @@ export class CompanyService {
 
     if (tags?.length) {
       const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags } },
+        where: { id: { in: tags }, isDeleted: false },
       });
 
       if (existingTags.length !== tags.length) {
@@ -104,7 +107,10 @@ export class CompanyService {
   async deleteCompany(id: string) {
     await this.companyExists(id);
 
-    return this.prisma.company.delete({ where: { id } });
+    return this.prisma.company.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
   }
 
   // Get all companies
@@ -119,14 +125,13 @@ export class CompanyService {
       conditions.push(getSearchCond(search, searchKeys));
     }
 
+    conditions.push(Prisma.sql`c."isDeleted" = false`);
+
     const whereClause = conditions.length
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const joinClause = Prisma.sql`
-      LEFT JOIN company_tag ct ON c.id = ct."companyId"
-      LEFT JOIN tag t ON ct."tagId" = t.id
-    `;
+      const joinClause = this.companyQuery.getCompanyJoinClause();
 
     const rawQuery = Prisma.sql`
       WITH "CompaniesCount" AS (
@@ -168,9 +173,8 @@ export class CompanyService {
       SELECT
         ${this.companyQuery.getCompanySelectFields()}
       FROM company c
-      LEFT JOIN company_tag ct ON c.id = ct."companyId"
-      LEFT JOIN tag t ON ct."tagId" = t.id
-      WHERE c.id = ${id}
+      ${this.companyQuery.getCompanyJoinClause()}
+      WHERE c.id = ${id} AND c."isDeleted" = false
       GROUP BY c.id
     `;
 
@@ -191,7 +195,9 @@ export class CompanyService {
 
   // Check if a company exists
   async companyExists(id: string) {
-    const company = await this.prisma.company.findUnique({ where: { id } });
+    const company = await this.prisma.company.findUnique({
+      where: { id, isDeleted: false },
+    });
 
     if (!company) {
       throw new CustomHttpException(

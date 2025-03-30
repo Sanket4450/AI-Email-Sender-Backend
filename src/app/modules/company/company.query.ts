@@ -20,4 +20,9 @@ export class CompanyQuery {
       ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
     ) AS tags
   `;
+
+  getCompanyJoinClause = (): Prisma.Sql => Prisma.sql`
+    LEFT JOIN company_tag ct ON c.id = ct."companyId"
+    LEFT JOIN tag t ON ct."tagId" = t.id AND t."isDeleted" = false
+  `;
 }
