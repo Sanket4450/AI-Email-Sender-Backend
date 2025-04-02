@@ -107,10 +107,12 @@ export class CompanyService {
   async deleteCompany(id: string) {
     await this.companyExists(id);
 
-    return this.prisma.company.update({
+    await this.prisma.company.update({
       where: { id },
       data: { isDeleted: true },
     });
+
+    return responseBuilder({ message: SUCCESS_MSG.COMPANY_DELETED });
   }
 
   // Get all companies
