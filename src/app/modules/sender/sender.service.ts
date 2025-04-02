@@ -164,6 +164,7 @@ export class SenderService {
     const rawQuery = Prisma.sql`
       SELECT
         ${this.senderQuery.getSenderSelectFields(true)}
+      ORDER BY s."displayName" DESC
       FROM sender s
       ${whereClause}
     `;

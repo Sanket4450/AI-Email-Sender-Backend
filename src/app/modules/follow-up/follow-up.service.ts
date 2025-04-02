@@ -143,6 +143,7 @@ export class FollowUpService {
         ${joinClause}
         ${whereClause}
         GROUP BY fu.id, e.id
+        ORDER BY e."createdAt" DESC
       )
       
       SELECT

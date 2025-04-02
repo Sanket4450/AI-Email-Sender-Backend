@@ -173,6 +173,7 @@ export class ContactService {
         ${joinClause}
         ${whereClause}
         GROUP BY c.id, co.id
+        ORDER BY co."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
       )

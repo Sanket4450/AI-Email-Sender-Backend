@@ -147,6 +147,7 @@ export class DraftService {
         ${joinClause}
         ${whereClause}
         GROUP BY d.id
+        ORDER BY d."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
       )

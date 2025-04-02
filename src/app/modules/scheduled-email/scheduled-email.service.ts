@@ -163,6 +163,7 @@ export class ScheduledEmailService {
         ${joinClause}
         ${whereClause}
         GROUP BY e.id, s.id
+        ORDER BY e."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
       )

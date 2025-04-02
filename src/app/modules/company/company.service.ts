@@ -151,6 +151,7 @@ export class CompanyService {
         ${joinClause}
         ${whereClause}
         GROUP BY c.id
+        ORDER BY c."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
       )
