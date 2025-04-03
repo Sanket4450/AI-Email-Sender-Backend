@@ -7,9 +7,9 @@ model Contact {
   linkedInUrl            String?
   location               String?
   contactTags            ContactTag[]
-  companyId              String
+  companyId              String?
   events                 ContactEvent[]
-  company                Company                 @relation(fields: [companyId], references: [id])
+  company                Company?                @relation(fields: [companyId], references: [id])
   contactScheduledEmails ScheduledEmailContact[]
   contactDrafts          DraftContact[]
   emails                 Email[]

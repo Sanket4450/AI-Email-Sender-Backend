@@ -39,9 +39,10 @@ export class CommonContactDto {
   @IsString()
   location?: string;
 
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
-  companyId: string;
+  companyId?: string;
 
   @IsOptional()
   @IsArray()

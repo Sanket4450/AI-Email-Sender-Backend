@@ -37,7 +37,7 @@ export class ContactService {
     }
 
     // Validate companyId if provided
-    await this.companyService.companyExists(companyId);
+    if (companyId) await this.companyService.companyExists(companyId);
 
     // Validate tags if provided
     if (tags?.length) {
@@ -64,7 +64,7 @@ export class ContactService {
             })),
           },
         }),
-        company: { connect: { id: companyId } },
+        ...(companyId && { company: { connect: { id: companyId } } }),
       },
     });
 
@@ -78,9 +78,7 @@ export class ContactService {
     await this.contactExists(id);
 
     // Validate companyId if provided
-    if (companyId) {
-      await this.companyService.companyExists(companyId);
-    }
+    if (companyId) await this.companyService.companyExists(companyId);
 
     // Validate tags if provided
     if (tags?.length) {
