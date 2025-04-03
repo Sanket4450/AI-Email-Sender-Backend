@@ -12,6 +12,7 @@ export class ContactQuery {
     c.name AS name,
     c.position AS position,
     c.email AS email,
+    c.phone AS phone,
     c."linkedInUrl" AS "linkedInUrl",
     c.location AS location,
     c."createdAt" AS "createdAt",
