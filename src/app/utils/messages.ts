@@ -71,6 +71,7 @@ export const SUCCESS_MSG = {
   COMPANY_CREATED: 'Company created successfully',
   COMPANY_UPDATED: 'Company updated successfully',
   COMPANY_DELETED: 'Company deleted successfully',
+  COMPANY_WITH_CONTACTS_DELETED: 'Company along with its contacts deleted successfully',
   COMPANIES_FETCHED: 'Companies fetched successfully',
   COMPANY_FETCHED: 'Company fetched successfully',
 

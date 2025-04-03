@@ -43,6 +43,6 @@ export class ContactQuery {
   getContactJoinClause = (): Prisma.Sql => Prisma.sql`
     JOIN company co ON c."companyId" = co.id
     LEFT JOIN contact_tag ct ON c.id = ct."contactId"
-    LEFT JOIN tag t ON ct."tagId" = t.id AND t."isDeleted" = false
+    LEFT JOIN tag t ON ct."tagId" = t.id
   `;
 }

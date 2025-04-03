@@ -109,10 +109,15 @@ export class CompanyService {
 
     await this.prisma.company.update({
       where: { id },
-      data: { isDeleted: true },
+      data: {
+        isDeleted: true,
+        contacts: { updateMany: { where: {}, data: { isDeleted: true } } },
+      },
     });
 
-    return responseBuilder({ message: SUCCESS_MSG.COMPANY_DELETED });
+    return responseBuilder({
+      message: SUCCESS_MSG.COMPANY_WITH_CONTACTS_DELETED,
+    });
   }
 
   // Get all companies
