@@ -145,9 +145,19 @@ export class SenderService {
 
   // Get all senders
   async getSenders(query: GetSendersDto) {
-    const { search } = query;
+    const { search, esps = [] } = query;
+
+    if (esps.length) {
+      esps.forEach((_, idx) => {
+        this.validateESP(esps[idx]);
+      });
+    }
 
     const conditions: Prisma.Sql[] = [];
+
+    if (esps.length) {
+      conditions.push(Prisma.sql`(s.esp IN (${Prisma.join(esps, `,`)}))`);
+    }
 
     if (search) {
       const searchKeys = ['s."displayName"', 's.name', 's.email', 's.esp'];
@@ -234,7 +244,7 @@ export class SenderService {
   }
 
   // Validate ESP
-  async validateESP(esp: string) {
+  validateESP(esp: string) {
     if (!Object.values(ESPS).includes(esp)) {
       throw new CustomHttpException(
         HttpStatus.NOT_FOUND,
