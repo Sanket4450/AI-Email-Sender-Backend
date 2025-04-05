@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyyDto } from './dto/create-company.dto';

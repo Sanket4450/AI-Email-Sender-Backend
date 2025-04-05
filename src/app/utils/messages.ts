@@ -30,7 +30,7 @@ export const ERROR_MSG = {
 
   // Sender
   SENDER_NOT_FOUND: 'Sender not found',
-  SENDER_ALREADY_EXISTS: 'Sender already exists with this name',
+  SENDER_ALREADY_EXISTS: 'Sender already exists with this email and Provider',
 
   // Encryption
   ENCRYPTION_FAILED: 'Encryption failed',
@@ -99,6 +99,7 @@ export const SUCCESS_MSG = {
   // Sender
   SENDER_CREATED: 'Sender created successfully',
   SENDER_UPDATED: 'Sender updated successfully',
+  SENDER_RESTORED: 'Existing Sender restored successfully',
   SENDER_DELETED: 'Sender deleted successfully',
   SENDERS_FETCHED: 'Senders fetched successfully',
   SENDER_FETCHED: 'Sender fetched successfully',

@@ -1,6 +1,13 @@
 import { Company, Contact, EmailEventType, Sender } from '@prisma/client';
 
-export const CONSTANTS = {};
+export const CONSTANTS = {
+  SENDGRID: 'Sendgrid',
+  MAILGUN: 'Mailgun',
+  POSTMARK: 'Postmark',
+  BREVO: 'Brevo',
+  ELASTIC_EMAIL: 'Elastic Email',
+  MAILJET: 'Mailjet',
+};
 
 export const APP_ENV = {
   DEVELOPMENT: 'development',

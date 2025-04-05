@@ -5,19 +5,11 @@ import { Prisma } from '@prisma/client';
 export class SenderQuery {
   constructor() {}
 
-  getSenderSelectFields = (
-    getAllFields: boolean = false,
-  ): Prisma.Sql => Prisma.sql`
+  getSenderSelectFields = (): Prisma.Sql => Prisma.sql`
     s.id AS id,
     s."displayName" AS "displayName",
-    ${
-      getAllFields
-        ? Prisma.sql`
     s.name AS name,
-      s.email AS email,`
-        : Prisma.empty
-    }
-    
+    s.email AS email,
     s.esp AS esp,
     s.priority AS priority,
     s.target AS target,

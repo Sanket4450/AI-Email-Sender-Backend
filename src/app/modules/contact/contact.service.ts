@@ -147,8 +147,6 @@ export class ContactService {
       conditions.push(getSearchCond(search, searchKeys));
     }
 
-    conditions.push(Prisma.sql`c."isDeleted" = false`);
-
     const whereClause = conditions.length
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;

@@ -7,7 +7,7 @@ import { UpdateSenderDto } from './dto/update-sender.dto';
 import { Sender, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { CryptoService } from '../crypto/crypto.service';
-import { ESPS } from 'src/app/utils/constants';
+import { CONSTANTS, ESPS } from 'src/app/utils/constants';
 import { GetSendersDto } from './dto/get-senders.dto';
 import { QueryResponse } from 'src/app/types/common.type';
 import { SenderQuery } from './sender.query';
@@ -29,13 +29,28 @@ export class SenderService {
     // Check if the name is already used with the same ESP
     const existingSender = await this.prisma.sender.findFirst({
       where: {
-        name: { equals: body.name, mode: 'insensitive' },
+        email: body.email,
         esp: body.esp,
-        isDeleted: false,
       },
     });
 
     if (existingSender) {
+      if (existingSender.isDeleted) {
+        // Encrypting the API KEY
+        const apiKey = this.cryptoService.encrypt(body.apiKey);
+
+        await this.prisma.sender.update({
+          where: { id: existingSender.id },
+          data: {
+            ...body,
+            apiKey,
+            isDeleted: false,
+          },
+        });
+
+        return responseBuilder({ message: SUCCESS_MSG.SENDER_CREATED });
+      }
+
       throw new CustomHttpException(
         HttpStatus.CONFLICT,
         ERROR_MSG.SENDER_ALREADY_EXISTS,
@@ -65,17 +80,35 @@ export class SenderService {
     if (body.esp) await this.validateESP(body.esp);
 
     // Check if the name is already used with the same ESP
-    if (body.name) {
+    if (body.email || body.esp) {
       const existingSender = await this.prisma.sender.findFirst({
         where: {
-          name: { equals: body.name, mode: 'insensitive' },
-          esp: sender.esp,
+          email: body.email || sender.email,
+          esp: body.esp || sender.esp,
           id: { not: id },
-          isDeleted: false,
         },
       });
 
       if (existingSender) {
+        if (existingSender.isDeleted) {
+          // Encrypting the API KEY
+          const apiKey = body.apiKey
+            ? this.cryptoService.encrypt(body.apiKey)
+            : null;
+
+          // Restore the deleted sender
+          await this.prisma.sender.update({
+            where: { id: existingSender.id },
+            data: {
+              ...body,
+              ...(apiKey && { apiKey }),
+              isDeleted: false,
+            },
+          });
+
+          return responseBuilder({ message: SUCCESS_MSG.SENDER_RESTORED });
+        }
+
         throw new CustomHttpException(
           HttpStatus.CONFLICT,
           ERROR_MSG.SENDER_ALREADY_EXISTS,
@@ -117,7 +150,7 @@ export class SenderService {
     const conditions: Prisma.Sql[] = [];
 
     if (search) {
-      const searchKeys = ['s."displayName"'];
+      const searchKeys = ['s."displayName"', 's.name', 's.email', 's.esp'];
       conditions.push(getSearchCond(search, searchKeys));
     }
 
@@ -163,7 +196,7 @@ export class SenderService {
 
     const rawQuery = Prisma.sql`
       SELECT
-        ${this.senderQuery.getSenderSelectFields(true)}
+        ${this.senderQuery.getSenderSelectFields()}
       ORDER BY s."displayName" DESC
       FROM sender s
       ${whereClause}
@@ -208,5 +241,17 @@ export class SenderService {
         ERROR_MSG.ESP_NOT_FOUND,
       );
     }
+  }
+
+  async getESPs() {
+    const esps = Object.entries(ESPS).map(([key, value]) => ({
+      value,
+      label: CONSTANTS[key],
+    }));
+
+    return responseBuilder({
+      message: SUCCESS_MSG.ESPS_FETCHED,
+      result: esps,
+    });
   }
 }

@@ -44,6 +44,12 @@ export class SenderController {
     return this.contactService.getSenders(body);
   }
 
+  // Get all ESPs
+  @Get('esps')
+  async getESPs() {
+    return this.contactService.getESPs();
+  }
+
   // Get a contact by ID
   @Get(':id')
   async getSingleSender(@Param('id') id: string) {
