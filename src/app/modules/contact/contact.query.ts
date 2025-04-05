@@ -17,19 +17,21 @@ export class ContactQuery {
     c.location AS location,
     c."createdAt" AS "createdAt",
 
-    JSON_BUILD_OBJECT(
-      'id', co.id,
-      'title', co.title
-      ${
-        getAllFields
-          ? Prisma.sql`,
-            'description', co.description,
-            'location', co.location,
-            'createdAt', co."createdAt"
-          `
-          : Prisma.empty
-      }
-    ) AS company,
+    CASE WHEN co.id IS NOT NULL THEN
+      JSON_BUILD_OBJECT(
+        'id', co.id,
+        'title', co.title
+        ${
+          getAllFields
+            ? Prisma.sql`,
+              'description', co.description,
+              'location', co.location,
+              'createdAt', co."createdAt"
+            `
+            : Prisma.empty
+        }
+      ) ELSE '{}'::JSON 
+      END AS company,
 
     COALESCE(
       JSON_AGG(
@@ -42,7 +44,7 @@ export class ContactQuery {
   `;
 
   getContactJoinClause = (): Prisma.Sql => Prisma.sql`
-    JOIN company co ON c."companyId" = co.id
+    LEFT JOIN company co ON c."companyId" = co.id
     LEFT JOIN contact_tag ct ON c.id = ct."contactId"
     LEFT JOIN tag t ON ct."tagId" = t.id
   `;
