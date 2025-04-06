@@ -21,7 +21,6 @@ export class DraftController {
   // Create a new draft
   @Post()
   async createDraft(@Body() body: CreateDraftDto) {
-    body.validateForScheduling();
     return this.draftService.createDraft(body);
   }
 

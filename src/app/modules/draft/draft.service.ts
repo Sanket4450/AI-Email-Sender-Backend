@@ -11,6 +11,7 @@ import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
 import { DraftQuery } from './draft.query';
 import { SenderService } from '../sender/sender.service';
+import { CommonDraftDto } from './dto/common-draft.dto';
 
 @Injectable()
 export class DraftService {
@@ -20,9 +21,28 @@ export class DraftService {
     private readonly draftQuery: DraftQuery,
   ) {}
 
+  validateForScheduling(body: Partial<CommonDraftDto>) {
+    if (body.scheduledAt) {
+      if (
+        !body.subject ||
+        !body.body ||
+        !body.senderId ||
+        !body.contactIds ||
+        body.contactIds.length === 0
+      ) {
+        throw new HttpException(
+          'Subject, body, senderId, and at least one contact id are required for scheduling.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+  }
+
   // Create a new draft
   async createDraft(body: CreateDraftDto) {
     const { senderId, contactIds, ...createDraftBody } = body;
+
+    this.validateForScheduling(body);
 
     // Validate that the sender exists
     if (senderId) await this.senderService.senderExists(senderId);
@@ -66,6 +86,8 @@ export class DraftService {
     const { senderId, contactIds, ...updateDraftBody } = body;
 
     await this.draftExists(id);
+
+    this.validateForScheduling(body);
 
     // Validate that the sender exists
     if (senderId) await this.senderService.senderExists(senderId);
@@ -146,6 +168,8 @@ export class DraftService {
 
     const selectClause = this.draftQuery.getDraftSelectFields();
 
+    const groupByClause = this.draftQuery.getGroupByClause();
+
     const rawQuery = Prisma.sql`
       WITH "DraftsCount" AS (
         SELECT
@@ -161,7 +185,7 @@ export class DraftService {
         FROM draft d
         ${joinClause}
         ${whereClause}
-        GROUP BY d.id
+        ${groupByClause}
         ORDER BY d."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
@@ -190,13 +214,15 @@ export class DraftService {
 
     const selectClause = this.draftQuery.getDraftSelectFields(true);
 
+    const groupByClause = this.draftQuery.getGroupByClause();
+
     const rawQuery = Prisma.sql`
       SELECT
         ${selectClause}
       FROM draft d
       ${joinClause}
       ${whereClause}
-      GROUP BY d.id
+      ${groupByClause}
     `;
 
     const [draft] = await this.prisma.$queryRaw<Draft[]>(rawQuery);

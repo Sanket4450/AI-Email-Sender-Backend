@@ -22,19 +22,5 @@ export class CommonDraftDto {
   @IsDateString()
   scheduledAt: Date;
 
-  validateForScheduling() {
-    if (this.scheduledAt) {
-      if (
-        !this.subject ||
-        !this.body ||
-        !this.senderId ||
-        !this.contactIds ||
-        this.contactIds.length === 0
-      ) {
-        throw new Error(
-          'Subject, body, senderId, and at least one contact id are required for scheduling.',
-        );
-      }
-    }
-  }
+  
 }
