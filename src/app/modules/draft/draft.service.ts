@@ -156,7 +156,7 @@ export class DraftService {
     }
 
     if (search) {
-      const searchKeys = ['e.subject', 'c.name', 's."displayName'];
+      const searchKeys = ['d.subject', 'c.name', 's."displayName"'];
       conditions.push(getSearchCond(search, searchKeys));
     }
 

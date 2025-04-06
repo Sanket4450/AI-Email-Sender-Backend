@@ -20,15 +20,6 @@ model Contact {
   @@map("contact")
 }
 
-model ContactTag {
-  contactId String
-  tagId     String
-  contact   Contact @relation(fields: [contactId], references: [id])
-  tag       Tag     @relation(fields: [tagId], references: [id])
-
-  @@id([contactId, tagId])
-  @@map("contact_tag")
-}
 
 model ContactEvent {
   id        String           @id @default(cuid())

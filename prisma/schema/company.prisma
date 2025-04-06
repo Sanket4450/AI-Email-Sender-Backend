@@ -12,24 +12,3 @@ model Company {
   @@index([title])
   @@map("company")
 }
-
-model CompanyTag {
-  companyId String
-  tagId     String
-  company   Company @relation(fields: [companyId], references: [id])
-  tag       Tag     @relation(fields: [tagId], references: [id])
-
-  @@id([companyId, tagId])
-  @@map("company_tag")
-}
-
-model Tag {
-  id           String       @id @default(cuid())
-  title        String
-  tagCompanies CompanyTag[]
-  tagContacts  ContactTag[]
-  isDeleted    Boolean      @default(false)
-
-  @@index([title])
-  @@map("tag")
-}

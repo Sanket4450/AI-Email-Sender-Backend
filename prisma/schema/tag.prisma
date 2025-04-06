@@ -1,0 +1,52 @@
+model Tag {
+  id           String       @id @default(cuid())
+  title        String
+  tagCompanies CompanyTag[]
+  tagContacts  ContactTag[]
+  isDeleted    Boolean      @default(false)
+  DraftTag     DraftTag[]
+  EmailTag     EmailTag[]
+
+  @@index([title])
+  @@map("tag")
+}
+
+model CompanyTag {
+  companyId String
+  tagId     String
+  company   Company @relation(fields: [companyId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([companyId, tagId])
+  @@map("company_tag")
+}
+
+model ContactTag {
+  contactId String
+  tagId     String
+  contact   Contact @relation(fields: [contactId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([contactId, tagId])
+  @@map("contact_tag")
+}
+
+model DraftTag {
+  draftId String
+  tagId   String
+  draft   Draft  @relation(fields: [draftId], references: [id])
+  tag     Tag    @relation(fields: [tagId], references: [id])
+
+  @@id([draftId, tagId])
+  @@map("draft_tag")
+}
+
+model EmailTag {
+  emailId String
+  tagId   String
+  email   Email  @relation(fields: [emailId], references: [id])
+  tag     Tag    @relation(fields: [tagId], references: [id])
+
+  @@id([emailId, tagId])
+  @@map("email_tag")
+}
