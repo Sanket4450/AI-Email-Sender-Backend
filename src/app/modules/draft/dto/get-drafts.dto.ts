@@ -6,5 +6,10 @@ export class GetDraftsDto extends IntersectionType(SearchDto, PaginationDto) {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
+  senderIds?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   contactIds?: string[];
 }

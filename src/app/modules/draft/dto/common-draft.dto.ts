@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CommonDraftDto {
   @IsOptional()
@@ -13,4 +13,28 @@ export class CommonDraftDto {
   @IsArray()
   @IsString({ each: true })
   contactIds?: string[];
+
+  @IsOptional()
+  @IsString()
+  senderId: string;
+
+  @IsOptional()
+  @IsDateString()
+  scheduledAt: Date;
+
+  validateForScheduling() {
+    if (this.scheduledAt) {
+      if (
+        !this.subject ||
+        !this.body ||
+        !this.senderId ||
+        !this.contactIds ||
+        this.contactIds.length === 0
+      ) {
+        throw new Error(
+          'Subject, body, senderId, and at least one contact id are required for scheduling.',
+        );
+      }
+    }
+  }
 }

@@ -10,17 +10,22 @@ import { GetDraftsDto } from './dto/get-drafts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
 import { DraftQuery } from './draft.query';
+import { SenderService } from '../sender/sender.service';
 
 @Injectable()
 export class DraftService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly senderService: SenderService,
     private readonly draftQuery: DraftQuery,
   ) {}
 
   // Create a new draft
   async createDraft(body: CreateDraftDto) {
-    const { contactIds, ...createDraftBody } = body;
+    const { senderId, contactIds, ...createDraftBody } = body;
+
+    // Validate that the sender exists
+    if (senderId) await this.senderService.senderExists(senderId);
 
     // Validate that all provided contact IDs exist in the database
     if (contactIds) {
@@ -40,6 +45,7 @@ export class DraftService {
     await this.prisma.draft.create({
       data: {
         ...createDraftBody,
+        ...(senderId && { sender: { connect: { id: senderId } } }),
         draftContacts: contactIds
           ? {
               create: contactIds.map((contactId) => ({
@@ -57,9 +63,12 @@ export class DraftService {
 
   // Update a draft by ID
   async updateDraft(id: string, body: UpdateDraftDto) {
-    const { contactIds, ...updateDraftBody } = body;
+    const { senderId, contactIds, ...updateDraftBody } = body;
 
     await this.draftExists(id);
+
+    // Validate that the sender exists
+    if (senderId) await this.senderService.senderExists(senderId);
 
     // Validate that all provided contact IDs exist in the database
     if (contactIds) {
@@ -80,6 +89,7 @@ export class DraftService {
       where: { id },
       data: {
         ...updateDraftBody,
+        ...(senderId && { sender: { connect: { id: senderId } } }),
         ...(contactIds?.length && {
           contacts: {
             connectOrCreate: contactIds.map((contactId) => ({
@@ -110,16 +120,21 @@ export class DraftService {
 
   // Get all drafts
   async getDrafts(query: GetDraftsDto) {
-    const { search, contactIds = [] } = query;
+    const { search, senderIds = [], contactIds = [] } = query;
     const { offset, limit } = getPagination(query);
 
     const conditions: Prisma.Sql[] = [];
 
+    if (senderIds.length) {
+      conditions.push(Prisma.sql`s.id IN (${Prisma.join(senderIds)})`);
+    }
+
     if (contactIds.length) {
       conditions.push(Prisma.sql`c.id IN (${Prisma.join(contactIds)})`);
     }
+
     if (search) {
-      const searchKeys = ['e.subject', 'c.name', 's.name'];
+      const searchKeys = ['e.subject', 'c.name', 's."displayName'];
       conditions.push(getSearchCond(search, searchKeys));
     }
 

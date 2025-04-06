@@ -63,35 +63,13 @@ enum EmailEventType {
   clicked
 }
 
-model ScheduledEmail {
-  id            String                  @id @default(cuid())
-  subject       String
-  body          String
-  scheduledAt   DateTime
-  senderId      String
-  sender        Sender                  @relation(fields: [senderId], references: [id])
-  emailContacts ScheduledEmailContact[]
-  createdAt     DateTime                @default(now())
-  updatedAt     DateTime                @updatedAt
-
-  @@index([subject])
-  @@map("scheduled_email")
-}
-
-model ScheduledEmailContact {
-  contactId String
-  contact   Contact        @relation(fields: [contactId], references: [id])
-  emailId   String
-  email     ScheduledEmail @relation(fields: [emailId], references: [id])
-
-  @@id([emailId, contactId])
-  @@map("scheduled_email_contact")
-}
-
 model Draft {
   id            String         @id @default(cuid())
   subject       String?
   body          String?
+  scheduledAt   DateTime?
+  senderId      String?
+  sender        Sender?        @relation(fields: [senderId], references: [id])
   draftContacts DraftContact[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt

@@ -6,7 +6,6 @@ import { TagModule } from './modules/tag/tag.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { SenderModule } from './modules/sender/sender.module';
 import { DraftModule } from './modules/draft/draft.module';
-import { ScheduledEmailModule } from './modules/scheduled-email/scheduled-email.module';
 import { EmailModule } from './modules/email/email.module';
 import { FollowUpModule } from './modules/follow-up/follow-up.module';
 import { AIModule } from './modules/ai/ai.module';
@@ -18,7 +17,6 @@ import { AIModule } from './modules/ai/ai.module';
     TagModule,
     SenderModule,
     DraftModule,
-    ScheduledEmailModule,
     EmailModule,
     FollowUpModule,
     AIModule,

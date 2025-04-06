@@ -10,7 +10,6 @@ model Contact {
   companyId              String?
   events                 ContactEvent[]
   company                Company?                @relation(fields: [companyId], references: [id])
-  contactScheduledEmails ScheduledEmailContact[]
   contactDrafts          DraftContact[]
   emails                 Email[]
   isDeleted              Boolean                 @default(false)

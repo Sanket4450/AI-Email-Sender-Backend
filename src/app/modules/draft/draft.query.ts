@@ -11,7 +11,14 @@ export class DraftQuery {
     d.id AS id,
     d.subject AS subject,
     ${getAllFields ? Prisma.sql`d.body AS body,` : Prisma.empty}
+    d."scheduledAt" AS "scheduledAt",
     d."createdAt" AS "createdAt",
+    CASE WHEN d.id IS NOT NULL
+      JSON_BUILD_OBJECT(
+        'id', s.id,
+        'displayName', s."displayName"
+      ) ELSE '{}'::JSON
+    END AS sender,
     COALESCE(
       JSON_AGG(
         JSON_BUILD_OBJECT(
@@ -35,6 +42,7 @@ export class DraftQuery {
   `;
 
   getDraftJoinClause = (): Prisma.Sql => Prisma.sql`
+    LEFT JOIN sender s ON s.id = d."senderId"
     LEFT JOIN draft_contact dc ON d.id = dc."draftId"
     LEFT JOIN contact c ON dc."contactId" = c.id
   `;
