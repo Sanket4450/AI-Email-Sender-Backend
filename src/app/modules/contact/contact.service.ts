@@ -108,11 +108,15 @@ export class ContactService {
 
   // Get all contacts
   async getContacts(query: GetContactsDto) {
-    const { search } = query;
+    const { search, companyIds = [] } = query;
     const { offset, limit } = getPagination(query);
 
     const conditions: Prisma.Sql[] = [];
 
+    if (companyIds.length) {
+      conditions.push(Prisma.sql`c.id IN (${Prisma.join(companyIds)})`);
+    }
+        
     if (search) {
       const searchKeys = [
         'c.name',
