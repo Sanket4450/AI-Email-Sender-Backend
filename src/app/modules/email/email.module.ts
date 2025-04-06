@@ -5,9 +5,10 @@ import { PrismaModule } from 'src/config/prisma/prisma.module';
 import { SenderModule } from '../sender/sender.module';
 import { ESPModule } from '../esp/esp.module';
 import { EmailQuery } from './email.query';
+import { TagModule } from '../tag/tag.module';
 
 @Module({
-  imports: [PrismaModule, SenderModule, ESPModule],
+  imports: [PrismaModule, SenderModule, ESPModule, TagModule],
   providers: [EmailService, EmailQuery],
   controllers: [EmailController],
   exports: [EmailService],

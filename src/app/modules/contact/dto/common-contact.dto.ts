@@ -1,5 +1,4 @@
 import {
-  IsArray,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -7,9 +6,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { TagsDto } from 'src/app/types/dto/common.dto';
 import { VALIDATION_MSG } from 'src/app/utils/messages';
 
-export class CommonContactDto {
+export class CommonContactDto extends TagsDto {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -43,9 +43,4 @@ export class CommonContactDto {
   @IsString()
   @IsNotEmpty()
   companyId?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  tags?: string[];
 }

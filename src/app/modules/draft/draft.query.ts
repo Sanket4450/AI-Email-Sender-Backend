@@ -38,13 +38,24 @@ export class DraftQuery {
           }
         )
       ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-    ) AS contacts
+    ) AS contacts,
+    
+    COALESCE(
+      JSON_AGG(
+        JSON_BUILD_OBJECT(
+          'id', t.id,
+          'title', t.title
+        )
+      ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+    ) AS tags
   `;
 
   getDraftJoinClause = (): Prisma.Sql => Prisma.sql`
     LEFT JOIN sender s ON s.id = d."senderId"
     LEFT JOIN draft_contact dc ON d.id = dc."draftId"
     LEFT JOIN contact c ON dc."contactId" = c.id
+    LEFT JOIN draft_tag dt ON c.id = dt."draftId"
+    LEFT JOIN tag t ON dt."tagId" = t.id AND t."isDeleted" = false
   `;
 
   getGroupByClause = (): Prisma.Sql => Prisma.sql`

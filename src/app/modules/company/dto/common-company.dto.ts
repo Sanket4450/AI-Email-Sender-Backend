@@ -1,6 +1,7 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { TagsDto } from 'src/app/types/dto/common.dto';
 
-export class CommonCompanyDto {
+export class CommonCompanyDto extends TagsDto {
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -12,9 +13,4 @@ export class CommonCompanyDto {
   @IsString()
   @IsNotEmpty()
   location: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  tags?: string[];
 }

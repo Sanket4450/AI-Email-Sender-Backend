@@ -12,12 +12,14 @@ import { QueryResponse } from 'src/app/types/common.type';
 import { DraftQuery } from './draft.query';
 import { SenderService } from '../sender/sender.service';
 import { CommonDraftDto } from './dto/common-draft.dto';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class DraftService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly senderService: SenderService,
+    private readonly tagService: TagService,
     private readonly draftQuery: DraftQuery,
   ) {}
 
@@ -40,7 +42,7 @@ export class DraftService {
 
   // Create a new draft
   async createDraft(body: CreateDraftDto) {
-    const { senderId, contactIds, ...createDraftBody } = body;
+    const { senderId, contactIds, tags, ...createDraftBody } = body;
 
     this.validateForScheduling(body);
 
@@ -61,6 +63,9 @@ export class DraftService {
       }
     }
 
+    // Validate tags if provided
+    if (tags?.length) await this.tagService.validateTags(tags);
+
     // Create the draft and associate contacts
     await this.prisma.draft.create({
       data: {
@@ -73,6 +78,13 @@ export class DraftService {
               })),
             }
           : undefined,
+        ...(tags?.length && {
+          draftTags: {
+            create: tags.map((tagId) => ({
+              tag: { connect: { id: tagId } },
+            })),
+          },
+        }),
       },
     });
 
@@ -83,7 +95,7 @@ export class DraftService {
 
   // Update a draft by ID
   async updateDraft(id: string, body: UpdateDraftDto) {
-    const { senderId, contactIds, ...updateDraftBody } = body;
+    const { senderId, contactIds, tags, ...updateDraftBody } = body;
 
     await this.draftExists(id);
 
@@ -105,6 +117,8 @@ export class DraftService {
         );
       }
     }
+
+    if (tags?.length) await this.tagService.validateTags(tags);
 
     // Update the draft and re-associate contacts
     await this.prisma.draft.update({
@@ -120,6 +134,14 @@ export class DraftService {
             })),
           },
         }),
+        ...(tags?.length && {
+          draftTags: {
+            connectOrCreate: tags.map((tagId) => ({
+              where: { draftId_tagId: { draftId: id, tagId } },
+              create: { tag: { connect: { id: tagId } } },
+            })),
+          },
+        }),
       },
     });
 
@@ -132,6 +154,7 @@ export class DraftService {
   async deleteDraft(id: string) {
     await this.draftExists(id);
 
+    await this.prisma.draftTag.deleteMany({ where: { draftId: id } });
     await this.prisma.draftContact.deleteMany({ where: { draftId: id } });
     await this.prisma.draft.delete({ where: { id } });
 
@@ -142,7 +165,7 @@ export class DraftService {
 
   // Get all drafts
   async getDrafts(query: GetDraftsDto) {
-    const { search, senderIds = [], contactIds = [] } = query;
+    const { search, senderIds = [], contactIds = [], tagIds = [] } = query;
     const { offset, limit } = getPagination(query);
 
     const conditions: Prisma.Sql[] = [];
@@ -155,8 +178,12 @@ export class DraftService {
       conditions.push(Prisma.sql`c.id IN (${Prisma.join(contactIds)})`);
     }
 
+    if (tagIds.length) {
+      conditions.push(Prisma.sql`t.id IN (${Prisma.join(tagIds)})`);
+    }
+
     if (search) {
-      const searchKeys = ['d.subject', 'c.name', 's."displayName"'];
+      const searchKeys = ['d.subject', 'c.name', 's."displayName"', 't.title'];
       conditions.push(getSearchCond(search, searchKeys));
     }
 

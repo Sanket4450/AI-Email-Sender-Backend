@@ -1,6 +1,7 @@
 import { IsArray, IsString } from 'class-validator';
+import { TagsDto } from 'src/app/types/dto/common.dto';
 
-export class CommonEmailDto {
+export class CommonEmailDto extends TagsDto {
   @IsString()
   senderId: string;
 

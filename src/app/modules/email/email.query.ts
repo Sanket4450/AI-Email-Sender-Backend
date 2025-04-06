@@ -29,10 +29,21 @@ export class EmailQuery {
           : Prisma.empty
       }
     ) AS contact,
+
     JSON_BUILD_OBJECT(
       'id', s.id,
       'displayName', s."displayName"
     ) AS sender,
+
+    COALESCE(
+      JSON_AGG(
+        JSON_BUILD_OBJECT(
+          'id', t.id,
+          'title', t.title
+        )
+      ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+    ) AS tags,
+    
     COALESCE(
       JSON_AGG(
         JSON_BUILD_OBJECT(
@@ -41,5 +52,17 @@ export class EmailQuery {
         )
       ) FILTER (WHERE ev.id IS NOT NULL), '[]'::JSON
     ) AS events
+  `;
+
+  getJoinClause = (): Prisma.Sql => Prisma.sql`
+    JOIN contact c ON c.id = e."contactId"
+    JOIN sender s ON s.id = e."senderId"
+    LEFT JOIN email_event ev ON ev."emailId" = e.id
+    LEFT JOIN email_tag et ON c.id = et."emailId"
+    LEFT JOIN tag t ON et."tagId" = t.id AND t."isDeleted" = false
+  `;
+
+  getGroupByClause = (): Prisma.Sql => Prisma.sql`
+    GROUP BY e.id, c.id, s.id
   `;
 }

@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class SearchDto {
   @IsOptional()
@@ -17,4 +17,12 @@ export class PaginationDto {
   @IsNumber()
   @Transform(({ value }) => parseInt(value, 10))
   limit: number;
+}
+
+
+export class TagsDto {
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
 }

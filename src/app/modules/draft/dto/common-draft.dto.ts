@@ -1,6 +1,7 @@
 import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
+import { TagsDto } from 'src/app/types/dto/common.dto';
 
-export class CommonDraftDto {
+export class CommonDraftDto extends TagsDto {
   @IsOptional()
   @IsString()
   subject?: string;

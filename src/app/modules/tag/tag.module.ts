@@ -8,5 +8,6 @@ import { TagQuery } from './tag.query';
   imports: [PrismaModule],
   controllers: [TagController],
   providers: [TagService, TagQuery],
+  exports: [TagService],
 })
 export class TagModule {}

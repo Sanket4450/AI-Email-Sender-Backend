@@ -18,6 +18,7 @@ import {
 } from 'src/app/utils/constants';
 import { QueryResponse } from 'src/app/types/common.type';
 import { EmailQuery } from './email.query';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class EmailService {
@@ -25,12 +26,13 @@ export class EmailService {
     private readonly prisma: PrismaService,
     private readonly senderService: SenderService,
     private readonly espService: ESPService,
+    private readonly tagService: TagService,
     private readonly emailQuery: EmailQuery,
   ) {}
 
   // Create a new email
   async createEmail(body: CreateEmailDto) {
-    const { senderId, contactIds, ...createEmailBody } = body;
+    const { senderId, contactIds, tags, ...createEmailBody } = body;
 
     // Validate that the sender exists
     const sender = await this.senderService.senderExists(senderId);
@@ -47,6 +49,9 @@ export class EmailService {
       );
     }
 
+    // Validate tags if provided
+    if (tags?.length) await this.tagService.validateTags(tags);
+
     const createdEmails = await this.prisma.email.createManyAndReturn({
       data: contacts.map((c) => ({
         ...createEmailBody,
@@ -62,6 +67,13 @@ export class EmailService {
         contact,
       })),
       sender,
+      ...(tags?.length && {
+        emailTags: {
+          create: tags.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      }),
     });
 
     return responseBuilder({
@@ -115,11 +127,11 @@ export class EmailService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-    const joinClause = Prisma.sql`
-      JOIN contact c ON c.id = e."contactId"
-      JOIN sender s ON s.id = e."senderId"
-      LEFT JOIN email_event ev ON ev."emailId" = e.id
-    `;
+    const selectClause = this.emailQuery.getEmailSelectFields();
+
+    const joinClause = this.emailQuery.getJoinClause();
+
+    const groupByClause = this.emailQuery.getGroupByClause();
 
     const rawQuery = Prisma.sql`
       WITH "EmailsCount" AS (
@@ -132,11 +144,11 @@ export class EmailService {
 
       "EmailsData" AS (
         SELECT
-          ${this.emailQuery.getEmailSelectFields()}
+          ${selectClause}
         FROM email e
         ${joinClause}
         ${whereClause}
-        GROUP BY e.id, c.id, s.id
+        ${groupByClause}
         ORDER BY e."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
@@ -158,16 +170,20 @@ export class EmailService {
 
   // Get a email by ID
   async getSingleEmail(id: string) {
+    const selectClause = this.emailQuery.getEmailSelectFields(true);
+
+    const joinClause = this.emailQuery.getJoinClause();
+
+    const groupByClause = this.emailQuery.getGroupByClause();
+
     const rawQuery = Prisma.sql`
-        SELECT
-          ${this.emailQuery.getEmailSelectFields(true)}
-        FROM email e
-        JOIN contact c ON c.id = e."contactId"
-        JOIN sender s ON s.id = e."senderId"
-        LEFT JOIN email_event ev ON ev."emailId" = e.id
-        WHERE e.id = ${id}
-        GROUP BY e.id, c.id, s.id;
-      `;
+      SELECT
+        ${selectClause}
+      FROM email e
+      ${joinClause}
+      WHERE e.id = ${id}
+      ${groupByClause};
+    `;
 
     const [email] = await this.prisma.$queryRaw<Email[]>(rawQuery);
 

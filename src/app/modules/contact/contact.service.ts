@@ -11,12 +11,14 @@ import { GetContactsDto } from './dto/get-contacts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
 import { ContactQuery } from './contact.query';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class ContactService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly companyService: CompanyService,
+    private readonly tagService: TagService,
     private readonly contactQuery: ContactQuery,
   ) {}
 
@@ -40,18 +42,7 @@ export class ContactService {
     if (companyId) await this.companyService.companyExists(companyId);
 
     // Validate tags if provided
-    if (tags?.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags }, isDeleted: false },
-      });
-
-      if (existingTags.length !== tags.length) {
-        throw new CustomHttpException(
-          HttpStatus.NOT_FOUND,
-          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
-        );
-      }
-    }
+    if (tags?.length) await this.tagService.validateTags(tags);
 
     // Create the contact
     await this.prisma.contact.create({
@@ -81,18 +72,7 @@ export class ContactService {
     if (companyId) await this.companyService.companyExists(companyId);
 
     // Validate tags if provided
-    if (tags?.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags }, isDeleted: false },
-      });
-
-      if (existingTags.length !== tags.length) {
-        throw new CustomHttpException(
-          HttpStatus.NOT_FOUND,
-          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
-        );
-      }
-    }
+    if (tags?.length) await this.tagService.validateTags(tags);
 
     // Update the contact
     await this.prisma.contact.update({

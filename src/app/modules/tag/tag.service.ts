@@ -142,4 +142,17 @@ export class TagService {
 
     return tag;
   }
+
+  async validateTags(tagIds: string[]) {
+    const existingTags = await this.prisma.tag.findMany({
+      where: { id: { in: tagIds }, isDeleted: false },
+    });
+
+    if (existingTags.length !== tagIds.length) {
+      throw new CustomHttpException(
+        HttpStatus.NOT_FOUND,
+        ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
+      );
+    }
+  }
 }

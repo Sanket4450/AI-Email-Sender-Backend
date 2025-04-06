@@ -10,11 +10,13 @@ import { GetCompaniesDto } from './dto/get-companies.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
 import { CompanyQuery } from './company.query';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class CompanyService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly tagService: TagService,
     private readonly companyQuery: CompanyQuery,
   ) {}
 
@@ -37,18 +39,7 @@ export class CompanyService {
     }
 
     // Validate tags if provided
-    if (tags?.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags }, isDeleted: false },
-      });
-
-      if (existingTags.length !== tags.length) {
-        throw new CustomHttpException(
-          HttpStatus.NOT_FOUND,
-          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
-        );
-      }
-    }
+    if (tags?.length) await this.tagService.validateTags(tags);
 
     await this.prisma.company.create({
       data: {
@@ -72,18 +63,7 @@ export class CompanyService {
 
     await this.companyExists(id);
 
-    if (tags?.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { id: { in: tags }, isDeleted: false },
-      });
-
-      if (existingTags.length !== tags.length) {
-        throw new CustomHttpException(
-          HttpStatus.NOT_FOUND,
-          ERROR_MSG.ONE_OR_MORE_TAGS_NOT_FOUND,
-        );
-      }
-    }
+    if (tags?.length) await this.tagService.validateTags(tags);
 
     await this.prisma.company.update({
       where: { id },
@@ -111,7 +91,6 @@ export class CompanyService {
       where: { id },
       data: {
         isDeleted: true,
-        contacts: { updateMany: { where: {}, data: { isDeleted: true } } },
       },
     });
 
@@ -138,7 +117,7 @@ export class CompanyService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
-      const joinClause = this.companyQuery.getCompanyJoinClause();
+    const joinClause = this.companyQuery.getCompanyJoinClause();
 
     const rawQuery = Prisma.sql`
       WITH "CompaniesCount" AS (
