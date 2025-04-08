@@ -7,6 +7,8 @@ import { SanitizeInputPipe } from './app/pipes/sanitize-input.pipe';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({});
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
