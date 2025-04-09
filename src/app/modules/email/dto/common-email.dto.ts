@@ -13,5 +13,5 @@ export class CommonEmailDto extends TagsDto {
 
   @IsArray()
   @IsString({ each: true })
-  contactIds?: string[];
+  contactIds: string[];
 }
