@@ -22,6 +22,9 @@ export const VALUES = {
   SENDGRID_USER_AGENT: 'SendGrid Event API',
 
   DEFAULT_PAGE_SIZE: 10,
+
+  SUBJECT_IDENFIFIER: '---SUBJECT---',
+  BODY_IDENFIFIER: '---BODY---',
 };
 
 export const ESPS = {
