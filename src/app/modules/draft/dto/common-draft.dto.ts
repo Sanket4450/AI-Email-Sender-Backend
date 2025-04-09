@@ -17,11 +17,9 @@ export class CommonDraftDto extends TagsDto {
 
   @IsOptional()
   @IsString()
-  senderId: string;
+  senderId?: string;
 
   @IsOptional()
   @IsDateString()
-  scheduledAt: Date;
-
-  
+  scheduledAt?: Date;
 }
