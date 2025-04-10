@@ -207,9 +207,9 @@ export class SenderService {
     const rawQuery = Prisma.sql`
       SELECT
         ${this.senderQuery.getSenderSelectFields()}
-      ORDER BY s."displayName" DESC
       FROM sender s
       ${whereClause}
+      ORDER BY s."displayName" DESC
     `;
 
     const [sender] = await this.prisma.$queryRaw<Sender[]>(rawQuery);
