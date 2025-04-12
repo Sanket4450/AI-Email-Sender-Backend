@@ -1,4 +1,4 @@
-export class CreateTagDto {
+export class CreateLLMLogDto {
   prompt: string;
   response?: string;
   isError?: boolean;

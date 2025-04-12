@@ -47,6 +47,9 @@ export const ERROR_MSG = {
   FOLLOW_UP_NOT_FOUND: 'Follow Up not found',
   FOLLOW_UP_CANNOT_SENT: 'Follow Up cannot be sent',
   FOLLOW_UP_CANNOT_MODIFY: 'Follow Up cannot be modified',
+
+  // Log
+  LOG_NOT_FOUND: 'Log not found',
 };
 
 export const VALIDATION_MSG = {
@@ -71,7 +74,8 @@ export const SUCCESS_MSG = {
   COMPANY_CREATED: 'Company created successfully',
   COMPANY_UPDATED: 'Company updated successfully',
   COMPANY_DELETED: 'Company deleted successfully',
-  COMPANY_WITH_CONTACTS_DELETED: 'Company along with its contacts deleted successfully',
+  COMPANY_WITH_CONTACTS_DELETED:
+    'Company along with its contacts deleted successfully',
   COMPANIES_FETCHED: 'Companies fetched successfully',
   COMPANY_FETCHED: 'Company fetched successfully',
 
@@ -125,4 +129,10 @@ export const SUCCESS_MSG = {
   FOLLOW_UP_DELETED: 'Follow Up deleted successfully',
   FOLLOW_UPS_FETCHED: 'Follow Ups fetched successfully',
   FOLLOW_UP_FETCHED: 'Follow Up fetched successfully',
+
+  // Log
+  LOG_DELETED: 'Log deleted successfully',
+  LOGS_DELETED: 'Logs deleted successfully',
+  LOGS_FETCHED: 'Logs fetched successfully',
+  LOG_FETCHED: 'Log fetched successfully',
 };

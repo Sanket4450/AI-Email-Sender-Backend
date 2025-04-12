@@ -65,3 +65,8 @@ export const EMAIL_PLACEHOLDERS: Record<
   '{{CONTACT_LOCATION}}': 'location',
   '{{SENDER_NAME}}': 'displayName',
 };
+
+export const LOG_TYPES = {
+  LLM: 'llm',
+  WEBHOOK: 'webhook',
+}
