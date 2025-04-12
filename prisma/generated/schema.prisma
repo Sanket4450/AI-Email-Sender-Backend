@@ -1,0 +1,265 @@
+model Company {
+  id          String       @id @default(cuid())
+  title       String
+  companyTags CompanyTag[]
+  description String?
+  location    String
+  contacts    Contact[]
+  isDeleted   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([title])
+  @@map("company")
+}
+
+model Contact {
+  id            String         @id @default(cuid())
+  name          String
+  position      String
+  email         String
+  phone         String?
+  linkedInUrl   String?
+  location      String?
+  contactTags   ContactTag[]
+  companyId     String?
+  events        ContactEvent[]
+  company       Company?       @relation(fields: [companyId], references: [id])
+  contactDrafts DraftContact[]
+  emails        Email[]
+  isDeleted     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([name, email])
+  @@map("contact")
+}
+
+model ContactEvent {
+  id        String           @id @default(cuid())
+  contactId String
+  contact   Contact          @relation(fields: [contactId], references: [id])
+  eventType ContactEventType
+  createdAt DateTime         @default(now())
+
+  @@map("contact_event")
+}
+
+enum ContactEventType {
+  notContacted
+  emailSent
+  rejected
+  pending
+  replied
+}
+
+model Email {
+  id             String         @id @default(cuid())
+  subject        String
+  body           String
+  messageId      String?
+  contactId      String
+  contact        Contact        @relation(fields: [contactId], references: [id])
+  isBounced      Boolean        @default(false)
+  isSpamReported Boolean        @default(false)
+  senderId       String
+  sender         Sender         @relation(fields: [senderId], references: [id])
+  emailTags      EmailTag[]
+  events         EmailEvent[]
+  followUps      FollowUp[]
+  notifications  Notification[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([subject])
+  @@map("email")
+}
+
+model EmailEvent {
+  id        String         @id @default(cuid())
+  emailId   String
+  email     Email          @relation(fields: [emailId], references: [id])
+  eventType EmailEventType
+  createdAt DateTime       @default(now())
+
+  @@map("email_event")
+}
+
+model FollowUp {
+  id             String          @id @default(cuid())
+  subject        String
+  body           String
+  emailId        String
+  email          Email           @relation(fields: [emailId], references: [id])
+  scheduledAt    DateTime?
+  isBounced      Boolean         @default(false)
+  isSpamReported Boolean         @default(false)
+  events         FollowUpEvent[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([subject])
+  @@map("follow_up")
+}
+
+model FollowUpEvent {
+  id         String         @id @default(cuid())
+  followUpId String
+  FollowUp   FollowUp       @relation(fields: [followUpId], references: [id])
+  eventType  EmailEventType
+  createdAt  DateTime       @default(now())
+
+  @@map("follow_up_event")
+}
+
+enum EmailEventType {
+  processed
+  delivered
+  opened
+  clicked
+}
+
+model Draft {
+  id            String         @id @default(cuid())
+  subject       String?
+  body          String?
+  scheduledAt   DateTime?
+  senderId      String?
+  sender        Sender?        @relation(fields: [senderId], references: [id])
+  draftContacts DraftContact[]
+  draftTags     DraftTag[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([subject])
+  @@map("draft")
+}
+
+model DraftContact {
+  draftId   String
+  contactId String
+  draft     Draft   @relation(fields: [draftId], references: [id])
+  contact   Contact @relation(fields: [contactId], references: [id])
+
+  @@id([draftId, contactId])
+  @@map("draft_contact")
+}
+
+model LLMLog {
+  id        String   @id @default(cuid())
+  prompt    String
+  response  String?
+  isError   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("llm_log")
+}
+
+model WebhookLog {
+  id        String   @id @default(cuid())
+  platform  String
+  body      String?
+  createdAt DateTime @default(now())
+
+  @@map("webhook_log")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  emailId   String
+  email     Email            @relation(fields: [emailId], references: [id])
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  isDeleted Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@map("notification")
+}
+
+enum NotificationType {
+  reply
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+  output          = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Sender {
+  id          String   @id @default(cuid())
+  displayName String
+  name        String
+  email       String
+  apiKey      String
+  esp         String
+  priority    Int      @default(1)
+  target      Int
+  sentCount   Int      @default(0)
+  drafts      Draft[]
+  emails      Email[]
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([email, esp])
+  @@map("sender")
+}
+
+model Tag {
+  id           String       @id @default(cuid())
+  title        String
+  tagCompanies CompanyTag[]
+  tagContacts  ContactTag[]
+  isDeleted    Boolean      @default(false)
+  DraftTag     DraftTag[]
+  EmailTag     EmailTag[]
+
+  @@index([title])
+  @@map("tag")
+}
+
+model CompanyTag {
+  companyId String
+  tagId     String
+  company   Company @relation(fields: [companyId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([companyId, tagId])
+  @@map("company_tag")
+}
+
+model ContactTag {
+  contactId String
+  tagId     String
+  contact   Contact @relation(fields: [contactId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([contactId, tagId])
+  @@map("contact_tag")
+}
+
+model DraftTag {
+  draftId String
+  tagId   String
+  draft   Draft  @relation(fields: [draftId], references: [id])
+  tag     Tag    @relation(fields: [tagId], references: [id])
+
+  @@id([draftId, tagId])
+  @@map("draft_tag")
+}
+
+model EmailTag {
+  emailId String
+  tagId   String
+  email   Email  @relation(fields: [emailId], references: [id])
+  tag     Tag    @relation(fields: [tagId], references: [id])
+
+  @@id([emailId, tagId])
+  @@map("email_tag")
+}
