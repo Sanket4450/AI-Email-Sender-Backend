@@ -17,7 +17,7 @@ export const APP_ENV = {
 
 export const VALUES = {
   OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
-  OPENAI_MODEL: 'deepseek/deepseek-r1-distill-qwen-32b:free',
+  OPENAI_MODEL: 'deepseek/deepseek-r1:free',
 
   SENDGRID_USER_AGENT: 'SendGrid Event API',
 

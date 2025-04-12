@@ -110,7 +110,7 @@ export class EmailService {
     }
     if (eventTypes.length) {
       conditions.push(
-        Prisma.sql`ev."eventType" IN (${Prisma.join(eventTypes)})`,
+        Prisma.sql`ev."eventType"::TEXT IN (${Prisma.join(eventTypes)})`,
       );
     }
     if (search) {
