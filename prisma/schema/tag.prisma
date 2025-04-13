@@ -3,9 +3,10 @@ model Tag {
   title        String
   tagCompanies CompanyTag[]
   tagContacts  ContactTag[]
-  isDeleted    Boolean      @default(false)
+  tagPurposes  PurposeTag[]
   DraftTag     DraftTag[]
   EmailTag     EmailTag[]
+  isDeleted    Boolean      @default(false)
 
   @@index([title])
   @@map("tag")
@@ -29,6 +30,16 @@ model ContactTag {
 
   @@id([contactId, tagId])
   @@map("contact_tag")
+}
+
+model PurposeTag {
+  purposeId String
+  tagId     String
+  purpose   Purpose @relation(fields: [purposeId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([purposeId, tagId])
+  @@map("purpose_tag")
 }
 
 model DraftTag {
