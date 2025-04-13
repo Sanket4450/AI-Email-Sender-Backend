@@ -7,12 +7,11 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { GetLogsDto } from './dto/get-logs.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
-import { Prisma } from '@prisma/client';
 import { QueryResponse } from 'src/app/types/common.type';
 import { LogQuery } from './log.query';
 import { LOG_TYPES } from 'src/app/utils/constants';
 import { DeleteLogDto } from './dto/delete-log.dto';
-import { LLMLog, WebhookLog } from 'prisma/generated';
+import { LLMLog, Prisma, WebhookLog } from 'prisma/generated';
 
 @Injectable()
 export class LogService {

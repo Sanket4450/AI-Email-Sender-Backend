@@ -1,4 +1,3 @@
-import { Company, Prisma } from '@prisma/client';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { CreateCompanyyDto } from './dto/create-company.dto';
@@ -11,6 +10,7 @@ import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
 import { CompanyQuery } from './company.query';
 import { TagService } from '../tag/tag.service';
+import { Company, Prisma } from 'prisma/generated';
 
 @Injectable()
 export class CompanyService {
@@ -120,7 +120,7 @@ export class CompanyService {
     const joinClause = this.companyQuery.getCompanyJoinClause();
 
     const rawQuery = Prisma.sql`
-      WITH "CompanieCount" AS (
+      WITH "CompanyCount" AS (
         SELECT
           COUNT(DISTINCT c.id)::INT AS "count"
         FROM company c
@@ -141,7 +141,7 @@ export class CompanyService {
       )
       
       SELECT
-        (SELECT "count" FROM "CompanieCount") AS "count",
+        (SELECT "count" FROM "CompanyCount") AS "count",
         COALESCE((SELECT JSON_AGG("CompaniesData") FROM "CompaniesData"), '[]'::JSON) AS "data";
     `;
 

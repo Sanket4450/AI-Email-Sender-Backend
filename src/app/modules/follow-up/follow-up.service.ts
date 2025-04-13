@@ -7,10 +7,10 @@ import { GetFollowUpsDto } from './dto/get-follow-up.dto';
 import { EmailService } from '../email/email.service';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
-import { FollowUp, Prisma } from '@prisma/client';
 import { ESPService } from '../esp/esp.service';
 import { getFollowUpSubject, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
+import { FollowUp, Prisma } from 'prisma/generated';
 
 @Injectable()
 export class FollowUpService {

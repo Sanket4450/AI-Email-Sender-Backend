@@ -7,9 +7,9 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { GetTagsDto } from './dto/get-tags.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
-import { Prisma, Tag } from '@prisma/client';
 import { QueryResponse } from 'src/app/types/common.type';
 import { TagQuery } from './tag.query';
+import { Prisma, Tag } from 'prisma/generated';
 
 @Injectable()
 export class TagService {

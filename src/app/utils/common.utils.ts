@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'prisma/generated';
 import { Pagination, PaginationQuery } from '../types/common.type';
 import { VALUES } from './constants';
 

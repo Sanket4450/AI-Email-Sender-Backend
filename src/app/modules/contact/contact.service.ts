@@ -5,13 +5,13 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { CompanyService } from '../company/company.service';
-import { Contact, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { GetContactsDto } from './dto/get-contacts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
 import { ContactQuery } from './contact.query';
 import { TagService } from '../tag/tag.service';
+import { Contact, Prisma } from 'prisma/generated';
 
 @Injectable()
 export class ContactService {

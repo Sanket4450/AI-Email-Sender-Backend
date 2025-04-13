@@ -1,4 +1,4 @@
-import { Company, Contact, EmailEventType, Sender } from '@prisma/client';
+import { Company, Contact, EmailEventType, Sender } from "prisma/generated";
 
 export const CONSTANTS = {
   SENDGRID: 'Sendgrid',

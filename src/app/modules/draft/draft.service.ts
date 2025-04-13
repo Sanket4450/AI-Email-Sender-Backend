@@ -5,7 +5,6 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { UpdateDraftDto } from './dto/update-draft.dto';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { Draft, Prisma } from '@prisma/client';
 import { GetDraftsDto } from './dto/get-drafts.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { QueryResponse } from 'src/app/types/common.type';
@@ -13,6 +12,7 @@ import { DraftQuery } from './draft.query';
 import { SenderService } from '../sender/sender.service';
 import { CommonDraftDto } from './dto/common-draft.dto';
 import { TagService } from '../tag/tag.service';
+import { Draft, Prisma } from 'prisma/generated';
 
 @Injectable()
 export class DraftService {

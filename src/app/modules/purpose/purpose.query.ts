@@ -2,14 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from 'prisma/generated';
 
 @Injectable()
-export class CompanyQuery {
+export class PurposeQuery {
   constructor() {}
 
-  getCompanySelectFields = (): Prisma.Sql => Prisma.sql`
+  getPurposeSelectFields = (): Prisma.Sql => Prisma.sql`
     c.id AS id,
     c.title AS title,
     c.description AS description,
-    c.location AS location,
     c."createdAt" AS "createdAt",
     COALESCE(
       JSON_AGG(
@@ -21,8 +20,8 @@ export class CompanyQuery {
     ) AS tags
   `;
 
-  getCompanyJoinClause = (): Prisma.Sql => Prisma.sql`
-    LEFT JOIN company_tag ct ON c.id = ct."companyId"
-    LEFT JOIN tag t ON ct."tagId" = t.id AND t."isDeleted" = false
+  getPurposeJoinClause = (): Prisma.Sql => Prisma.sql`
+    LEFT JOIN purpose_tag pt ON p.id = pt."purposeId"
+    LEFT JOIN tag t ON pt."tagId" = t.id AND t."isDeleted" = false
   `;
 }

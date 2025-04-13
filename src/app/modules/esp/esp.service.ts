@@ -5,10 +5,10 @@ import {
   SendgridFollowUpEmailProps,
   SendGridService,
 } from './sendgrid/sendgrid.service';
-import { Contact, Sender } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { ERROR_MSG } from 'src/app/utils/messages';
 import { CryptoService } from '../crypto/crypto.service';
+import { Contact, Sender } from 'prisma/generated';
 
 export interface EmailProps {
   subject: string;

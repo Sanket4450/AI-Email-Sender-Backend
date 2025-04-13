@@ -226,6 +226,25 @@ exports.Prisma.NotificationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PurposeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DraftPurposeScalarFieldEnum = {
+  draftId: 'draftId',
+  purposeId: 'purposeId'
+};
+
+exports.Prisma.EmailPurposeScalarFieldEnum = {
+  emailId: 'emailId',
+  purposeId: 'purposeId'
+};
+
 exports.Prisma.SenderScalarFieldEnum = {
   id: 'id',
   displayName: 'displayName',
@@ -254,6 +273,11 @@ exports.Prisma.CompanyTagScalarFieldEnum = {
 
 exports.Prisma.ContactTagScalarFieldEnum = {
   contactId: 'contactId',
+  tagId: 'tagId'
+};
+
+exports.Prisma.PurposeTagScalarFieldEnum = {
+  purposeId: 'purposeId',
   tagId: 'tagId'
 };
 
@@ -313,10 +337,14 @@ exports.Prisma.ModelName = {
   LLMLog: 'LLMLog',
   WebhookLog: 'WebhookLog',
   Notification: 'Notification',
+  Purpose: 'Purpose',
+  DraftPurpose: 'DraftPurpose',
+  EmailPurpose: 'EmailPurpose',
   Sender: 'Sender',
   Tag: 'Tag',
   CompanyTag: 'CompanyTag',
   ContactTag: 'ContactTag',
+  PurposeTag: 'PurposeTag',
   DraftTag: 'DraftTag',
   EmailTag: 'EmailTag'
 };

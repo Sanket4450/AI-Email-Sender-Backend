@@ -4,7 +4,6 @@ import { CreateSenderDto } from './dto/create-sender.dto';
 import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
 import { UpdateSenderDto } from './dto/update-sender.dto';
-import { Sender, Prisma } from '@prisma/client';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { CryptoService } from '../crypto/crypto.service';
 import { CONSTANTS, ESPS } from 'src/app/utils/constants';
@@ -12,6 +11,7 @@ import { GetSendersDto } from './dto/get-senders.dto';
 import { QueryResponse } from 'src/app/types/common.type';
 import { SenderQuery } from './sender.query';
 import { getSearchCond } from 'src/app/utils/common.utils';
+import { Prisma, Sender } from 'prisma/generated';
 
 @Injectable()
 export class SenderService {

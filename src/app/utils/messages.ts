@@ -48,6 +48,10 @@ export const ERROR_MSG = {
   FOLLOW_UP_CANNOT_SENT: 'Follow Up cannot be sent',
   FOLLOW_UP_CANNOT_MODIFY: 'Follow Up cannot be modified',
 
+  // Purpose
+  PURPOSE_NOT_FOUND: 'Purpose not found',
+  PURPOSE_ALREADY_EXISTS: 'Purpose already exists with this name',
+
   // Log
   LOG_NOT_FOUND: 'Log not found',
 };
@@ -85,6 +89,13 @@ export const SUCCESS_MSG = {
   CONTACT_DELETED: 'Contact deleted successfully',
   CONTACTS_FETCHED: 'Contacts fetched successfully',
   CONTACT_FETCHED: 'Contact fetched successfully',
+
+  // Tag
+  PURPOSE_CREATED: 'Purpose created successfully',
+  PURPOSE_UPDATED: 'Purpose updated successfully',
+  PURPOSE_DELETED: 'Purpose deleted successfully',
+  PURPOSES_FETCHED: 'Purposes fetched successfully',
+  PURPOSE_FETCHED: 'Purpose fetched successfully',
 
   // Tag
   TAG_CREATED: 'Tag created successfully',

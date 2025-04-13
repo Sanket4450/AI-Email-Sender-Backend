@@ -74,6 +74,21 @@ export type WebhookLog = $Result.DefaultSelection<Prisma.$WebhookLogPayload>
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model Purpose
+ * 
+ */
+export type Purpose = $Result.DefaultSelection<Prisma.$PurposePayload>
+/**
+ * Model DraftPurpose
+ * 
+ */
+export type DraftPurpose = $Result.DefaultSelection<Prisma.$DraftPurposePayload>
+/**
+ * Model EmailPurpose
+ * 
+ */
+export type EmailPurpose = $Result.DefaultSelection<Prisma.$EmailPurposePayload>
+/**
  * Model Sender
  * 
  */
@@ -93,6 +108,11 @@ export type CompanyTag = $Result.DefaultSelection<Prisma.$CompanyTagPayload>
  * 
  */
 export type ContactTag = $Result.DefaultSelection<Prisma.$ContactTagPayload>
+/**
+ * Model PurposeTag
+ * 
+ */
+export type PurposeTag = $Result.DefaultSelection<Prisma.$PurposeTagPayload>
 /**
  * Model DraftTag
  * 
@@ -395,6 +415,36 @@ export class PrismaClient<
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.purpose`: Exposes CRUD operations for the **Purpose** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Purposes
+    * const purposes = await prisma.purpose.findMany()
+    * ```
+    */
+  get purpose(): Prisma.PurposeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.draftPurpose`: Exposes CRUD operations for the **DraftPurpose** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DraftPurposes
+    * const draftPurposes = await prisma.draftPurpose.findMany()
+    * ```
+    */
+  get draftPurpose(): Prisma.DraftPurposeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.emailPurpose`: Exposes CRUD operations for the **EmailPurpose** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmailPurposes
+    * const emailPurposes = await prisma.emailPurpose.findMany()
+    * ```
+    */
+  get emailPurpose(): Prisma.EmailPurposeDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.sender`: Exposes CRUD operations for the **Sender** model.
     * Example usage:
     * ```ts
@@ -433,6 +483,16 @@ export class PrismaClient<
     * ```
     */
   get contactTag(): Prisma.ContactTagDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.purposeTag`: Exposes CRUD operations for the **PurposeTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PurposeTags
+    * const purposeTags = await prisma.purposeTag.findMany()
+    * ```
+    */
+  get purposeTag(): Prisma.PurposeTagDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.draftTag`: Exposes CRUD operations for the **DraftTag** model.
@@ -905,10 +965,14 @@ export namespace Prisma {
     LLMLog: 'LLMLog',
     WebhookLog: 'WebhookLog',
     Notification: 'Notification',
+    Purpose: 'Purpose',
+    DraftPurpose: 'DraftPurpose',
+    EmailPurpose: 'EmailPurpose',
     Sender: 'Sender',
     Tag: 'Tag',
     CompanyTag: 'CompanyTag',
     ContactTag: 'ContactTag',
+    PurposeTag: 'PurposeTag',
     DraftTag: 'DraftTag',
     EmailTag: 'EmailTag'
   };
@@ -929,7 +993,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "contact" | "contactEvent" | "email" | "emailEvent" | "followUp" | "followUpEvent" | "draft" | "draftContact" | "lLMLog" | "webhookLog" | "notification" | "sender" | "tag" | "companyTag" | "contactTag" | "draftTag" | "emailTag"
+      modelProps: "company" | "contact" | "contactEvent" | "email" | "emailEvent" | "followUp" | "followUpEvent" | "draft" | "draftContact" | "lLMLog" | "webhookLog" | "notification" | "purpose" | "draftPurpose" | "emailPurpose" | "sender" | "tag" | "companyTag" | "contactTag" | "purposeTag" | "draftTag" | "emailTag"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1821,6 +1885,228 @@ export namespace Prisma {
           }
         }
       }
+      Purpose: {
+        payload: Prisma.$PurposePayload<ExtArgs>
+        fields: Prisma.PurposeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PurposeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PurposeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>
+          }
+          findFirst: {
+            args: Prisma.PurposeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PurposeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>
+          }
+          findMany: {
+            args: Prisma.PurposeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>[]
+          }
+          create: {
+            args: Prisma.PurposeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>
+          }
+          createMany: {
+            args: Prisma.PurposeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PurposeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>[]
+          }
+          delete: {
+            args: Prisma.PurposeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>
+          }
+          update: {
+            args: Prisma.PurposeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>
+          }
+          deleteMany: {
+            args: Prisma.PurposeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PurposeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PurposeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>[]
+          }
+          upsert: {
+            args: Prisma.PurposeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposePayload>
+          }
+          aggregate: {
+            args: Prisma.PurposeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePurpose>
+          }
+          groupBy: {
+            args: Prisma.PurposeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PurposeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PurposeCountArgs<ExtArgs>
+            result: $Utils.Optional<PurposeCountAggregateOutputType> | number
+          }
+        }
+      }
+      DraftPurpose: {
+        payload: Prisma.$DraftPurposePayload<ExtArgs>
+        fields: Prisma.DraftPurposeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DraftPurposeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DraftPurposeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>
+          }
+          findFirst: {
+            args: Prisma.DraftPurposeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DraftPurposeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>
+          }
+          findMany: {
+            args: Prisma.DraftPurposeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>[]
+          }
+          create: {
+            args: Prisma.DraftPurposeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>
+          }
+          createMany: {
+            args: Prisma.DraftPurposeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DraftPurposeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>[]
+          }
+          delete: {
+            args: Prisma.DraftPurposeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>
+          }
+          update: {
+            args: Prisma.DraftPurposeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>
+          }
+          deleteMany: {
+            args: Prisma.DraftPurposeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DraftPurposeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DraftPurposeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>[]
+          }
+          upsert: {
+            args: Prisma.DraftPurposeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DraftPurposePayload>
+          }
+          aggregate: {
+            args: Prisma.DraftPurposeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDraftPurpose>
+          }
+          groupBy: {
+            args: Prisma.DraftPurposeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DraftPurposeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DraftPurposeCountArgs<ExtArgs>
+            result: $Utils.Optional<DraftPurposeCountAggregateOutputType> | number
+          }
+        }
+      }
+      EmailPurpose: {
+        payload: Prisma.$EmailPurposePayload<ExtArgs>
+        fields: Prisma.EmailPurposeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmailPurposeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmailPurposeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>
+          }
+          findFirst: {
+            args: Prisma.EmailPurposeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmailPurposeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>
+          }
+          findMany: {
+            args: Prisma.EmailPurposeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>[]
+          }
+          create: {
+            args: Prisma.EmailPurposeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>
+          }
+          createMany: {
+            args: Prisma.EmailPurposeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmailPurposeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>[]
+          }
+          delete: {
+            args: Prisma.EmailPurposeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>
+          }
+          update: {
+            args: Prisma.EmailPurposeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>
+          }
+          deleteMany: {
+            args: Prisma.EmailPurposeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmailPurposeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmailPurposeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>[]
+          }
+          upsert: {
+            args: Prisma.EmailPurposeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPurposePayload>
+          }
+          aggregate: {
+            args: Prisma.EmailPurposeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmailPurpose>
+          }
+          groupBy: {
+            args: Prisma.EmailPurposeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailPurposeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmailPurposeCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailPurposeCountAggregateOutputType> | number
+          }
+        }
+      }
       Sender: {
         payload: Prisma.$SenderPayload<ExtArgs>
         fields: Prisma.SenderFieldRefs
@@ -2117,6 +2403,80 @@ export namespace Prisma {
           }
         }
       }
+      PurposeTag: {
+        payload: Prisma.$PurposeTagPayload<ExtArgs>
+        fields: Prisma.PurposeTagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PurposeTagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PurposeTagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>
+          }
+          findFirst: {
+            args: Prisma.PurposeTagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PurposeTagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>
+          }
+          findMany: {
+            args: Prisma.PurposeTagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>[]
+          }
+          create: {
+            args: Prisma.PurposeTagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>
+          }
+          createMany: {
+            args: Prisma.PurposeTagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PurposeTagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>[]
+          }
+          delete: {
+            args: Prisma.PurposeTagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>
+          }
+          update: {
+            args: Prisma.PurposeTagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>
+          }
+          deleteMany: {
+            args: Prisma.PurposeTagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PurposeTagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PurposeTagUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>[]
+          }
+          upsert: {
+            args: Prisma.PurposeTagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurposeTagPayload>
+          }
+          aggregate: {
+            args: Prisma.PurposeTagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePurposeTag>
+          }
+          groupBy: {
+            args: Prisma.PurposeTagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PurposeTagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PurposeTagCountArgs<ExtArgs>
+            result: $Utils.Optional<PurposeTagCountAggregateOutputType> | number
+          }
+        }
+      }
       DraftTag: {
         payload: Prisma.$DraftTagPayload<ExtArgs>
         fields: Prisma.DraftTagFieldRefs
@@ -2361,10 +2721,14 @@ export namespace Prisma {
     lLMLog?: LLMLogOmit
     webhookLog?: WebhookLogOmit
     notification?: NotificationOmit
+    purpose?: PurposeOmit
+    draftPurpose?: DraftPurposeOmit
+    emailPurpose?: EmailPurposeOmit
     sender?: SenderOmit
     tag?: TagOmit
     companyTag?: CompanyTagOmit
     contactTag?: ContactTagOmit
+    purposeTag?: PurposeTagOmit
     draftTag?: DraftTagOmit
     emailTag?: EmailTagOmit
   }
@@ -2560,6 +2924,7 @@ export namespace Prisma {
 
   export type EmailCountOutputType = {
     emailTags: number
+    emailPurposes: number
     events: number
     followUps: number
     notifications: number
@@ -2567,6 +2932,7 @@ export namespace Prisma {
 
   export type EmailCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emailTags?: boolean | EmailCountOutputTypeCountEmailTagsArgs
+    emailPurposes?: boolean | EmailCountOutputTypeCountEmailPurposesArgs
     events?: boolean | EmailCountOutputTypeCountEventsArgs
     followUps?: boolean | EmailCountOutputTypeCountFollowUpsArgs
     notifications?: boolean | EmailCountOutputTypeCountNotificationsArgs
@@ -2588,6 +2954,13 @@ export namespace Prisma {
    */
   export type EmailCountOutputTypeCountEmailTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EmailTagWhereInput
+  }
+
+  /**
+   * EmailCountOutputType without action
+   */
+  export type EmailCountOutputTypeCountEmailPurposesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailPurposeWhereInput
   }
 
   /**
@@ -2650,11 +3023,13 @@ export namespace Prisma {
   export type DraftCountOutputType = {
     draftContacts: number
     draftTags: number
+    draftPurposes: number
   }
 
   export type DraftCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     draftContacts?: boolean | DraftCountOutputTypeCountDraftContactsArgs
     draftTags?: boolean | DraftCountOutputTypeCountDraftTagsArgs
+    draftPurposes?: boolean | DraftCountOutputTypeCountDraftPurposesArgs
   }
 
   // Custom InputTypes
@@ -2680,6 +3055,62 @@ export namespace Prisma {
    */
   export type DraftCountOutputTypeCountDraftTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DraftTagWhereInput
+  }
+
+  /**
+   * DraftCountOutputType without action
+   */
+  export type DraftCountOutputTypeCountDraftPurposesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DraftPurposeWhereInput
+  }
+
+
+  /**
+   * Count Type PurposeCountOutputType
+   */
+
+  export type PurposeCountOutputType = {
+    purposeTags: number
+    purposeDrafts: number
+    purposeEmails: number
+  }
+
+  export type PurposeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purposeTags?: boolean | PurposeCountOutputTypeCountPurposeTagsArgs
+    purposeDrafts?: boolean | PurposeCountOutputTypeCountPurposeDraftsArgs
+    purposeEmails?: boolean | PurposeCountOutputTypeCountPurposeEmailsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PurposeCountOutputType without action
+   */
+  export type PurposeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeCountOutputType
+     */
+    select?: PurposeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PurposeCountOutputType without action
+   */
+  export type PurposeCountOutputTypeCountPurposeTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurposeTagWhereInput
+  }
+
+  /**
+   * PurposeCountOutputType without action
+   */
+  export type PurposeCountOutputTypeCountPurposeDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DraftPurposeWhereInput
+  }
+
+  /**
+   * PurposeCountOutputType without action
+   */
+  export type PurposeCountOutputTypeCountPurposeEmailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailPurposeWhereInput
   }
 
 
@@ -2730,6 +3161,7 @@ export namespace Prisma {
   export type TagCountOutputType = {
     tagCompanies: number
     tagContacts: number
+    tagPurposes: number
     DraftTag: number
     EmailTag: number
   }
@@ -2737,6 +3169,7 @@ export namespace Prisma {
   export type TagCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tagCompanies?: boolean | TagCountOutputTypeCountTagCompaniesArgs
     tagContacts?: boolean | TagCountOutputTypeCountTagContactsArgs
+    tagPurposes?: boolean | TagCountOutputTypeCountTagPurposesArgs
     DraftTag?: boolean | TagCountOutputTypeCountDraftTagArgs
     EmailTag?: boolean | TagCountOutputTypeCountEmailTagArgs
   }
@@ -2764,6 +3197,13 @@ export namespace Prisma {
    */
   export type TagCountOutputTypeCountTagContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContactTagWhereInput
+  }
+
+  /**
+   * TagCountOutputType without action
+   */
+  export type TagCountOutputTypeCountTagPurposesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurposeTagWhereInput
   }
 
   /**
@@ -6430,6 +6870,7 @@ export namespace Prisma {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     sender?: boolean | SenderDefaultArgs<ExtArgs>
     emailTags?: boolean | Email$emailTagsArgs<ExtArgs>
+    emailPurposes?: boolean | Email$emailPurposesArgs<ExtArgs>
     events?: boolean | Email$eventsArgs<ExtArgs>
     followUps?: boolean | Email$followUpsArgs<ExtArgs>
     notifications?: boolean | Email$notificationsArgs<ExtArgs>
@@ -6484,6 +6925,7 @@ export namespace Prisma {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     sender?: boolean | SenderDefaultArgs<ExtArgs>
     emailTags?: boolean | Email$emailTagsArgs<ExtArgs>
+    emailPurposes?: boolean | Email$emailPurposesArgs<ExtArgs>
     events?: boolean | Email$eventsArgs<ExtArgs>
     followUps?: boolean | Email$followUpsArgs<ExtArgs>
     notifications?: boolean | Email$notificationsArgs<ExtArgs>
@@ -6504,6 +6946,7 @@ export namespace Prisma {
       contact: Prisma.$ContactPayload<ExtArgs>
       sender: Prisma.$SenderPayload<ExtArgs>
       emailTags: Prisma.$EmailTagPayload<ExtArgs>[]
+      emailPurposes: Prisma.$EmailPurposePayload<ExtArgs>[]
       events: Prisma.$EmailEventPayload<ExtArgs>[]
       followUps: Prisma.$FollowUpPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
@@ -6916,6 +7359,7 @@ export namespace Prisma {
     contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sender<T extends SenderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SenderDefaultArgs<ExtArgs>>): Prisma__SenderClient<$Result.GetResult<Prisma.$SenderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     emailTags<T extends Email$emailTagsArgs<ExtArgs> = {}>(args?: Subset<T, Email$emailTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    emailPurposes<T extends Email$emailPurposesArgs<ExtArgs> = {}>(args?: Subset<T, Email$emailPurposesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Email$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Email$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     followUps<T extends Email$followUpsArgs<ExtArgs> = {}>(args?: Subset<T, Email$followUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FollowUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Email$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Email$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7375,6 +7819,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EmailTagScalarFieldEnum | EmailTagScalarFieldEnum[]
+  }
+
+  /**
+   * Email.emailPurposes
+   */
+  export type Email$emailPurposesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    where?: EmailPurposeWhereInput
+    orderBy?: EmailPurposeOrderByWithRelationInput | EmailPurposeOrderByWithRelationInput[]
+    cursor?: EmailPurposeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailPurposeScalarFieldEnum | EmailPurposeScalarFieldEnum[]
   }
 
   /**
@@ -10881,6 +11349,7 @@ export namespace Prisma {
     sender?: boolean | Draft$senderArgs<ExtArgs>
     draftContacts?: boolean | Draft$draftContactsArgs<ExtArgs>
     draftTags?: boolean | Draft$draftTagsArgs<ExtArgs>
+    draftPurposes?: boolean | Draft$draftPurposesArgs<ExtArgs>
     _count?: boolean | DraftCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["draft"]>
 
@@ -10921,6 +11390,7 @@ export namespace Prisma {
     sender?: boolean | Draft$senderArgs<ExtArgs>
     draftContacts?: boolean | Draft$draftContactsArgs<ExtArgs>
     draftTags?: boolean | Draft$draftTagsArgs<ExtArgs>
+    draftPurposes?: boolean | Draft$draftPurposesArgs<ExtArgs>
     _count?: boolean | DraftCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DraftIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10936,6 +11406,7 @@ export namespace Prisma {
       sender: Prisma.$SenderPayload<ExtArgs> | null
       draftContacts: Prisma.$DraftContactPayload<ExtArgs>[]
       draftTags: Prisma.$DraftTagPayload<ExtArgs>[]
+      draftPurposes: Prisma.$DraftPurposePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11342,6 +11813,7 @@ export namespace Prisma {
     sender<T extends Draft$senderArgs<ExtArgs> = {}>(args?: Subset<T, Draft$senderArgs<ExtArgs>>): Prisma__SenderClient<$Result.GetResult<Prisma.$SenderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     draftContacts<T extends Draft$draftContactsArgs<ExtArgs> = {}>(args?: Subset<T, Draft$draftContactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     draftTags<T extends Draft$draftTagsArgs<ExtArgs> = {}>(args?: Subset<T, Draft$draftTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    draftPurposes<T extends Draft$draftPurposesArgs<ExtArgs> = {}>(args?: Subset<T, Draft$draftPurposesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11838,6 +12310,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DraftTagScalarFieldEnum | DraftTagScalarFieldEnum[]
+  }
+
+  /**
+   * Draft.draftPurposes
+   */
+  export type Draft$draftPurposesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    where?: DraftPurposeWhereInput
+    orderBy?: DraftPurposeOrderByWithRelationInput | DraftPurposeOrderByWithRelationInput[]
+    cursor?: DraftPurposeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DraftPurposeScalarFieldEnum | DraftPurposeScalarFieldEnum[]
   }
 
   /**
@@ -15935,6 +16431,3199 @@ export namespace Prisma {
 
 
   /**
+   * Model Purpose
+   */
+
+  export type AggregatePurpose = {
+    _count: PurposeCountAggregateOutputType | null
+    _min: PurposeMinAggregateOutputType | null
+    _max: PurposeMaxAggregateOutputType | null
+  }
+
+  export type PurposeMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PurposeMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PurposeCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    isDeleted: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PurposeMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PurposeMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PurposeCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PurposeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Purpose to aggregate.
+     */
+    where?: PurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purposes to fetch.
+     */
+    orderBy?: PurposeOrderByWithRelationInput | PurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Purposes
+    **/
+    _count?: true | PurposeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PurposeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PurposeMaxAggregateInputType
+  }
+
+  export type GetPurposeAggregateType<T extends PurposeAggregateArgs> = {
+        [P in keyof T & keyof AggregatePurpose]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePurpose[P]>
+      : GetScalarType<T[P], AggregatePurpose[P]>
+  }
+
+
+
+
+  export type PurposeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurposeWhereInput
+    orderBy?: PurposeOrderByWithAggregationInput | PurposeOrderByWithAggregationInput[]
+    by: PurposeScalarFieldEnum[] | PurposeScalarFieldEnum
+    having?: PurposeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PurposeCountAggregateInputType | true
+    _min?: PurposeMinAggregateInputType
+    _max?: PurposeMaxAggregateInputType
+  }
+
+  export type PurposeGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    isDeleted: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: PurposeCountAggregateOutputType | null
+    _min: PurposeMinAggregateOutputType | null
+    _max: PurposeMaxAggregateOutputType | null
+  }
+
+  type GetPurposeGroupByPayload<T extends PurposeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PurposeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PurposeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PurposeGroupByOutputType[P]>
+            : GetScalarType<T[P], PurposeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PurposeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purposeTags?: boolean | Purpose$purposeTagsArgs<ExtArgs>
+    purposeDrafts?: boolean | Purpose$purposeDraftsArgs<ExtArgs>
+    purposeEmails?: boolean | Purpose$purposeEmailsArgs<ExtArgs>
+    _count?: boolean | PurposeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purpose"]>
+
+  export type PurposeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["purpose"]>
+
+  export type PurposeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["purpose"]>
+
+  export type PurposeSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PurposeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["purpose"]>
+  export type PurposeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purposeTags?: boolean | Purpose$purposeTagsArgs<ExtArgs>
+    purposeDrafts?: boolean | Purpose$purposeDraftsArgs<ExtArgs>
+    purposeEmails?: boolean | Purpose$purposeEmailsArgs<ExtArgs>
+    _count?: boolean | PurposeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PurposeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PurposeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PurposePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Purpose"
+    objects: {
+      purposeTags: Prisma.$PurposeTagPayload<ExtArgs>[]
+      purposeDrafts: Prisma.$DraftPurposePayload<ExtArgs>[]
+      purposeEmails: Prisma.$EmailPurposePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      isDeleted: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["purpose"]>
+    composites: {}
+  }
+
+  type PurposeGetPayload<S extends boolean | null | undefined | PurposeDefaultArgs> = $Result.GetResult<Prisma.$PurposePayload, S>
+
+  type PurposeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PurposeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PurposeCountAggregateInputType | true
+    }
+
+  export interface PurposeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Purpose'], meta: { name: 'Purpose' } }
+    /**
+     * Find zero or one Purpose that matches the filter.
+     * @param {PurposeFindUniqueArgs} args - Arguments to find a Purpose
+     * @example
+     * // Get one Purpose
+     * const purpose = await prisma.purpose.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PurposeFindUniqueArgs>(args: SelectSubset<T, PurposeFindUniqueArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Purpose that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PurposeFindUniqueOrThrowArgs} args - Arguments to find a Purpose
+     * @example
+     * // Get one Purpose
+     * const purpose = await prisma.purpose.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PurposeFindUniqueOrThrowArgs>(args: SelectSubset<T, PurposeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Purpose that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeFindFirstArgs} args - Arguments to find a Purpose
+     * @example
+     * // Get one Purpose
+     * const purpose = await prisma.purpose.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PurposeFindFirstArgs>(args?: SelectSubset<T, PurposeFindFirstArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Purpose that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeFindFirstOrThrowArgs} args - Arguments to find a Purpose
+     * @example
+     * // Get one Purpose
+     * const purpose = await prisma.purpose.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PurposeFindFirstOrThrowArgs>(args?: SelectSubset<T, PurposeFindFirstOrThrowArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Purposes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Purposes
+     * const purposes = await prisma.purpose.findMany()
+     * 
+     * // Get first 10 Purposes
+     * const purposes = await prisma.purpose.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const purposeWithIdOnly = await prisma.purpose.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PurposeFindManyArgs>(args?: SelectSubset<T, PurposeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Purpose.
+     * @param {PurposeCreateArgs} args - Arguments to create a Purpose.
+     * @example
+     * // Create one Purpose
+     * const Purpose = await prisma.purpose.create({
+     *   data: {
+     *     // ... data to create a Purpose
+     *   }
+     * })
+     * 
+     */
+    create<T extends PurposeCreateArgs>(args: SelectSubset<T, PurposeCreateArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Purposes.
+     * @param {PurposeCreateManyArgs} args - Arguments to create many Purposes.
+     * @example
+     * // Create many Purposes
+     * const purpose = await prisma.purpose.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PurposeCreateManyArgs>(args?: SelectSubset<T, PurposeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Purposes and returns the data saved in the database.
+     * @param {PurposeCreateManyAndReturnArgs} args - Arguments to create many Purposes.
+     * @example
+     * // Create many Purposes
+     * const purpose = await prisma.purpose.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Purposes and only return the `id`
+     * const purposeWithIdOnly = await prisma.purpose.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PurposeCreateManyAndReturnArgs>(args?: SelectSubset<T, PurposeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Purpose.
+     * @param {PurposeDeleteArgs} args - Arguments to delete one Purpose.
+     * @example
+     * // Delete one Purpose
+     * const Purpose = await prisma.purpose.delete({
+     *   where: {
+     *     // ... filter to delete one Purpose
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PurposeDeleteArgs>(args: SelectSubset<T, PurposeDeleteArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Purpose.
+     * @param {PurposeUpdateArgs} args - Arguments to update one Purpose.
+     * @example
+     * // Update one Purpose
+     * const purpose = await prisma.purpose.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PurposeUpdateArgs>(args: SelectSubset<T, PurposeUpdateArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Purposes.
+     * @param {PurposeDeleteManyArgs} args - Arguments to filter Purposes to delete.
+     * @example
+     * // Delete a few Purposes
+     * const { count } = await prisma.purpose.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PurposeDeleteManyArgs>(args?: SelectSubset<T, PurposeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Purposes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Purposes
+     * const purpose = await prisma.purpose.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PurposeUpdateManyArgs>(args: SelectSubset<T, PurposeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Purposes and returns the data updated in the database.
+     * @param {PurposeUpdateManyAndReturnArgs} args - Arguments to update many Purposes.
+     * @example
+     * // Update many Purposes
+     * const purpose = await prisma.purpose.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Purposes and only return the `id`
+     * const purposeWithIdOnly = await prisma.purpose.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PurposeUpdateManyAndReturnArgs>(args: SelectSubset<T, PurposeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Purpose.
+     * @param {PurposeUpsertArgs} args - Arguments to update or create a Purpose.
+     * @example
+     * // Update or create a Purpose
+     * const purpose = await prisma.purpose.upsert({
+     *   create: {
+     *     // ... data to create a Purpose
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Purpose we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PurposeUpsertArgs>(args: SelectSubset<T, PurposeUpsertArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Purposes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeCountArgs} args - Arguments to filter Purposes to count.
+     * @example
+     * // Count the number of Purposes
+     * const count = await prisma.purpose.count({
+     *   where: {
+     *     // ... the filter for the Purposes we want to count
+     *   }
+     * })
+    **/
+    count<T extends PurposeCountArgs>(
+      args?: Subset<T, PurposeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PurposeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Purpose.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PurposeAggregateArgs>(args: Subset<T, PurposeAggregateArgs>): Prisma.PrismaPromise<GetPurposeAggregateType<T>>
+
+    /**
+     * Group by Purpose.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PurposeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PurposeGroupByArgs['orderBy'] }
+        : { orderBy?: PurposeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PurposeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurposeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Purpose model
+   */
+  readonly fields: PurposeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Purpose.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PurposeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    purposeTags<T extends Purpose$purposeTagsArgs<ExtArgs> = {}>(args?: Subset<T, Purpose$purposeTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purposeDrafts<T extends Purpose$purposeDraftsArgs<ExtArgs> = {}>(args?: Subset<T, Purpose$purposeDraftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purposeEmails<T extends Purpose$purposeEmailsArgs<ExtArgs> = {}>(args?: Subset<T, Purpose$purposeEmailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Purpose model
+   */
+  interface PurposeFieldRefs {
+    readonly id: FieldRef<"Purpose", 'String'>
+    readonly name: FieldRef<"Purpose", 'String'>
+    readonly description: FieldRef<"Purpose", 'String'>
+    readonly isDeleted: FieldRef<"Purpose", 'Boolean'>
+    readonly createdAt: FieldRef<"Purpose", 'DateTime'>
+    readonly updatedAt: FieldRef<"Purpose", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Purpose findUnique
+   */
+  export type PurposeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which Purpose to fetch.
+     */
+    where: PurposeWhereUniqueInput
+  }
+
+  /**
+   * Purpose findUniqueOrThrow
+   */
+  export type PurposeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which Purpose to fetch.
+     */
+    where: PurposeWhereUniqueInput
+  }
+
+  /**
+   * Purpose findFirst
+   */
+  export type PurposeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which Purpose to fetch.
+     */
+    where?: PurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purposes to fetch.
+     */
+    orderBy?: PurposeOrderByWithRelationInput | PurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Purposes.
+     */
+    cursor?: PurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Purposes.
+     */
+    distinct?: PurposeScalarFieldEnum | PurposeScalarFieldEnum[]
+  }
+
+  /**
+   * Purpose findFirstOrThrow
+   */
+  export type PurposeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which Purpose to fetch.
+     */
+    where?: PurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purposes to fetch.
+     */
+    orderBy?: PurposeOrderByWithRelationInput | PurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Purposes.
+     */
+    cursor?: PurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Purposes.
+     */
+    distinct?: PurposeScalarFieldEnum | PurposeScalarFieldEnum[]
+  }
+
+  /**
+   * Purpose findMany
+   */
+  export type PurposeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which Purposes to fetch.
+     */
+    where?: PurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purposes to fetch.
+     */
+    orderBy?: PurposeOrderByWithRelationInput | PurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Purposes.
+     */
+    cursor?: PurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purposes.
+     */
+    skip?: number
+    distinct?: PurposeScalarFieldEnum | PurposeScalarFieldEnum[]
+  }
+
+  /**
+   * Purpose create
+   */
+  export type PurposeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Purpose.
+     */
+    data: XOR<PurposeCreateInput, PurposeUncheckedCreateInput>
+  }
+
+  /**
+   * Purpose createMany
+   */
+  export type PurposeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Purposes.
+     */
+    data: PurposeCreateManyInput | PurposeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Purpose createManyAndReturn
+   */
+  export type PurposeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * The data used to create many Purposes.
+     */
+    data: PurposeCreateManyInput | PurposeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Purpose update
+   */
+  export type PurposeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Purpose.
+     */
+    data: XOR<PurposeUpdateInput, PurposeUncheckedUpdateInput>
+    /**
+     * Choose, which Purpose to update.
+     */
+    where: PurposeWhereUniqueInput
+  }
+
+  /**
+   * Purpose updateMany
+   */
+  export type PurposeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Purposes.
+     */
+    data: XOR<PurposeUpdateManyMutationInput, PurposeUncheckedUpdateManyInput>
+    /**
+     * Filter which Purposes to update
+     */
+    where?: PurposeWhereInput
+    /**
+     * Limit how many Purposes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Purpose updateManyAndReturn
+   */
+  export type PurposeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * The data used to update Purposes.
+     */
+    data: XOR<PurposeUpdateManyMutationInput, PurposeUncheckedUpdateManyInput>
+    /**
+     * Filter which Purposes to update
+     */
+    where?: PurposeWhereInput
+    /**
+     * Limit how many Purposes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Purpose upsert
+   */
+  export type PurposeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Purpose to update in case it exists.
+     */
+    where: PurposeWhereUniqueInput
+    /**
+     * In case the Purpose found by the `where` argument doesn't exist, create a new Purpose with this data.
+     */
+    create: XOR<PurposeCreateInput, PurposeUncheckedCreateInput>
+    /**
+     * In case the Purpose was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PurposeUpdateInput, PurposeUncheckedUpdateInput>
+  }
+
+  /**
+   * Purpose delete
+   */
+  export type PurposeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+    /**
+     * Filter which Purpose to delete.
+     */
+    where: PurposeWhereUniqueInput
+  }
+
+  /**
+   * Purpose deleteMany
+   */
+  export type PurposeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Purposes to delete
+     */
+    where?: PurposeWhereInput
+    /**
+     * Limit how many Purposes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Purpose.purposeTags
+   */
+  export type Purpose$purposeTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    where?: PurposeTagWhereInput
+    orderBy?: PurposeTagOrderByWithRelationInput | PurposeTagOrderByWithRelationInput[]
+    cursor?: PurposeTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PurposeTagScalarFieldEnum | PurposeTagScalarFieldEnum[]
+  }
+
+  /**
+   * Purpose.purposeDrafts
+   */
+  export type Purpose$purposeDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    where?: DraftPurposeWhereInput
+    orderBy?: DraftPurposeOrderByWithRelationInput | DraftPurposeOrderByWithRelationInput[]
+    cursor?: DraftPurposeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DraftPurposeScalarFieldEnum | DraftPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * Purpose.purposeEmails
+   */
+  export type Purpose$purposeEmailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    where?: EmailPurposeWhereInput
+    orderBy?: EmailPurposeOrderByWithRelationInput | EmailPurposeOrderByWithRelationInput[]
+    cursor?: EmailPurposeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailPurposeScalarFieldEnum | EmailPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * Purpose without action
+   */
+  export type PurposeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purpose
+     */
+    select?: PurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purpose
+     */
+    omit?: PurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DraftPurpose
+   */
+
+  export type AggregateDraftPurpose = {
+    _count: DraftPurposeCountAggregateOutputType | null
+    _min: DraftPurposeMinAggregateOutputType | null
+    _max: DraftPurposeMaxAggregateOutputType | null
+  }
+
+  export type DraftPurposeMinAggregateOutputType = {
+    draftId: string | null
+    purposeId: string | null
+  }
+
+  export type DraftPurposeMaxAggregateOutputType = {
+    draftId: string | null
+    purposeId: string | null
+  }
+
+  export type DraftPurposeCountAggregateOutputType = {
+    draftId: number
+    purposeId: number
+    _all: number
+  }
+
+
+  export type DraftPurposeMinAggregateInputType = {
+    draftId?: true
+    purposeId?: true
+  }
+
+  export type DraftPurposeMaxAggregateInputType = {
+    draftId?: true
+    purposeId?: true
+  }
+
+  export type DraftPurposeCountAggregateInputType = {
+    draftId?: true
+    purposeId?: true
+    _all?: true
+  }
+
+  export type DraftPurposeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DraftPurpose to aggregate.
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DraftPurposes to fetch.
+     */
+    orderBy?: DraftPurposeOrderByWithRelationInput | DraftPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DraftPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DraftPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DraftPurposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DraftPurposes
+    **/
+    _count?: true | DraftPurposeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DraftPurposeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DraftPurposeMaxAggregateInputType
+  }
+
+  export type GetDraftPurposeAggregateType<T extends DraftPurposeAggregateArgs> = {
+        [P in keyof T & keyof AggregateDraftPurpose]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDraftPurpose[P]>
+      : GetScalarType<T[P], AggregateDraftPurpose[P]>
+  }
+
+
+
+
+  export type DraftPurposeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DraftPurposeWhereInput
+    orderBy?: DraftPurposeOrderByWithAggregationInput | DraftPurposeOrderByWithAggregationInput[]
+    by: DraftPurposeScalarFieldEnum[] | DraftPurposeScalarFieldEnum
+    having?: DraftPurposeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DraftPurposeCountAggregateInputType | true
+    _min?: DraftPurposeMinAggregateInputType
+    _max?: DraftPurposeMaxAggregateInputType
+  }
+
+  export type DraftPurposeGroupByOutputType = {
+    draftId: string
+    purposeId: string
+    _count: DraftPurposeCountAggregateOutputType | null
+    _min: DraftPurposeMinAggregateOutputType | null
+    _max: DraftPurposeMaxAggregateOutputType | null
+  }
+
+  type GetDraftPurposeGroupByPayload<T extends DraftPurposeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DraftPurposeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DraftPurposeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DraftPurposeGroupByOutputType[P]>
+            : GetScalarType<T[P], DraftPurposeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DraftPurposeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    draftId?: boolean
+    purposeId?: boolean
+    draft?: boolean | DraftDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["draftPurpose"]>
+
+  export type DraftPurposeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    draftId?: boolean
+    purposeId?: boolean
+    draft?: boolean | DraftDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["draftPurpose"]>
+
+  export type DraftPurposeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    draftId?: boolean
+    purposeId?: boolean
+    draft?: boolean | DraftDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["draftPurpose"]>
+
+  export type DraftPurposeSelectScalar = {
+    draftId?: boolean
+    purposeId?: boolean
+  }
+
+  export type DraftPurposeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"draftId" | "purposeId", ExtArgs["result"]["draftPurpose"]>
+  export type DraftPurposeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    draft?: boolean | DraftDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }
+  export type DraftPurposeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    draft?: boolean | DraftDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }
+  export type DraftPurposeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    draft?: boolean | DraftDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }
+
+  export type $DraftPurposePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DraftPurpose"
+    objects: {
+      draft: Prisma.$DraftPayload<ExtArgs>
+      purpose: Prisma.$PurposePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      draftId: string
+      purposeId: string
+    }, ExtArgs["result"]["draftPurpose"]>
+    composites: {}
+  }
+
+  type DraftPurposeGetPayload<S extends boolean | null | undefined | DraftPurposeDefaultArgs> = $Result.GetResult<Prisma.$DraftPurposePayload, S>
+
+  type DraftPurposeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DraftPurposeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DraftPurposeCountAggregateInputType | true
+    }
+
+  export interface DraftPurposeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DraftPurpose'], meta: { name: 'DraftPurpose' } }
+    /**
+     * Find zero or one DraftPurpose that matches the filter.
+     * @param {DraftPurposeFindUniqueArgs} args - Arguments to find a DraftPurpose
+     * @example
+     * // Get one DraftPurpose
+     * const draftPurpose = await prisma.draftPurpose.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DraftPurposeFindUniqueArgs>(args: SelectSubset<T, DraftPurposeFindUniqueArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DraftPurpose that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DraftPurposeFindUniqueOrThrowArgs} args - Arguments to find a DraftPurpose
+     * @example
+     * // Get one DraftPurpose
+     * const draftPurpose = await prisma.draftPurpose.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DraftPurposeFindUniqueOrThrowArgs>(args: SelectSubset<T, DraftPurposeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DraftPurpose that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeFindFirstArgs} args - Arguments to find a DraftPurpose
+     * @example
+     * // Get one DraftPurpose
+     * const draftPurpose = await prisma.draftPurpose.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DraftPurposeFindFirstArgs>(args?: SelectSubset<T, DraftPurposeFindFirstArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DraftPurpose that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeFindFirstOrThrowArgs} args - Arguments to find a DraftPurpose
+     * @example
+     * // Get one DraftPurpose
+     * const draftPurpose = await prisma.draftPurpose.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DraftPurposeFindFirstOrThrowArgs>(args?: SelectSubset<T, DraftPurposeFindFirstOrThrowArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DraftPurposes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DraftPurposes
+     * const draftPurposes = await prisma.draftPurpose.findMany()
+     * 
+     * // Get first 10 DraftPurposes
+     * const draftPurposes = await prisma.draftPurpose.findMany({ take: 10 })
+     * 
+     * // Only select the `draftId`
+     * const draftPurposeWithDraftIdOnly = await prisma.draftPurpose.findMany({ select: { draftId: true } })
+     * 
+     */
+    findMany<T extends DraftPurposeFindManyArgs>(args?: SelectSubset<T, DraftPurposeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DraftPurpose.
+     * @param {DraftPurposeCreateArgs} args - Arguments to create a DraftPurpose.
+     * @example
+     * // Create one DraftPurpose
+     * const DraftPurpose = await prisma.draftPurpose.create({
+     *   data: {
+     *     // ... data to create a DraftPurpose
+     *   }
+     * })
+     * 
+     */
+    create<T extends DraftPurposeCreateArgs>(args: SelectSubset<T, DraftPurposeCreateArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DraftPurposes.
+     * @param {DraftPurposeCreateManyArgs} args - Arguments to create many DraftPurposes.
+     * @example
+     * // Create many DraftPurposes
+     * const draftPurpose = await prisma.draftPurpose.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DraftPurposeCreateManyArgs>(args?: SelectSubset<T, DraftPurposeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DraftPurposes and returns the data saved in the database.
+     * @param {DraftPurposeCreateManyAndReturnArgs} args - Arguments to create many DraftPurposes.
+     * @example
+     * // Create many DraftPurposes
+     * const draftPurpose = await prisma.draftPurpose.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DraftPurposes and only return the `draftId`
+     * const draftPurposeWithDraftIdOnly = await prisma.draftPurpose.createManyAndReturn({
+     *   select: { draftId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DraftPurposeCreateManyAndReturnArgs>(args?: SelectSubset<T, DraftPurposeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DraftPurpose.
+     * @param {DraftPurposeDeleteArgs} args - Arguments to delete one DraftPurpose.
+     * @example
+     * // Delete one DraftPurpose
+     * const DraftPurpose = await prisma.draftPurpose.delete({
+     *   where: {
+     *     // ... filter to delete one DraftPurpose
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DraftPurposeDeleteArgs>(args: SelectSubset<T, DraftPurposeDeleteArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DraftPurpose.
+     * @param {DraftPurposeUpdateArgs} args - Arguments to update one DraftPurpose.
+     * @example
+     * // Update one DraftPurpose
+     * const draftPurpose = await prisma.draftPurpose.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DraftPurposeUpdateArgs>(args: SelectSubset<T, DraftPurposeUpdateArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DraftPurposes.
+     * @param {DraftPurposeDeleteManyArgs} args - Arguments to filter DraftPurposes to delete.
+     * @example
+     * // Delete a few DraftPurposes
+     * const { count } = await prisma.draftPurpose.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DraftPurposeDeleteManyArgs>(args?: SelectSubset<T, DraftPurposeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DraftPurposes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DraftPurposes
+     * const draftPurpose = await prisma.draftPurpose.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DraftPurposeUpdateManyArgs>(args: SelectSubset<T, DraftPurposeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DraftPurposes and returns the data updated in the database.
+     * @param {DraftPurposeUpdateManyAndReturnArgs} args - Arguments to update many DraftPurposes.
+     * @example
+     * // Update many DraftPurposes
+     * const draftPurpose = await prisma.draftPurpose.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DraftPurposes and only return the `draftId`
+     * const draftPurposeWithDraftIdOnly = await prisma.draftPurpose.updateManyAndReturn({
+     *   select: { draftId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DraftPurposeUpdateManyAndReturnArgs>(args: SelectSubset<T, DraftPurposeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DraftPurpose.
+     * @param {DraftPurposeUpsertArgs} args - Arguments to update or create a DraftPurpose.
+     * @example
+     * // Update or create a DraftPurpose
+     * const draftPurpose = await prisma.draftPurpose.upsert({
+     *   create: {
+     *     // ... data to create a DraftPurpose
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DraftPurpose we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DraftPurposeUpsertArgs>(args: SelectSubset<T, DraftPurposeUpsertArgs<ExtArgs>>): Prisma__DraftPurposeClient<$Result.GetResult<Prisma.$DraftPurposePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DraftPurposes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeCountArgs} args - Arguments to filter DraftPurposes to count.
+     * @example
+     * // Count the number of DraftPurposes
+     * const count = await prisma.draftPurpose.count({
+     *   where: {
+     *     // ... the filter for the DraftPurposes we want to count
+     *   }
+     * })
+    **/
+    count<T extends DraftPurposeCountArgs>(
+      args?: Subset<T, DraftPurposeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DraftPurposeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DraftPurpose.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DraftPurposeAggregateArgs>(args: Subset<T, DraftPurposeAggregateArgs>): Prisma.PrismaPromise<GetDraftPurposeAggregateType<T>>
+
+    /**
+     * Group by DraftPurpose.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DraftPurposeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DraftPurposeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DraftPurposeGroupByArgs['orderBy'] }
+        : { orderBy?: DraftPurposeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DraftPurposeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDraftPurposeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DraftPurpose model
+   */
+  readonly fields: DraftPurposeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DraftPurpose.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DraftPurposeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    draft<T extends DraftDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DraftDefaultArgs<ExtArgs>>): Prisma__DraftClient<$Result.GetResult<Prisma.$DraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    purpose<T extends PurposeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurposeDefaultArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DraftPurpose model
+   */
+  interface DraftPurposeFieldRefs {
+    readonly draftId: FieldRef<"DraftPurpose", 'String'>
+    readonly purposeId: FieldRef<"DraftPurpose", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DraftPurpose findUnique
+   */
+  export type DraftPurposeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which DraftPurpose to fetch.
+     */
+    where: DraftPurposeWhereUniqueInput
+  }
+
+  /**
+   * DraftPurpose findUniqueOrThrow
+   */
+  export type DraftPurposeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which DraftPurpose to fetch.
+     */
+    where: DraftPurposeWhereUniqueInput
+  }
+
+  /**
+   * DraftPurpose findFirst
+   */
+  export type DraftPurposeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which DraftPurpose to fetch.
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DraftPurposes to fetch.
+     */
+    orderBy?: DraftPurposeOrderByWithRelationInput | DraftPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DraftPurposes.
+     */
+    cursor?: DraftPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DraftPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DraftPurposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DraftPurposes.
+     */
+    distinct?: DraftPurposeScalarFieldEnum | DraftPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * DraftPurpose findFirstOrThrow
+   */
+  export type DraftPurposeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which DraftPurpose to fetch.
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DraftPurposes to fetch.
+     */
+    orderBy?: DraftPurposeOrderByWithRelationInput | DraftPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DraftPurposes.
+     */
+    cursor?: DraftPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DraftPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DraftPurposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DraftPurposes.
+     */
+    distinct?: DraftPurposeScalarFieldEnum | DraftPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * DraftPurpose findMany
+   */
+  export type DraftPurposeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which DraftPurposes to fetch.
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DraftPurposes to fetch.
+     */
+    orderBy?: DraftPurposeOrderByWithRelationInput | DraftPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DraftPurposes.
+     */
+    cursor?: DraftPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DraftPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DraftPurposes.
+     */
+    skip?: number
+    distinct?: DraftPurposeScalarFieldEnum | DraftPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * DraftPurpose create
+   */
+  export type DraftPurposeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DraftPurpose.
+     */
+    data: XOR<DraftPurposeCreateInput, DraftPurposeUncheckedCreateInput>
+  }
+
+  /**
+   * DraftPurpose createMany
+   */
+  export type DraftPurposeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DraftPurposes.
+     */
+    data: DraftPurposeCreateManyInput | DraftPurposeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DraftPurpose createManyAndReturn
+   */
+  export type DraftPurposeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * The data used to create many DraftPurposes.
+     */
+    data: DraftPurposeCreateManyInput | DraftPurposeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DraftPurpose update
+   */
+  export type DraftPurposeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DraftPurpose.
+     */
+    data: XOR<DraftPurposeUpdateInput, DraftPurposeUncheckedUpdateInput>
+    /**
+     * Choose, which DraftPurpose to update.
+     */
+    where: DraftPurposeWhereUniqueInput
+  }
+
+  /**
+   * DraftPurpose updateMany
+   */
+  export type DraftPurposeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DraftPurposes.
+     */
+    data: XOR<DraftPurposeUpdateManyMutationInput, DraftPurposeUncheckedUpdateManyInput>
+    /**
+     * Filter which DraftPurposes to update
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * Limit how many DraftPurposes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DraftPurpose updateManyAndReturn
+   */
+  export type DraftPurposeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * The data used to update DraftPurposes.
+     */
+    data: XOR<DraftPurposeUpdateManyMutationInput, DraftPurposeUncheckedUpdateManyInput>
+    /**
+     * Filter which DraftPurposes to update
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * Limit how many DraftPurposes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DraftPurpose upsert
+   */
+  export type DraftPurposeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DraftPurpose to update in case it exists.
+     */
+    where: DraftPurposeWhereUniqueInput
+    /**
+     * In case the DraftPurpose found by the `where` argument doesn't exist, create a new DraftPurpose with this data.
+     */
+    create: XOR<DraftPurposeCreateInput, DraftPurposeUncheckedCreateInput>
+    /**
+     * In case the DraftPurpose was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DraftPurposeUpdateInput, DraftPurposeUncheckedUpdateInput>
+  }
+
+  /**
+   * DraftPurpose delete
+   */
+  export type DraftPurposeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+    /**
+     * Filter which DraftPurpose to delete.
+     */
+    where: DraftPurposeWhereUniqueInput
+  }
+
+  /**
+   * DraftPurpose deleteMany
+   */
+  export type DraftPurposeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DraftPurposes to delete
+     */
+    where?: DraftPurposeWhereInput
+    /**
+     * Limit how many DraftPurposes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DraftPurpose without action
+   */
+  export type DraftPurposeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DraftPurpose
+     */
+    select?: DraftPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DraftPurpose
+     */
+    omit?: DraftPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DraftPurposeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EmailPurpose
+   */
+
+  export type AggregateEmailPurpose = {
+    _count: EmailPurposeCountAggregateOutputType | null
+    _min: EmailPurposeMinAggregateOutputType | null
+    _max: EmailPurposeMaxAggregateOutputType | null
+  }
+
+  export type EmailPurposeMinAggregateOutputType = {
+    emailId: string | null
+    purposeId: string | null
+  }
+
+  export type EmailPurposeMaxAggregateOutputType = {
+    emailId: string | null
+    purposeId: string | null
+  }
+
+  export type EmailPurposeCountAggregateOutputType = {
+    emailId: number
+    purposeId: number
+    _all: number
+  }
+
+
+  export type EmailPurposeMinAggregateInputType = {
+    emailId?: true
+    purposeId?: true
+  }
+
+  export type EmailPurposeMaxAggregateInputType = {
+    emailId?: true
+    purposeId?: true
+  }
+
+  export type EmailPurposeCountAggregateInputType = {
+    emailId?: true
+    purposeId?: true
+    _all?: true
+  }
+
+  export type EmailPurposeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailPurpose to aggregate.
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailPurposes to fetch.
+     */
+    orderBy?: EmailPurposeOrderByWithRelationInput | EmailPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmailPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailPurposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EmailPurposes
+    **/
+    _count?: true | EmailPurposeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmailPurposeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmailPurposeMaxAggregateInputType
+  }
+
+  export type GetEmailPurposeAggregateType<T extends EmailPurposeAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmailPurpose]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmailPurpose[P]>
+      : GetScalarType<T[P], AggregateEmailPurpose[P]>
+  }
+
+
+
+
+  export type EmailPurposeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailPurposeWhereInput
+    orderBy?: EmailPurposeOrderByWithAggregationInput | EmailPurposeOrderByWithAggregationInput[]
+    by: EmailPurposeScalarFieldEnum[] | EmailPurposeScalarFieldEnum
+    having?: EmailPurposeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmailPurposeCountAggregateInputType | true
+    _min?: EmailPurposeMinAggregateInputType
+    _max?: EmailPurposeMaxAggregateInputType
+  }
+
+  export type EmailPurposeGroupByOutputType = {
+    emailId: string
+    purposeId: string
+    _count: EmailPurposeCountAggregateOutputType | null
+    _min: EmailPurposeMinAggregateOutputType | null
+    _max: EmailPurposeMaxAggregateOutputType | null
+  }
+
+  type GetEmailPurposeGroupByPayload<T extends EmailPurposeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmailPurposeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmailPurposeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailPurposeGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailPurposeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmailPurposeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    emailId?: boolean
+    purposeId?: boolean
+    email?: boolean | EmailDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailPurpose"]>
+
+  export type EmailPurposeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    emailId?: boolean
+    purposeId?: boolean
+    email?: boolean | EmailDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailPurpose"]>
+
+  export type EmailPurposeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    emailId?: boolean
+    purposeId?: boolean
+    email?: boolean | EmailDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailPurpose"]>
+
+  export type EmailPurposeSelectScalar = {
+    emailId?: boolean
+    purposeId?: boolean
+  }
+
+  export type EmailPurposeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"emailId" | "purposeId", ExtArgs["result"]["emailPurpose"]>
+  export type EmailPurposeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    email?: boolean | EmailDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }
+  export type EmailPurposeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    email?: boolean | EmailDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }
+  export type EmailPurposeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    email?: boolean | EmailDefaultArgs<ExtArgs>
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+  }
+
+  export type $EmailPurposePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EmailPurpose"
+    objects: {
+      email: Prisma.$EmailPayload<ExtArgs>
+      purpose: Prisma.$PurposePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      emailId: string
+      purposeId: string
+    }, ExtArgs["result"]["emailPurpose"]>
+    composites: {}
+  }
+
+  type EmailPurposeGetPayload<S extends boolean | null | undefined | EmailPurposeDefaultArgs> = $Result.GetResult<Prisma.$EmailPurposePayload, S>
+
+  type EmailPurposeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailPurposeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailPurposeCountAggregateInputType | true
+    }
+
+  export interface EmailPurposeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmailPurpose'], meta: { name: 'EmailPurpose' } }
+    /**
+     * Find zero or one EmailPurpose that matches the filter.
+     * @param {EmailPurposeFindUniqueArgs} args - Arguments to find a EmailPurpose
+     * @example
+     * // Get one EmailPurpose
+     * const emailPurpose = await prisma.emailPurpose.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailPurposeFindUniqueArgs>(args: SelectSubset<T, EmailPurposeFindUniqueArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EmailPurpose that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailPurposeFindUniqueOrThrowArgs} args - Arguments to find a EmailPurpose
+     * @example
+     * // Get one EmailPurpose
+     * const emailPurpose = await prisma.emailPurpose.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailPurposeFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailPurposeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailPurpose that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeFindFirstArgs} args - Arguments to find a EmailPurpose
+     * @example
+     * // Get one EmailPurpose
+     * const emailPurpose = await prisma.emailPurpose.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailPurposeFindFirstArgs>(args?: SelectSubset<T, EmailPurposeFindFirstArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailPurpose that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeFindFirstOrThrowArgs} args - Arguments to find a EmailPurpose
+     * @example
+     * // Get one EmailPurpose
+     * const emailPurpose = await prisma.emailPurpose.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailPurposeFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailPurposeFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EmailPurposes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmailPurposes
+     * const emailPurposes = await prisma.emailPurpose.findMany()
+     * 
+     * // Get first 10 EmailPurposes
+     * const emailPurposes = await prisma.emailPurpose.findMany({ take: 10 })
+     * 
+     * // Only select the `emailId`
+     * const emailPurposeWithEmailIdOnly = await prisma.emailPurpose.findMany({ select: { emailId: true } })
+     * 
+     */
+    findMany<T extends EmailPurposeFindManyArgs>(args?: SelectSubset<T, EmailPurposeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EmailPurpose.
+     * @param {EmailPurposeCreateArgs} args - Arguments to create a EmailPurpose.
+     * @example
+     * // Create one EmailPurpose
+     * const EmailPurpose = await prisma.emailPurpose.create({
+     *   data: {
+     *     // ... data to create a EmailPurpose
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmailPurposeCreateArgs>(args: SelectSubset<T, EmailPurposeCreateArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EmailPurposes.
+     * @param {EmailPurposeCreateManyArgs} args - Arguments to create many EmailPurposes.
+     * @example
+     * // Create many EmailPurposes
+     * const emailPurpose = await prisma.emailPurpose.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmailPurposeCreateManyArgs>(args?: SelectSubset<T, EmailPurposeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EmailPurposes and returns the data saved in the database.
+     * @param {EmailPurposeCreateManyAndReturnArgs} args - Arguments to create many EmailPurposes.
+     * @example
+     * // Create many EmailPurposes
+     * const emailPurpose = await prisma.emailPurpose.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EmailPurposes and only return the `emailId`
+     * const emailPurposeWithEmailIdOnly = await prisma.emailPurpose.createManyAndReturn({
+     *   select: { emailId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmailPurposeCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailPurposeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EmailPurpose.
+     * @param {EmailPurposeDeleteArgs} args - Arguments to delete one EmailPurpose.
+     * @example
+     * // Delete one EmailPurpose
+     * const EmailPurpose = await prisma.emailPurpose.delete({
+     *   where: {
+     *     // ... filter to delete one EmailPurpose
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmailPurposeDeleteArgs>(args: SelectSubset<T, EmailPurposeDeleteArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EmailPurpose.
+     * @param {EmailPurposeUpdateArgs} args - Arguments to update one EmailPurpose.
+     * @example
+     * // Update one EmailPurpose
+     * const emailPurpose = await prisma.emailPurpose.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmailPurposeUpdateArgs>(args: SelectSubset<T, EmailPurposeUpdateArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EmailPurposes.
+     * @param {EmailPurposeDeleteManyArgs} args - Arguments to filter EmailPurposes to delete.
+     * @example
+     * // Delete a few EmailPurposes
+     * const { count } = await prisma.emailPurpose.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmailPurposeDeleteManyArgs>(args?: SelectSubset<T, EmailPurposeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailPurposes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmailPurposes
+     * const emailPurpose = await prisma.emailPurpose.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmailPurposeUpdateManyArgs>(args: SelectSubset<T, EmailPurposeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailPurposes and returns the data updated in the database.
+     * @param {EmailPurposeUpdateManyAndReturnArgs} args - Arguments to update many EmailPurposes.
+     * @example
+     * // Update many EmailPurposes
+     * const emailPurpose = await prisma.emailPurpose.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EmailPurposes and only return the `emailId`
+     * const emailPurposeWithEmailIdOnly = await prisma.emailPurpose.updateManyAndReturn({
+     *   select: { emailId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmailPurposeUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailPurposeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EmailPurpose.
+     * @param {EmailPurposeUpsertArgs} args - Arguments to update or create a EmailPurpose.
+     * @example
+     * // Update or create a EmailPurpose
+     * const emailPurpose = await prisma.emailPurpose.upsert({
+     *   create: {
+     *     // ... data to create a EmailPurpose
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmailPurpose we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailPurposeUpsertArgs>(args: SelectSubset<T, EmailPurposeUpsertArgs<ExtArgs>>): Prisma__EmailPurposeClient<$Result.GetResult<Prisma.$EmailPurposePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EmailPurposes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeCountArgs} args - Arguments to filter EmailPurposes to count.
+     * @example
+     * // Count the number of EmailPurposes
+     * const count = await prisma.emailPurpose.count({
+     *   where: {
+     *     // ... the filter for the EmailPurposes we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmailPurposeCountArgs>(
+      args?: Subset<T, EmailPurposeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmailPurposeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EmailPurpose.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmailPurposeAggregateArgs>(args: Subset<T, EmailPurposeAggregateArgs>): Prisma.PrismaPromise<GetEmailPurposeAggregateType<T>>
+
+    /**
+     * Group by EmailPurpose.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailPurposeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmailPurposeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmailPurposeGroupByArgs['orderBy'] }
+        : { orderBy?: EmailPurposeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmailPurposeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailPurposeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EmailPurpose model
+   */
+  readonly fields: EmailPurposeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmailPurpose.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailPurposeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    email<T extends EmailDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmailDefaultArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    purpose<T extends PurposeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurposeDefaultArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EmailPurpose model
+   */
+  interface EmailPurposeFieldRefs {
+    readonly emailId: FieldRef<"EmailPurpose", 'String'>
+    readonly purposeId: FieldRef<"EmailPurpose", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EmailPurpose findUnique
+   */
+  export type EmailPurposeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailPurpose to fetch.
+     */
+    where: EmailPurposeWhereUniqueInput
+  }
+
+  /**
+   * EmailPurpose findUniqueOrThrow
+   */
+  export type EmailPurposeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailPurpose to fetch.
+     */
+    where: EmailPurposeWhereUniqueInput
+  }
+
+  /**
+   * EmailPurpose findFirst
+   */
+  export type EmailPurposeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailPurpose to fetch.
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailPurposes to fetch.
+     */
+    orderBy?: EmailPurposeOrderByWithRelationInput | EmailPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailPurposes.
+     */
+    cursor?: EmailPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailPurposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailPurposes.
+     */
+    distinct?: EmailPurposeScalarFieldEnum | EmailPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * EmailPurpose findFirstOrThrow
+   */
+  export type EmailPurposeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailPurpose to fetch.
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailPurposes to fetch.
+     */
+    orderBy?: EmailPurposeOrderByWithRelationInput | EmailPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailPurposes.
+     */
+    cursor?: EmailPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailPurposes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailPurposes.
+     */
+    distinct?: EmailPurposeScalarFieldEnum | EmailPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * EmailPurpose findMany
+   */
+  export type EmailPurposeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailPurposes to fetch.
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailPurposes to fetch.
+     */
+    orderBy?: EmailPurposeOrderByWithRelationInput | EmailPurposeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EmailPurposes.
+     */
+    cursor?: EmailPurposeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailPurposes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailPurposes.
+     */
+    skip?: number
+    distinct?: EmailPurposeScalarFieldEnum | EmailPurposeScalarFieldEnum[]
+  }
+
+  /**
+   * EmailPurpose create
+   */
+  export type EmailPurposeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EmailPurpose.
+     */
+    data: XOR<EmailPurposeCreateInput, EmailPurposeUncheckedCreateInput>
+  }
+
+  /**
+   * EmailPurpose createMany
+   */
+  export type EmailPurposeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EmailPurposes.
+     */
+    data: EmailPurposeCreateManyInput | EmailPurposeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EmailPurpose createManyAndReturn
+   */
+  export type EmailPurposeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * The data used to create many EmailPurposes.
+     */
+    data: EmailPurposeCreateManyInput | EmailPurposeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailPurpose update
+   */
+  export type EmailPurposeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EmailPurpose.
+     */
+    data: XOR<EmailPurposeUpdateInput, EmailPurposeUncheckedUpdateInput>
+    /**
+     * Choose, which EmailPurpose to update.
+     */
+    where: EmailPurposeWhereUniqueInput
+  }
+
+  /**
+   * EmailPurpose updateMany
+   */
+  export type EmailPurposeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EmailPurposes.
+     */
+    data: XOR<EmailPurposeUpdateManyMutationInput, EmailPurposeUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailPurposes to update
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * Limit how many EmailPurposes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailPurpose updateManyAndReturn
+   */
+  export type EmailPurposeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * The data used to update EmailPurposes.
+     */
+    data: XOR<EmailPurposeUpdateManyMutationInput, EmailPurposeUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailPurposes to update
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * Limit how many EmailPurposes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailPurpose upsert
+   */
+  export type EmailPurposeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EmailPurpose to update in case it exists.
+     */
+    where: EmailPurposeWhereUniqueInput
+    /**
+     * In case the EmailPurpose found by the `where` argument doesn't exist, create a new EmailPurpose with this data.
+     */
+    create: XOR<EmailPurposeCreateInput, EmailPurposeUncheckedCreateInput>
+    /**
+     * In case the EmailPurpose was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailPurposeUpdateInput, EmailPurposeUncheckedUpdateInput>
+  }
+
+  /**
+   * EmailPurpose delete
+   */
+  export type EmailPurposeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+    /**
+     * Filter which EmailPurpose to delete.
+     */
+    where: EmailPurposeWhereUniqueInput
+  }
+
+  /**
+   * EmailPurpose deleteMany
+   */
+  export type EmailPurposeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailPurposes to delete
+     */
+    where?: EmailPurposeWhereInput
+    /**
+     * Limit how many EmailPurposes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailPurpose without action
+   */
+  export type EmailPurposeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailPurpose
+     */
+    select?: EmailPurposeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailPurpose
+     */
+    omit?: EmailPurposeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailPurposeInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Sender
    */
 
@@ -17315,6 +21004,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: boolean | Tag$tagCompaniesArgs<ExtArgs>
     tagContacts?: boolean | Tag$tagContactsArgs<ExtArgs>
+    tagPurposes?: boolean | Tag$tagPurposesArgs<ExtArgs>
     DraftTag?: boolean | Tag$DraftTagArgs<ExtArgs>
     EmailTag?: boolean | Tag$EmailTagArgs<ExtArgs>
     _count?: boolean | TagCountOutputTypeDefaultArgs<ExtArgs>
@@ -17342,6 +21032,7 @@ export namespace Prisma {
   export type TagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tagCompanies?: boolean | Tag$tagCompaniesArgs<ExtArgs>
     tagContacts?: boolean | Tag$tagContactsArgs<ExtArgs>
+    tagPurposes?: boolean | Tag$tagPurposesArgs<ExtArgs>
     DraftTag?: boolean | Tag$DraftTagArgs<ExtArgs>
     EmailTag?: boolean | Tag$EmailTagArgs<ExtArgs>
     _count?: boolean | TagCountOutputTypeDefaultArgs<ExtArgs>
@@ -17354,6 +21045,7 @@ export namespace Prisma {
     objects: {
       tagCompanies: Prisma.$CompanyTagPayload<ExtArgs>[]
       tagContacts: Prisma.$ContactTagPayload<ExtArgs>[]
+      tagPurposes: Prisma.$PurposeTagPayload<ExtArgs>[]
       DraftTag: Prisma.$DraftTagPayload<ExtArgs>[]
       EmailTag: Prisma.$EmailTagPayload<ExtArgs>[]
     }
@@ -17757,6 +21449,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tagCompanies<T extends Tag$tagCompaniesArgs<ExtArgs> = {}>(args?: Subset<T, Tag$tagCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tagContacts<T extends Tag$tagContactsArgs<ExtArgs> = {}>(args?: Subset<T, Tag$tagContactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tagPurposes<T extends Tag$tagPurposesArgs<ExtArgs> = {}>(args?: Subset<T, Tag$tagPurposesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     DraftTag<T extends Tag$DraftTagArgs<ExtArgs> = {}>(args?: Subset<T, Tag$DraftTagArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DraftTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     EmailTag<T extends Tag$EmailTagArgs<ExtArgs> = {}>(args?: Subset<T, Tag$EmailTagArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -18224,6 +21917,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContactTagScalarFieldEnum | ContactTagScalarFieldEnum[]
+  }
+
+  /**
+   * Tag.tagPurposes
+   */
+  export type Tag$tagPurposesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    where?: PurposeTagWhereInput
+    orderBy?: PurposeTagOrderByWithRelationInput | PurposeTagOrderByWithRelationInput[]
+    cursor?: PurposeTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PurposeTagScalarFieldEnum | PurposeTagScalarFieldEnum[]
   }
 
   /**
@@ -20344,6 +24061,1033 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ContactTagInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PurposeTag
+   */
+
+  export type AggregatePurposeTag = {
+    _count: PurposeTagCountAggregateOutputType | null
+    _min: PurposeTagMinAggregateOutputType | null
+    _max: PurposeTagMaxAggregateOutputType | null
+  }
+
+  export type PurposeTagMinAggregateOutputType = {
+    purposeId: string | null
+    tagId: string | null
+  }
+
+  export type PurposeTagMaxAggregateOutputType = {
+    purposeId: string | null
+    tagId: string | null
+  }
+
+  export type PurposeTagCountAggregateOutputType = {
+    purposeId: number
+    tagId: number
+    _all: number
+  }
+
+
+  export type PurposeTagMinAggregateInputType = {
+    purposeId?: true
+    tagId?: true
+  }
+
+  export type PurposeTagMaxAggregateInputType = {
+    purposeId?: true
+    tagId?: true
+  }
+
+  export type PurposeTagCountAggregateInputType = {
+    purposeId?: true
+    tagId?: true
+    _all?: true
+  }
+
+  export type PurposeTagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PurposeTag to aggregate.
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurposeTags to fetch.
+     */
+    orderBy?: PurposeTagOrderByWithRelationInput | PurposeTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PurposeTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurposeTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurposeTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PurposeTags
+    **/
+    _count?: true | PurposeTagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PurposeTagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PurposeTagMaxAggregateInputType
+  }
+
+  export type GetPurposeTagAggregateType<T extends PurposeTagAggregateArgs> = {
+        [P in keyof T & keyof AggregatePurposeTag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePurposeTag[P]>
+      : GetScalarType<T[P], AggregatePurposeTag[P]>
+  }
+
+
+
+
+  export type PurposeTagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurposeTagWhereInput
+    orderBy?: PurposeTagOrderByWithAggregationInput | PurposeTagOrderByWithAggregationInput[]
+    by: PurposeTagScalarFieldEnum[] | PurposeTagScalarFieldEnum
+    having?: PurposeTagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PurposeTagCountAggregateInputType | true
+    _min?: PurposeTagMinAggregateInputType
+    _max?: PurposeTagMaxAggregateInputType
+  }
+
+  export type PurposeTagGroupByOutputType = {
+    purposeId: string
+    tagId: string
+    _count: PurposeTagCountAggregateOutputType | null
+    _min: PurposeTagMinAggregateOutputType | null
+    _max: PurposeTagMaxAggregateOutputType | null
+  }
+
+  type GetPurposeTagGroupByPayload<T extends PurposeTagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PurposeTagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PurposeTagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PurposeTagGroupByOutputType[P]>
+            : GetScalarType<T[P], PurposeTagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PurposeTagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    purposeId?: boolean
+    tagId?: boolean
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+    tag?: boolean | TagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purposeTag"]>
+
+  export type PurposeTagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    purposeId?: boolean
+    tagId?: boolean
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+    tag?: boolean | TagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purposeTag"]>
+
+  export type PurposeTagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    purposeId?: boolean
+    tagId?: boolean
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+    tag?: boolean | TagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purposeTag"]>
+
+  export type PurposeTagSelectScalar = {
+    purposeId?: boolean
+    tagId?: boolean
+  }
+
+  export type PurposeTagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"purposeId" | "tagId", ExtArgs["result"]["purposeTag"]>
+  export type PurposeTagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+    tag?: boolean | TagDefaultArgs<ExtArgs>
+  }
+  export type PurposeTagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+    tag?: boolean | TagDefaultArgs<ExtArgs>
+  }
+  export type PurposeTagIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purpose?: boolean | PurposeDefaultArgs<ExtArgs>
+    tag?: boolean | TagDefaultArgs<ExtArgs>
+  }
+
+  export type $PurposeTagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PurposeTag"
+    objects: {
+      purpose: Prisma.$PurposePayload<ExtArgs>
+      tag: Prisma.$TagPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      purposeId: string
+      tagId: string
+    }, ExtArgs["result"]["purposeTag"]>
+    composites: {}
+  }
+
+  type PurposeTagGetPayload<S extends boolean | null | undefined | PurposeTagDefaultArgs> = $Result.GetResult<Prisma.$PurposeTagPayload, S>
+
+  type PurposeTagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PurposeTagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PurposeTagCountAggregateInputType | true
+    }
+
+  export interface PurposeTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PurposeTag'], meta: { name: 'PurposeTag' } }
+    /**
+     * Find zero or one PurposeTag that matches the filter.
+     * @param {PurposeTagFindUniqueArgs} args - Arguments to find a PurposeTag
+     * @example
+     * // Get one PurposeTag
+     * const purposeTag = await prisma.purposeTag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PurposeTagFindUniqueArgs>(args: SelectSubset<T, PurposeTagFindUniqueArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PurposeTag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PurposeTagFindUniqueOrThrowArgs} args - Arguments to find a PurposeTag
+     * @example
+     * // Get one PurposeTag
+     * const purposeTag = await prisma.purposeTag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PurposeTagFindUniqueOrThrowArgs>(args: SelectSubset<T, PurposeTagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PurposeTag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagFindFirstArgs} args - Arguments to find a PurposeTag
+     * @example
+     * // Get one PurposeTag
+     * const purposeTag = await prisma.purposeTag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PurposeTagFindFirstArgs>(args?: SelectSubset<T, PurposeTagFindFirstArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PurposeTag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagFindFirstOrThrowArgs} args - Arguments to find a PurposeTag
+     * @example
+     * // Get one PurposeTag
+     * const purposeTag = await prisma.purposeTag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PurposeTagFindFirstOrThrowArgs>(args?: SelectSubset<T, PurposeTagFindFirstOrThrowArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PurposeTags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PurposeTags
+     * const purposeTags = await prisma.purposeTag.findMany()
+     * 
+     * // Get first 10 PurposeTags
+     * const purposeTags = await prisma.purposeTag.findMany({ take: 10 })
+     * 
+     * // Only select the `purposeId`
+     * const purposeTagWithPurposeIdOnly = await prisma.purposeTag.findMany({ select: { purposeId: true } })
+     * 
+     */
+    findMany<T extends PurposeTagFindManyArgs>(args?: SelectSubset<T, PurposeTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PurposeTag.
+     * @param {PurposeTagCreateArgs} args - Arguments to create a PurposeTag.
+     * @example
+     * // Create one PurposeTag
+     * const PurposeTag = await prisma.purposeTag.create({
+     *   data: {
+     *     // ... data to create a PurposeTag
+     *   }
+     * })
+     * 
+     */
+    create<T extends PurposeTagCreateArgs>(args: SelectSubset<T, PurposeTagCreateArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PurposeTags.
+     * @param {PurposeTagCreateManyArgs} args - Arguments to create many PurposeTags.
+     * @example
+     * // Create many PurposeTags
+     * const purposeTag = await prisma.purposeTag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PurposeTagCreateManyArgs>(args?: SelectSubset<T, PurposeTagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PurposeTags and returns the data saved in the database.
+     * @param {PurposeTagCreateManyAndReturnArgs} args - Arguments to create many PurposeTags.
+     * @example
+     * // Create many PurposeTags
+     * const purposeTag = await prisma.purposeTag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PurposeTags and only return the `purposeId`
+     * const purposeTagWithPurposeIdOnly = await prisma.purposeTag.createManyAndReturn({
+     *   select: { purposeId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PurposeTagCreateManyAndReturnArgs>(args?: SelectSubset<T, PurposeTagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PurposeTag.
+     * @param {PurposeTagDeleteArgs} args - Arguments to delete one PurposeTag.
+     * @example
+     * // Delete one PurposeTag
+     * const PurposeTag = await prisma.purposeTag.delete({
+     *   where: {
+     *     // ... filter to delete one PurposeTag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PurposeTagDeleteArgs>(args: SelectSubset<T, PurposeTagDeleteArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PurposeTag.
+     * @param {PurposeTagUpdateArgs} args - Arguments to update one PurposeTag.
+     * @example
+     * // Update one PurposeTag
+     * const purposeTag = await prisma.purposeTag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PurposeTagUpdateArgs>(args: SelectSubset<T, PurposeTagUpdateArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PurposeTags.
+     * @param {PurposeTagDeleteManyArgs} args - Arguments to filter PurposeTags to delete.
+     * @example
+     * // Delete a few PurposeTags
+     * const { count } = await prisma.purposeTag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PurposeTagDeleteManyArgs>(args?: SelectSubset<T, PurposeTagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PurposeTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PurposeTags
+     * const purposeTag = await prisma.purposeTag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PurposeTagUpdateManyArgs>(args: SelectSubset<T, PurposeTagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PurposeTags and returns the data updated in the database.
+     * @param {PurposeTagUpdateManyAndReturnArgs} args - Arguments to update many PurposeTags.
+     * @example
+     * // Update many PurposeTags
+     * const purposeTag = await prisma.purposeTag.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PurposeTags and only return the `purposeId`
+     * const purposeTagWithPurposeIdOnly = await prisma.purposeTag.updateManyAndReturn({
+     *   select: { purposeId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PurposeTagUpdateManyAndReturnArgs>(args: SelectSubset<T, PurposeTagUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PurposeTag.
+     * @param {PurposeTagUpsertArgs} args - Arguments to update or create a PurposeTag.
+     * @example
+     * // Update or create a PurposeTag
+     * const purposeTag = await prisma.purposeTag.upsert({
+     *   create: {
+     *     // ... data to create a PurposeTag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PurposeTag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PurposeTagUpsertArgs>(args: SelectSubset<T, PurposeTagUpsertArgs<ExtArgs>>): Prisma__PurposeTagClient<$Result.GetResult<Prisma.$PurposeTagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PurposeTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagCountArgs} args - Arguments to filter PurposeTags to count.
+     * @example
+     * // Count the number of PurposeTags
+     * const count = await prisma.purposeTag.count({
+     *   where: {
+     *     // ... the filter for the PurposeTags we want to count
+     *   }
+     * })
+    **/
+    count<T extends PurposeTagCountArgs>(
+      args?: Subset<T, PurposeTagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PurposeTagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PurposeTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PurposeTagAggregateArgs>(args: Subset<T, PurposeTagAggregateArgs>): Prisma.PrismaPromise<GetPurposeTagAggregateType<T>>
+
+    /**
+     * Group by PurposeTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurposeTagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PurposeTagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PurposeTagGroupByArgs['orderBy'] }
+        : { orderBy?: PurposeTagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PurposeTagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurposeTagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PurposeTag model
+   */
+  readonly fields: PurposeTagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PurposeTag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PurposeTagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    purpose<T extends PurposeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurposeDefaultArgs<ExtArgs>>): Prisma__PurposeClient<$Result.GetResult<Prisma.$PurposePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tag<T extends TagDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TagDefaultArgs<ExtArgs>>): Prisma__TagClient<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PurposeTag model
+   */
+  interface PurposeTagFieldRefs {
+    readonly purposeId: FieldRef<"PurposeTag", 'String'>
+    readonly tagId: FieldRef<"PurposeTag", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PurposeTag findUnique
+   */
+  export type PurposeTagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PurposeTag to fetch.
+     */
+    where: PurposeTagWhereUniqueInput
+  }
+
+  /**
+   * PurposeTag findUniqueOrThrow
+   */
+  export type PurposeTagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PurposeTag to fetch.
+     */
+    where: PurposeTagWhereUniqueInput
+  }
+
+  /**
+   * PurposeTag findFirst
+   */
+  export type PurposeTagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PurposeTag to fetch.
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurposeTags to fetch.
+     */
+    orderBy?: PurposeTagOrderByWithRelationInput | PurposeTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PurposeTags.
+     */
+    cursor?: PurposeTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurposeTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurposeTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PurposeTags.
+     */
+    distinct?: PurposeTagScalarFieldEnum | PurposeTagScalarFieldEnum[]
+  }
+
+  /**
+   * PurposeTag findFirstOrThrow
+   */
+  export type PurposeTagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PurposeTag to fetch.
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurposeTags to fetch.
+     */
+    orderBy?: PurposeTagOrderByWithRelationInput | PurposeTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PurposeTags.
+     */
+    cursor?: PurposeTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurposeTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurposeTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PurposeTags.
+     */
+    distinct?: PurposeTagScalarFieldEnum | PurposeTagScalarFieldEnum[]
+  }
+
+  /**
+   * PurposeTag findMany
+   */
+  export type PurposeTagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PurposeTags to fetch.
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurposeTags to fetch.
+     */
+    orderBy?: PurposeTagOrderByWithRelationInput | PurposeTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PurposeTags.
+     */
+    cursor?: PurposeTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurposeTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurposeTags.
+     */
+    skip?: number
+    distinct?: PurposeTagScalarFieldEnum | PurposeTagScalarFieldEnum[]
+  }
+
+  /**
+   * PurposeTag create
+   */
+  export type PurposeTagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PurposeTag.
+     */
+    data: XOR<PurposeTagCreateInput, PurposeTagUncheckedCreateInput>
+  }
+
+  /**
+   * PurposeTag createMany
+   */
+  export type PurposeTagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PurposeTags.
+     */
+    data: PurposeTagCreateManyInput | PurposeTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PurposeTag createManyAndReturn
+   */
+  export type PurposeTagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * The data used to create many PurposeTags.
+     */
+    data: PurposeTagCreateManyInput | PurposeTagCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PurposeTag update
+   */
+  export type PurposeTagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PurposeTag.
+     */
+    data: XOR<PurposeTagUpdateInput, PurposeTagUncheckedUpdateInput>
+    /**
+     * Choose, which PurposeTag to update.
+     */
+    where: PurposeTagWhereUniqueInput
+  }
+
+  /**
+   * PurposeTag updateMany
+   */
+  export type PurposeTagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PurposeTags.
+     */
+    data: XOR<PurposeTagUpdateManyMutationInput, PurposeTagUncheckedUpdateManyInput>
+    /**
+     * Filter which PurposeTags to update
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * Limit how many PurposeTags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurposeTag updateManyAndReturn
+   */
+  export type PurposeTagUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * The data used to update PurposeTags.
+     */
+    data: XOR<PurposeTagUpdateManyMutationInput, PurposeTagUncheckedUpdateManyInput>
+    /**
+     * Filter which PurposeTags to update
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * Limit how many PurposeTags to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PurposeTag upsert
+   */
+  export type PurposeTagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PurposeTag to update in case it exists.
+     */
+    where: PurposeTagWhereUniqueInput
+    /**
+     * In case the PurposeTag found by the `where` argument doesn't exist, create a new PurposeTag with this data.
+     */
+    create: XOR<PurposeTagCreateInput, PurposeTagUncheckedCreateInput>
+    /**
+     * In case the PurposeTag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PurposeTagUpdateInput, PurposeTagUncheckedUpdateInput>
+  }
+
+  /**
+   * PurposeTag delete
+   */
+  export type PurposeTagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
+    /**
+     * Filter which PurposeTag to delete.
+     */
+    where: PurposeTagWhereUniqueInput
+  }
+
+  /**
+   * PurposeTag deleteMany
+   */
+  export type PurposeTagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PurposeTags to delete
+     */
+    where?: PurposeTagWhereInput
+    /**
+     * Limit how many PurposeTags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurposeTag without action
+   */
+  export type PurposeTagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurposeTag
+     */
+    select?: PurposeTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurposeTag
+     */
+    omit?: PurposeTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurposeTagInclude<ExtArgs> | null
   }
 
 
@@ -22560,6 +27304,34 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const PurposeScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PurposeScalarFieldEnum = (typeof PurposeScalarFieldEnum)[keyof typeof PurposeScalarFieldEnum]
+
+
+  export const DraftPurposeScalarFieldEnum: {
+    draftId: 'draftId',
+    purposeId: 'purposeId'
+  };
+
+  export type DraftPurposeScalarFieldEnum = (typeof DraftPurposeScalarFieldEnum)[keyof typeof DraftPurposeScalarFieldEnum]
+
+
+  export const EmailPurposeScalarFieldEnum: {
+    emailId: 'emailId',
+    purposeId: 'purposeId'
+  };
+
+  export type EmailPurposeScalarFieldEnum = (typeof EmailPurposeScalarFieldEnum)[keyof typeof EmailPurposeScalarFieldEnum]
+
+
   export const SenderScalarFieldEnum: {
     id: 'id',
     displayName: 'displayName',
@@ -22601,6 +27373,14 @@ export namespace Prisma {
   };
 
   export type ContactTagScalarFieldEnum = (typeof ContactTagScalarFieldEnum)[keyof typeof ContactTagScalarFieldEnum]
+
+
+  export const PurposeTagScalarFieldEnum: {
+    purposeId: 'purposeId',
+    tagId: 'tagId'
+  };
+
+  export type PurposeTagScalarFieldEnum = (typeof PurposeTagScalarFieldEnum)[keyof typeof PurposeTagScalarFieldEnum]
 
 
   export const DraftTagScalarFieldEnum: {
@@ -22988,6 +27768,7 @@ export namespace Prisma {
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     sender?: XOR<SenderScalarRelationFilter, SenderWhereInput>
     emailTags?: EmailTagListRelationFilter
+    emailPurposes?: EmailPurposeListRelationFilter
     events?: EmailEventListRelationFilter
     followUps?: FollowUpListRelationFilter
     notifications?: NotificationListRelationFilter
@@ -23007,6 +27788,7 @@ export namespace Prisma {
     contact?: ContactOrderByWithRelationInput
     sender?: SenderOrderByWithRelationInput
     emailTags?: EmailTagOrderByRelationAggregateInput
+    emailPurposes?: EmailPurposeOrderByRelationAggregateInput
     events?: EmailEventOrderByRelationAggregateInput
     followUps?: FollowUpOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
@@ -23029,6 +27811,7 @@ export namespace Prisma {
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     sender?: XOR<SenderScalarRelationFilter, SenderWhereInput>
     emailTags?: EmailTagListRelationFilter
+    emailPurposes?: EmailPurposeListRelationFilter
     events?: EmailEventListRelationFilter
     followUps?: FollowUpListRelationFilter
     notifications?: NotificationListRelationFilter
@@ -23258,6 +28041,7 @@ export namespace Prisma {
     sender?: XOR<SenderNullableScalarRelationFilter, SenderWhereInput> | null
     draftContacts?: DraftContactListRelationFilter
     draftTags?: DraftTagListRelationFilter
+    draftPurposes?: DraftPurposeListRelationFilter
   }
 
   export type DraftOrderByWithRelationInput = {
@@ -23271,6 +28055,7 @@ export namespace Prisma {
     sender?: SenderOrderByWithRelationInput
     draftContacts?: DraftContactOrderByRelationAggregateInput
     draftTags?: DraftTagOrderByRelationAggregateInput
+    draftPurposes?: DraftPurposeOrderByRelationAggregateInput
   }
 
   export type DraftWhereUniqueInput = Prisma.AtLeast<{
@@ -23287,6 +28072,7 @@ export namespace Prisma {
     sender?: XOR<SenderNullableScalarRelationFilter, SenderWhereInput> | null
     draftContacts?: DraftContactListRelationFilter
     draftTags?: DraftTagListRelationFilter
+    draftPurposes?: DraftPurposeListRelationFilter
   }, "id">
 
   export type DraftOrderByWithAggregationInput = {
@@ -23518,6 +28304,160 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
+  export type PurposeWhereInput = {
+    AND?: PurposeWhereInput | PurposeWhereInput[]
+    OR?: PurposeWhereInput[]
+    NOT?: PurposeWhereInput | PurposeWhereInput[]
+    id?: StringFilter<"Purpose"> | string
+    name?: StringFilter<"Purpose"> | string
+    description?: StringNullableFilter<"Purpose"> | string | null
+    isDeleted?: BoolFilter<"Purpose"> | boolean
+    createdAt?: DateTimeFilter<"Purpose"> | Date | string
+    updatedAt?: DateTimeFilter<"Purpose"> | Date | string
+    purposeTags?: PurposeTagListRelationFilter
+    purposeDrafts?: DraftPurposeListRelationFilter
+    purposeEmails?: EmailPurposeListRelationFilter
+  }
+
+  export type PurposeOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    purposeTags?: PurposeTagOrderByRelationAggregateInput
+    purposeDrafts?: DraftPurposeOrderByRelationAggregateInput
+    purposeEmails?: EmailPurposeOrderByRelationAggregateInput
+  }
+
+  export type PurposeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PurposeWhereInput | PurposeWhereInput[]
+    OR?: PurposeWhereInput[]
+    NOT?: PurposeWhereInput | PurposeWhereInput[]
+    name?: StringFilter<"Purpose"> | string
+    description?: StringNullableFilter<"Purpose"> | string | null
+    isDeleted?: BoolFilter<"Purpose"> | boolean
+    createdAt?: DateTimeFilter<"Purpose"> | Date | string
+    updatedAt?: DateTimeFilter<"Purpose"> | Date | string
+    purposeTags?: PurposeTagListRelationFilter
+    purposeDrafts?: DraftPurposeListRelationFilter
+    purposeEmails?: EmailPurposeListRelationFilter
+  }, "id">
+
+  export type PurposeOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PurposeCountOrderByAggregateInput
+    _max?: PurposeMaxOrderByAggregateInput
+    _min?: PurposeMinOrderByAggregateInput
+  }
+
+  export type PurposeScalarWhereWithAggregatesInput = {
+    AND?: PurposeScalarWhereWithAggregatesInput | PurposeScalarWhereWithAggregatesInput[]
+    OR?: PurposeScalarWhereWithAggregatesInput[]
+    NOT?: PurposeScalarWhereWithAggregatesInput | PurposeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Purpose"> | string
+    name?: StringWithAggregatesFilter<"Purpose"> | string
+    description?: StringNullableWithAggregatesFilter<"Purpose"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"Purpose"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Purpose"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Purpose"> | Date | string
+  }
+
+  export type DraftPurposeWhereInput = {
+    AND?: DraftPurposeWhereInput | DraftPurposeWhereInput[]
+    OR?: DraftPurposeWhereInput[]
+    NOT?: DraftPurposeWhereInput | DraftPurposeWhereInput[]
+    draftId?: StringFilter<"DraftPurpose"> | string
+    purposeId?: StringFilter<"DraftPurpose"> | string
+    draft?: XOR<DraftScalarRelationFilter, DraftWhereInput>
+    purpose?: XOR<PurposeScalarRelationFilter, PurposeWhereInput>
+  }
+
+  export type DraftPurposeOrderByWithRelationInput = {
+    draftId?: SortOrder
+    purposeId?: SortOrder
+    draft?: DraftOrderByWithRelationInput
+    purpose?: PurposeOrderByWithRelationInput
+  }
+
+  export type DraftPurposeWhereUniqueInput = Prisma.AtLeast<{
+    draftId_purposeId?: DraftPurposeDraftIdPurposeIdCompoundUniqueInput
+    AND?: DraftPurposeWhereInput | DraftPurposeWhereInput[]
+    OR?: DraftPurposeWhereInput[]
+    NOT?: DraftPurposeWhereInput | DraftPurposeWhereInput[]
+    draftId?: StringFilter<"DraftPurpose"> | string
+    purposeId?: StringFilter<"DraftPurpose"> | string
+    draft?: XOR<DraftScalarRelationFilter, DraftWhereInput>
+    purpose?: XOR<PurposeScalarRelationFilter, PurposeWhereInput>
+  }, "draftId_purposeId">
+
+  export type DraftPurposeOrderByWithAggregationInput = {
+    draftId?: SortOrder
+    purposeId?: SortOrder
+    _count?: DraftPurposeCountOrderByAggregateInput
+    _max?: DraftPurposeMaxOrderByAggregateInput
+    _min?: DraftPurposeMinOrderByAggregateInput
+  }
+
+  export type DraftPurposeScalarWhereWithAggregatesInput = {
+    AND?: DraftPurposeScalarWhereWithAggregatesInput | DraftPurposeScalarWhereWithAggregatesInput[]
+    OR?: DraftPurposeScalarWhereWithAggregatesInput[]
+    NOT?: DraftPurposeScalarWhereWithAggregatesInput | DraftPurposeScalarWhereWithAggregatesInput[]
+    draftId?: StringWithAggregatesFilter<"DraftPurpose"> | string
+    purposeId?: StringWithAggregatesFilter<"DraftPurpose"> | string
+  }
+
+  export type EmailPurposeWhereInput = {
+    AND?: EmailPurposeWhereInput | EmailPurposeWhereInput[]
+    OR?: EmailPurposeWhereInput[]
+    NOT?: EmailPurposeWhereInput | EmailPurposeWhereInput[]
+    emailId?: StringFilter<"EmailPurpose"> | string
+    purposeId?: StringFilter<"EmailPurpose"> | string
+    email?: XOR<EmailScalarRelationFilter, EmailWhereInput>
+    purpose?: XOR<PurposeScalarRelationFilter, PurposeWhereInput>
+  }
+
+  export type EmailPurposeOrderByWithRelationInput = {
+    emailId?: SortOrder
+    purposeId?: SortOrder
+    email?: EmailOrderByWithRelationInput
+    purpose?: PurposeOrderByWithRelationInput
+  }
+
+  export type EmailPurposeWhereUniqueInput = Prisma.AtLeast<{
+    emailId_purposeId?: EmailPurposeEmailIdPurposeIdCompoundUniqueInput
+    AND?: EmailPurposeWhereInput | EmailPurposeWhereInput[]
+    OR?: EmailPurposeWhereInput[]
+    NOT?: EmailPurposeWhereInput | EmailPurposeWhereInput[]
+    emailId?: StringFilter<"EmailPurpose"> | string
+    purposeId?: StringFilter<"EmailPurpose"> | string
+    email?: XOR<EmailScalarRelationFilter, EmailWhereInput>
+    purpose?: XOR<PurposeScalarRelationFilter, PurposeWhereInput>
+  }, "emailId_purposeId">
+
+  export type EmailPurposeOrderByWithAggregationInput = {
+    emailId?: SortOrder
+    purposeId?: SortOrder
+    _count?: EmailPurposeCountOrderByAggregateInput
+    _max?: EmailPurposeMaxOrderByAggregateInput
+    _min?: EmailPurposeMinOrderByAggregateInput
+  }
+
+  export type EmailPurposeScalarWhereWithAggregatesInput = {
+    AND?: EmailPurposeScalarWhereWithAggregatesInput | EmailPurposeScalarWhereWithAggregatesInput[]
+    OR?: EmailPurposeScalarWhereWithAggregatesInput[]
+    NOT?: EmailPurposeScalarWhereWithAggregatesInput | EmailPurposeScalarWhereWithAggregatesInput[]
+    emailId?: StringWithAggregatesFilter<"EmailPurpose"> | string
+    purposeId?: StringWithAggregatesFilter<"EmailPurpose"> | string
+  }
+
   export type SenderWhereInput = {
     AND?: SenderWhereInput | SenderWhereInput[]
     OR?: SenderWhereInput[]
@@ -23623,6 +28563,7 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Tag"> | boolean
     tagCompanies?: CompanyTagListRelationFilter
     tagContacts?: ContactTagListRelationFilter
+    tagPurposes?: PurposeTagListRelationFilter
     DraftTag?: DraftTagListRelationFilter
     EmailTag?: EmailTagListRelationFilter
   }
@@ -23633,6 +28574,7 @@ export namespace Prisma {
     isDeleted?: SortOrder
     tagCompanies?: CompanyTagOrderByRelationAggregateInput
     tagContacts?: ContactTagOrderByRelationAggregateInput
+    tagPurposes?: PurposeTagOrderByRelationAggregateInput
     DraftTag?: DraftTagOrderByRelationAggregateInput
     EmailTag?: EmailTagOrderByRelationAggregateInput
   }
@@ -23646,6 +28588,7 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Tag"> | boolean
     tagCompanies?: CompanyTagListRelationFilter
     tagContacts?: ContactTagListRelationFilter
+    tagPurposes?: PurposeTagListRelationFilter
     DraftTag?: DraftTagListRelationFilter
     EmailTag?: EmailTagListRelationFilter
   }, "id">
@@ -23754,6 +28697,50 @@ export namespace Prisma {
     NOT?: ContactTagScalarWhereWithAggregatesInput | ContactTagScalarWhereWithAggregatesInput[]
     contactId?: StringWithAggregatesFilter<"ContactTag"> | string
     tagId?: StringWithAggregatesFilter<"ContactTag"> | string
+  }
+
+  export type PurposeTagWhereInput = {
+    AND?: PurposeTagWhereInput | PurposeTagWhereInput[]
+    OR?: PurposeTagWhereInput[]
+    NOT?: PurposeTagWhereInput | PurposeTagWhereInput[]
+    purposeId?: StringFilter<"PurposeTag"> | string
+    tagId?: StringFilter<"PurposeTag"> | string
+    purpose?: XOR<PurposeScalarRelationFilter, PurposeWhereInput>
+    tag?: XOR<TagScalarRelationFilter, TagWhereInput>
+  }
+
+  export type PurposeTagOrderByWithRelationInput = {
+    purposeId?: SortOrder
+    tagId?: SortOrder
+    purpose?: PurposeOrderByWithRelationInput
+    tag?: TagOrderByWithRelationInput
+  }
+
+  export type PurposeTagWhereUniqueInput = Prisma.AtLeast<{
+    purposeId_tagId?: PurposeTagPurposeIdTagIdCompoundUniqueInput
+    AND?: PurposeTagWhereInput | PurposeTagWhereInput[]
+    OR?: PurposeTagWhereInput[]
+    NOT?: PurposeTagWhereInput | PurposeTagWhereInput[]
+    purposeId?: StringFilter<"PurposeTag"> | string
+    tagId?: StringFilter<"PurposeTag"> | string
+    purpose?: XOR<PurposeScalarRelationFilter, PurposeWhereInput>
+    tag?: XOR<TagScalarRelationFilter, TagWhereInput>
+  }, "purposeId_tagId">
+
+  export type PurposeTagOrderByWithAggregationInput = {
+    purposeId?: SortOrder
+    tagId?: SortOrder
+    _count?: PurposeTagCountOrderByAggregateInput
+    _max?: PurposeTagMaxOrderByAggregateInput
+    _min?: PurposeTagMinOrderByAggregateInput
+  }
+
+  export type PurposeTagScalarWhereWithAggregatesInput = {
+    AND?: PurposeTagScalarWhereWithAggregatesInput | PurposeTagScalarWhereWithAggregatesInput[]
+    OR?: PurposeTagScalarWhereWithAggregatesInput[]
+    NOT?: PurposeTagScalarWhereWithAggregatesInput | PurposeTagScalarWhereWithAggregatesInput[]
+    purposeId?: StringWithAggregatesFilter<"PurposeTag"> | string
+    tagId?: StringWithAggregatesFilter<"PurposeTag"> | string
   }
 
   export type DraftTagWhereInput = {
@@ -24095,6 +29082,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutEmailsInput
     sender: SenderCreateNestedOneWithoutEmailsInput
     emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     events?: EmailEventCreateNestedManyWithoutEmailInput
     followUps?: FollowUpCreateNestedManyWithoutEmailInput
     notifications?: NotificationCreateNestedManyWithoutEmailInput
@@ -24112,6 +29100,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
     followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
@@ -24129,6 +29118,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
     sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
     emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     events?: EmailEventUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUpdateManyWithoutEmailNestedInput
@@ -24146,6 +29136,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
@@ -24381,6 +29372,7 @@ export namespace Prisma {
     sender?: SenderCreateNestedOneWithoutDraftsInput
     draftContacts?: DraftContactCreateNestedManyWithoutDraftInput
     draftTags?: DraftTagCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeCreateNestedManyWithoutDraftInput
   }
 
   export type DraftUncheckedCreateInput = {
@@ -24393,6 +29385,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     draftContacts?: DraftContactUncheckedCreateNestedManyWithoutDraftInput
     draftTags?: DraftTagUncheckedCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeUncheckedCreateNestedManyWithoutDraftInput
   }
 
   export type DraftUpdateInput = {
@@ -24405,6 +29398,7 @@ export namespace Prisma {
     sender?: SenderUpdateOneWithoutDraftsNestedInput
     draftContacts?: DraftContactUpdateManyWithoutDraftNestedInput
     draftTags?: DraftTagUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUpdateManyWithoutDraftNestedInput
   }
 
   export type DraftUncheckedUpdateInput = {
@@ -24417,6 +29411,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draftContacts?: DraftContactUncheckedUpdateManyWithoutDraftNestedInput
     draftTags?: DraftTagUncheckedUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUncheckedUpdateManyWithoutDraftNestedInput
   }
 
   export type DraftCreateManyInput = {
@@ -24649,6 +29644,149 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PurposeCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeTags?: PurposeTagCreateNestedManyWithoutPurposeInput
+    purposeDrafts?: DraftPurposeCreateNestedManyWithoutPurposeInput
+    purposeEmails?: EmailPurposeCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeTags?: PurposeTagUncheckedCreateNestedManyWithoutPurposeInput
+    purposeDrafts?: DraftPurposeUncheckedCreateNestedManyWithoutPurposeInput
+    purposeEmails?: EmailPurposeUncheckedCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeTags?: PurposeTagUpdateManyWithoutPurposeNestedInput
+    purposeDrafts?: DraftPurposeUpdateManyWithoutPurposeNestedInput
+    purposeEmails?: EmailPurposeUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type PurposeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeTags?: PurposeTagUncheckedUpdateManyWithoutPurposeNestedInput
+    purposeDrafts?: DraftPurposeUncheckedUpdateManyWithoutPurposeNestedInput
+    purposeEmails?: EmailPurposeUncheckedUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type PurposeCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PurposeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurposeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DraftPurposeCreateInput = {
+    draft: DraftCreateNestedOneWithoutDraftPurposesInput
+    purpose: PurposeCreateNestedOneWithoutPurposeDraftsInput
+  }
+
+  export type DraftPurposeUncheckedCreateInput = {
+    draftId: string
+    purposeId: string
+  }
+
+  export type DraftPurposeUpdateInput = {
+    draft?: DraftUpdateOneRequiredWithoutDraftPurposesNestedInput
+    purpose?: PurposeUpdateOneRequiredWithoutPurposeDraftsNestedInput
+  }
+
+  export type DraftPurposeUncheckedUpdateInput = {
+    draftId?: StringFieldUpdateOperationsInput | string
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DraftPurposeCreateManyInput = {
+    draftId: string
+    purposeId: string
+  }
+
+  export type DraftPurposeUpdateManyMutationInput = {
+
+  }
+
+  export type DraftPurposeUncheckedUpdateManyInput = {
+    draftId?: StringFieldUpdateOperationsInput | string
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmailPurposeCreateInput = {
+    email: EmailCreateNestedOneWithoutEmailPurposesInput
+    purpose: PurposeCreateNestedOneWithoutPurposeEmailsInput
+  }
+
+  export type EmailPurposeUncheckedCreateInput = {
+    emailId: string
+    purposeId: string
+  }
+
+  export type EmailPurposeUpdateInput = {
+    email?: EmailUpdateOneRequiredWithoutEmailPurposesNestedInput
+    purpose?: PurposeUpdateOneRequiredWithoutPurposeEmailsNestedInput
+  }
+
+  export type EmailPurposeUncheckedUpdateInput = {
+    emailId?: StringFieldUpdateOperationsInput | string
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmailPurposeCreateManyInput = {
+    emailId: string
+    purposeId: string
+  }
+
+  export type EmailPurposeUpdateManyMutationInput = {
+
+  }
+
+  export type EmailPurposeUncheckedUpdateManyInput = {
+    emailId?: StringFieldUpdateOperationsInput | string
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type SenderCreateInput = {
     id?: string
     displayName: string
@@ -24768,6 +29906,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: CompanyTagCreateNestedManyWithoutTagInput
     tagContacts?: ContactTagCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagCreateNestedManyWithoutTagInput
   }
@@ -24778,6 +29917,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: CompanyTagUncheckedCreateNestedManyWithoutTagInput
     tagContacts?: ContactTagUncheckedCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagUncheckedCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagUncheckedCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagUncheckedCreateNestedManyWithoutTagInput
   }
@@ -24788,6 +29928,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUpdateManyWithoutTagNestedInput
     tagContacts?: ContactTagUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUpdateManyWithoutTagNestedInput
   }
@@ -24798,6 +29939,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUncheckedUpdateManyWithoutTagNestedInput
     tagContacts?: ContactTagUncheckedUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUncheckedUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUncheckedUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUncheckedUpdateManyWithoutTagNestedInput
   }
@@ -24885,6 +30027,40 @@ export namespace Prisma {
 
   export type ContactTagUncheckedUpdateManyInput = {
     contactId?: StringFieldUpdateOperationsInput | string
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurposeTagCreateInput = {
+    purpose: PurposeCreateNestedOneWithoutPurposeTagsInput
+    tag: TagCreateNestedOneWithoutTagPurposesInput
+  }
+
+  export type PurposeTagUncheckedCreateInput = {
+    purposeId: string
+    tagId: string
+  }
+
+  export type PurposeTagUpdateInput = {
+    purpose?: PurposeUpdateOneRequiredWithoutPurposeTagsNestedInput
+    tag?: TagUpdateOneRequiredWithoutTagPurposesNestedInput
+  }
+
+  export type PurposeTagUncheckedUpdateInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurposeTagCreateManyInput = {
+    purposeId: string
+    tagId: string
+  }
+
+  export type PurposeTagUpdateManyMutationInput = {
+
+  }
+
+  export type PurposeTagUncheckedUpdateManyInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
     tagId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -25256,6 +30432,12 @@ export namespace Prisma {
     none?: EmailTagWhereInput
   }
 
+  export type EmailPurposeListRelationFilter = {
+    every?: EmailPurposeWhereInput
+    some?: EmailPurposeWhereInput
+    none?: EmailPurposeWhereInput
+  }
+
   export type EmailEventListRelationFilter = {
     every?: EmailEventWhereInput
     some?: EmailEventWhereInput
@@ -25275,6 +30457,10 @@ export namespace Prisma {
   }
 
   export type EmailTagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EmailPurposeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25480,7 +30666,17 @@ export namespace Prisma {
     none?: DraftTagWhereInput
   }
 
+  export type DraftPurposeListRelationFilter = {
+    every?: DraftPurposeWhereInput
+    some?: DraftPurposeWhereInput
+    none?: DraftPurposeWhereInput
+  }
+
   export type DraftTagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DraftPurposeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25626,6 +30822,88 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
+  export type PurposeTagListRelationFilter = {
+    every?: PurposeTagWhereInput
+    some?: PurposeTagWhereInput
+    none?: PurposeTagWhereInput
+  }
+
+  export type PurposeTagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PurposeCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurposeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurposeMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurposeScalarRelationFilter = {
+    is?: PurposeWhereInput
+    isNot?: PurposeWhereInput
+  }
+
+  export type DraftPurposeDraftIdPurposeIdCompoundUniqueInput = {
+    draftId: string
+    purposeId: string
+  }
+
+  export type DraftPurposeCountOrderByAggregateInput = {
+    draftId?: SortOrder
+    purposeId?: SortOrder
+  }
+
+  export type DraftPurposeMaxOrderByAggregateInput = {
+    draftId?: SortOrder
+    purposeId?: SortOrder
+  }
+
+  export type DraftPurposeMinOrderByAggregateInput = {
+    draftId?: SortOrder
+    purposeId?: SortOrder
+  }
+
+  export type EmailPurposeEmailIdPurposeIdCompoundUniqueInput = {
+    emailId: string
+    purposeId: string
+  }
+
+  export type EmailPurposeCountOrderByAggregateInput = {
+    emailId?: SortOrder
+    purposeId?: SortOrder
+  }
+
+  export type EmailPurposeMaxOrderByAggregateInput = {
+    emailId?: SortOrder
+    purposeId?: SortOrder
+  }
+
+  export type EmailPurposeMinOrderByAggregateInput = {
+    emailId?: SortOrder
+    purposeId?: SortOrder
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -25792,6 +31070,26 @@ export namespace Prisma {
 
   export type ContactTagMinOrderByAggregateInput = {
     contactId?: SortOrder
+    tagId?: SortOrder
+  }
+
+  export type PurposeTagPurposeIdTagIdCompoundUniqueInput = {
+    purposeId: string
+    tagId: string
+  }
+
+  export type PurposeTagCountOrderByAggregateInput = {
+    purposeId?: SortOrder
+    tagId?: SortOrder
+  }
+
+  export type PurposeTagMaxOrderByAggregateInput = {
+    purposeId?: SortOrder
+    tagId?: SortOrder
+  }
+
+  export type PurposeTagMinOrderByAggregateInput = {
+    purposeId?: SortOrder
     tagId?: SortOrder
   }
 
@@ -26156,6 +31454,13 @@ export namespace Prisma {
     connect?: EmailTagWhereUniqueInput | EmailTagWhereUniqueInput[]
   }
 
+  export type EmailPurposeCreateNestedManyWithoutEmailInput = {
+    create?: XOR<EmailPurposeCreateWithoutEmailInput, EmailPurposeUncheckedCreateWithoutEmailInput> | EmailPurposeCreateWithoutEmailInput[] | EmailPurposeUncheckedCreateWithoutEmailInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutEmailInput | EmailPurposeCreateOrConnectWithoutEmailInput[]
+    createMany?: EmailPurposeCreateManyEmailInputEnvelope
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+  }
+
   export type EmailEventCreateNestedManyWithoutEmailInput = {
     create?: XOR<EmailEventCreateWithoutEmailInput, EmailEventUncheckedCreateWithoutEmailInput> | EmailEventCreateWithoutEmailInput[] | EmailEventUncheckedCreateWithoutEmailInput[]
     connectOrCreate?: EmailEventCreateOrConnectWithoutEmailInput | EmailEventCreateOrConnectWithoutEmailInput[]
@@ -26182,6 +31487,13 @@ export namespace Prisma {
     connectOrCreate?: EmailTagCreateOrConnectWithoutEmailInput | EmailTagCreateOrConnectWithoutEmailInput[]
     createMany?: EmailTagCreateManyEmailInputEnvelope
     connect?: EmailTagWhereUniqueInput | EmailTagWhereUniqueInput[]
+  }
+
+  export type EmailPurposeUncheckedCreateNestedManyWithoutEmailInput = {
+    create?: XOR<EmailPurposeCreateWithoutEmailInput, EmailPurposeUncheckedCreateWithoutEmailInput> | EmailPurposeCreateWithoutEmailInput[] | EmailPurposeUncheckedCreateWithoutEmailInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutEmailInput | EmailPurposeCreateOrConnectWithoutEmailInput[]
+    createMany?: EmailPurposeCreateManyEmailInputEnvelope
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
   }
 
   export type EmailEventUncheckedCreateNestedManyWithoutEmailInput = {
@@ -26233,6 +31545,20 @@ export namespace Prisma {
     update?: EmailTagUpdateWithWhereUniqueWithoutEmailInput | EmailTagUpdateWithWhereUniqueWithoutEmailInput[]
     updateMany?: EmailTagUpdateManyWithWhereWithoutEmailInput | EmailTagUpdateManyWithWhereWithoutEmailInput[]
     deleteMany?: EmailTagScalarWhereInput | EmailTagScalarWhereInput[]
+  }
+
+  export type EmailPurposeUpdateManyWithoutEmailNestedInput = {
+    create?: XOR<EmailPurposeCreateWithoutEmailInput, EmailPurposeUncheckedCreateWithoutEmailInput> | EmailPurposeCreateWithoutEmailInput[] | EmailPurposeUncheckedCreateWithoutEmailInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutEmailInput | EmailPurposeCreateOrConnectWithoutEmailInput[]
+    upsert?: EmailPurposeUpsertWithWhereUniqueWithoutEmailInput | EmailPurposeUpsertWithWhereUniqueWithoutEmailInput[]
+    createMany?: EmailPurposeCreateManyEmailInputEnvelope
+    set?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    disconnect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    delete?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    update?: EmailPurposeUpdateWithWhereUniqueWithoutEmailInput | EmailPurposeUpdateWithWhereUniqueWithoutEmailInput[]
+    updateMany?: EmailPurposeUpdateManyWithWhereWithoutEmailInput | EmailPurposeUpdateManyWithWhereWithoutEmailInput[]
+    deleteMany?: EmailPurposeScalarWhereInput | EmailPurposeScalarWhereInput[]
   }
 
   export type EmailEventUpdateManyWithoutEmailNestedInput = {
@@ -26289,6 +31615,20 @@ export namespace Prisma {
     update?: EmailTagUpdateWithWhereUniqueWithoutEmailInput | EmailTagUpdateWithWhereUniqueWithoutEmailInput[]
     updateMany?: EmailTagUpdateManyWithWhereWithoutEmailInput | EmailTagUpdateManyWithWhereWithoutEmailInput[]
     deleteMany?: EmailTagScalarWhereInput | EmailTagScalarWhereInput[]
+  }
+
+  export type EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput = {
+    create?: XOR<EmailPurposeCreateWithoutEmailInput, EmailPurposeUncheckedCreateWithoutEmailInput> | EmailPurposeCreateWithoutEmailInput[] | EmailPurposeUncheckedCreateWithoutEmailInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutEmailInput | EmailPurposeCreateOrConnectWithoutEmailInput[]
+    upsert?: EmailPurposeUpsertWithWhereUniqueWithoutEmailInput | EmailPurposeUpsertWithWhereUniqueWithoutEmailInput[]
+    createMany?: EmailPurposeCreateManyEmailInputEnvelope
+    set?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    disconnect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    delete?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    update?: EmailPurposeUpdateWithWhereUniqueWithoutEmailInput | EmailPurposeUpdateWithWhereUniqueWithoutEmailInput[]
+    updateMany?: EmailPurposeUpdateManyWithWhereWithoutEmailInput | EmailPurposeUpdateManyWithWhereWithoutEmailInput[]
+    deleteMany?: EmailPurposeScalarWhereInput | EmailPurposeScalarWhereInput[]
   }
 
   export type EmailEventUncheckedUpdateManyWithoutEmailNestedInput = {
@@ -26445,6 +31785,13 @@ export namespace Prisma {
     connect?: DraftTagWhereUniqueInput | DraftTagWhereUniqueInput[]
   }
 
+  export type DraftPurposeCreateNestedManyWithoutDraftInput = {
+    create?: XOR<DraftPurposeCreateWithoutDraftInput, DraftPurposeUncheckedCreateWithoutDraftInput> | DraftPurposeCreateWithoutDraftInput[] | DraftPurposeUncheckedCreateWithoutDraftInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutDraftInput | DraftPurposeCreateOrConnectWithoutDraftInput[]
+    createMany?: DraftPurposeCreateManyDraftInputEnvelope
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+  }
+
   export type DraftContactUncheckedCreateNestedManyWithoutDraftInput = {
     create?: XOR<DraftContactCreateWithoutDraftInput, DraftContactUncheckedCreateWithoutDraftInput> | DraftContactCreateWithoutDraftInput[] | DraftContactUncheckedCreateWithoutDraftInput[]
     connectOrCreate?: DraftContactCreateOrConnectWithoutDraftInput | DraftContactCreateOrConnectWithoutDraftInput[]
@@ -26457,6 +31804,13 @@ export namespace Prisma {
     connectOrCreate?: DraftTagCreateOrConnectWithoutDraftInput | DraftTagCreateOrConnectWithoutDraftInput[]
     createMany?: DraftTagCreateManyDraftInputEnvelope
     connect?: DraftTagWhereUniqueInput | DraftTagWhereUniqueInput[]
+  }
+
+  export type DraftPurposeUncheckedCreateNestedManyWithoutDraftInput = {
+    create?: XOR<DraftPurposeCreateWithoutDraftInput, DraftPurposeUncheckedCreateWithoutDraftInput> | DraftPurposeCreateWithoutDraftInput[] | DraftPurposeUncheckedCreateWithoutDraftInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutDraftInput | DraftPurposeCreateOrConnectWithoutDraftInput[]
+    createMany?: DraftPurposeCreateManyDraftInputEnvelope
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
   }
 
   export type SenderUpdateOneWithoutDraftsNestedInput = {
@@ -26497,6 +31851,20 @@ export namespace Prisma {
     deleteMany?: DraftTagScalarWhereInput | DraftTagScalarWhereInput[]
   }
 
+  export type DraftPurposeUpdateManyWithoutDraftNestedInput = {
+    create?: XOR<DraftPurposeCreateWithoutDraftInput, DraftPurposeUncheckedCreateWithoutDraftInput> | DraftPurposeCreateWithoutDraftInput[] | DraftPurposeUncheckedCreateWithoutDraftInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutDraftInput | DraftPurposeCreateOrConnectWithoutDraftInput[]
+    upsert?: DraftPurposeUpsertWithWhereUniqueWithoutDraftInput | DraftPurposeUpsertWithWhereUniqueWithoutDraftInput[]
+    createMany?: DraftPurposeCreateManyDraftInputEnvelope
+    set?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    disconnect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    delete?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    update?: DraftPurposeUpdateWithWhereUniqueWithoutDraftInput | DraftPurposeUpdateWithWhereUniqueWithoutDraftInput[]
+    updateMany?: DraftPurposeUpdateManyWithWhereWithoutDraftInput | DraftPurposeUpdateManyWithWhereWithoutDraftInput[]
+    deleteMany?: DraftPurposeScalarWhereInput | DraftPurposeScalarWhereInput[]
+  }
+
   export type DraftContactUncheckedUpdateManyWithoutDraftNestedInput = {
     create?: XOR<DraftContactCreateWithoutDraftInput, DraftContactUncheckedCreateWithoutDraftInput> | DraftContactCreateWithoutDraftInput[] | DraftContactUncheckedCreateWithoutDraftInput[]
     connectOrCreate?: DraftContactCreateOrConnectWithoutDraftInput | DraftContactCreateOrConnectWithoutDraftInput[]
@@ -26523,6 +31891,20 @@ export namespace Prisma {
     update?: DraftTagUpdateWithWhereUniqueWithoutDraftInput | DraftTagUpdateWithWhereUniqueWithoutDraftInput[]
     updateMany?: DraftTagUpdateManyWithWhereWithoutDraftInput | DraftTagUpdateManyWithWhereWithoutDraftInput[]
     deleteMany?: DraftTagScalarWhereInput | DraftTagScalarWhereInput[]
+  }
+
+  export type DraftPurposeUncheckedUpdateManyWithoutDraftNestedInput = {
+    create?: XOR<DraftPurposeCreateWithoutDraftInput, DraftPurposeUncheckedCreateWithoutDraftInput> | DraftPurposeCreateWithoutDraftInput[] | DraftPurposeUncheckedCreateWithoutDraftInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutDraftInput | DraftPurposeCreateOrConnectWithoutDraftInput[]
+    upsert?: DraftPurposeUpsertWithWhereUniqueWithoutDraftInput | DraftPurposeUpsertWithWhereUniqueWithoutDraftInput[]
+    createMany?: DraftPurposeCreateManyDraftInputEnvelope
+    set?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    disconnect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    delete?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    update?: DraftPurposeUpdateWithWhereUniqueWithoutDraftInput | DraftPurposeUpdateWithWhereUniqueWithoutDraftInput[]
+    updateMany?: DraftPurposeUpdateManyWithWhereWithoutDraftInput | DraftPurposeUpdateManyWithWhereWithoutDraftInput[]
+    deleteMany?: DraftPurposeScalarWhereInput | DraftPurposeScalarWhereInput[]
   }
 
   export type DraftCreateNestedOneWithoutDraftContactsInput = {
@@ -26569,6 +31951,188 @@ export namespace Prisma {
     upsert?: EmailUpsertWithoutNotificationsInput
     connect?: EmailWhereUniqueInput
     update?: XOR<XOR<EmailUpdateToOneWithWhereWithoutNotificationsInput, EmailUpdateWithoutNotificationsInput>, EmailUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type PurposeTagCreateNestedManyWithoutPurposeInput = {
+    create?: XOR<PurposeTagCreateWithoutPurposeInput, PurposeTagUncheckedCreateWithoutPurposeInput> | PurposeTagCreateWithoutPurposeInput[] | PurposeTagUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutPurposeInput | PurposeTagCreateOrConnectWithoutPurposeInput[]
+    createMany?: PurposeTagCreateManyPurposeInputEnvelope
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+  }
+
+  export type DraftPurposeCreateNestedManyWithoutPurposeInput = {
+    create?: XOR<DraftPurposeCreateWithoutPurposeInput, DraftPurposeUncheckedCreateWithoutPurposeInput> | DraftPurposeCreateWithoutPurposeInput[] | DraftPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutPurposeInput | DraftPurposeCreateOrConnectWithoutPurposeInput[]
+    createMany?: DraftPurposeCreateManyPurposeInputEnvelope
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+  }
+
+  export type EmailPurposeCreateNestedManyWithoutPurposeInput = {
+    create?: XOR<EmailPurposeCreateWithoutPurposeInput, EmailPurposeUncheckedCreateWithoutPurposeInput> | EmailPurposeCreateWithoutPurposeInput[] | EmailPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutPurposeInput | EmailPurposeCreateOrConnectWithoutPurposeInput[]
+    createMany?: EmailPurposeCreateManyPurposeInputEnvelope
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+  }
+
+  export type PurposeTagUncheckedCreateNestedManyWithoutPurposeInput = {
+    create?: XOR<PurposeTagCreateWithoutPurposeInput, PurposeTagUncheckedCreateWithoutPurposeInput> | PurposeTagCreateWithoutPurposeInput[] | PurposeTagUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutPurposeInput | PurposeTagCreateOrConnectWithoutPurposeInput[]
+    createMany?: PurposeTagCreateManyPurposeInputEnvelope
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+  }
+
+  export type DraftPurposeUncheckedCreateNestedManyWithoutPurposeInput = {
+    create?: XOR<DraftPurposeCreateWithoutPurposeInput, DraftPurposeUncheckedCreateWithoutPurposeInput> | DraftPurposeCreateWithoutPurposeInput[] | DraftPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutPurposeInput | DraftPurposeCreateOrConnectWithoutPurposeInput[]
+    createMany?: DraftPurposeCreateManyPurposeInputEnvelope
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+  }
+
+  export type EmailPurposeUncheckedCreateNestedManyWithoutPurposeInput = {
+    create?: XOR<EmailPurposeCreateWithoutPurposeInput, EmailPurposeUncheckedCreateWithoutPurposeInput> | EmailPurposeCreateWithoutPurposeInput[] | EmailPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutPurposeInput | EmailPurposeCreateOrConnectWithoutPurposeInput[]
+    createMany?: EmailPurposeCreateManyPurposeInputEnvelope
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+  }
+
+  export type PurposeTagUpdateManyWithoutPurposeNestedInput = {
+    create?: XOR<PurposeTagCreateWithoutPurposeInput, PurposeTagUncheckedCreateWithoutPurposeInput> | PurposeTagCreateWithoutPurposeInput[] | PurposeTagUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutPurposeInput | PurposeTagCreateOrConnectWithoutPurposeInput[]
+    upsert?: PurposeTagUpsertWithWhereUniqueWithoutPurposeInput | PurposeTagUpsertWithWhereUniqueWithoutPurposeInput[]
+    createMany?: PurposeTagCreateManyPurposeInputEnvelope
+    set?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    disconnect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    delete?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    update?: PurposeTagUpdateWithWhereUniqueWithoutPurposeInput | PurposeTagUpdateWithWhereUniqueWithoutPurposeInput[]
+    updateMany?: PurposeTagUpdateManyWithWhereWithoutPurposeInput | PurposeTagUpdateManyWithWhereWithoutPurposeInput[]
+    deleteMany?: PurposeTagScalarWhereInput | PurposeTagScalarWhereInput[]
+  }
+
+  export type DraftPurposeUpdateManyWithoutPurposeNestedInput = {
+    create?: XOR<DraftPurposeCreateWithoutPurposeInput, DraftPurposeUncheckedCreateWithoutPurposeInput> | DraftPurposeCreateWithoutPurposeInput[] | DraftPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutPurposeInput | DraftPurposeCreateOrConnectWithoutPurposeInput[]
+    upsert?: DraftPurposeUpsertWithWhereUniqueWithoutPurposeInput | DraftPurposeUpsertWithWhereUniqueWithoutPurposeInput[]
+    createMany?: DraftPurposeCreateManyPurposeInputEnvelope
+    set?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    disconnect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    delete?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    update?: DraftPurposeUpdateWithWhereUniqueWithoutPurposeInput | DraftPurposeUpdateWithWhereUniqueWithoutPurposeInput[]
+    updateMany?: DraftPurposeUpdateManyWithWhereWithoutPurposeInput | DraftPurposeUpdateManyWithWhereWithoutPurposeInput[]
+    deleteMany?: DraftPurposeScalarWhereInput | DraftPurposeScalarWhereInput[]
+  }
+
+  export type EmailPurposeUpdateManyWithoutPurposeNestedInput = {
+    create?: XOR<EmailPurposeCreateWithoutPurposeInput, EmailPurposeUncheckedCreateWithoutPurposeInput> | EmailPurposeCreateWithoutPurposeInput[] | EmailPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutPurposeInput | EmailPurposeCreateOrConnectWithoutPurposeInput[]
+    upsert?: EmailPurposeUpsertWithWhereUniqueWithoutPurposeInput | EmailPurposeUpsertWithWhereUniqueWithoutPurposeInput[]
+    createMany?: EmailPurposeCreateManyPurposeInputEnvelope
+    set?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    disconnect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    delete?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    update?: EmailPurposeUpdateWithWhereUniqueWithoutPurposeInput | EmailPurposeUpdateWithWhereUniqueWithoutPurposeInput[]
+    updateMany?: EmailPurposeUpdateManyWithWhereWithoutPurposeInput | EmailPurposeUpdateManyWithWhereWithoutPurposeInput[]
+    deleteMany?: EmailPurposeScalarWhereInput | EmailPurposeScalarWhereInput[]
+  }
+
+  export type PurposeTagUncheckedUpdateManyWithoutPurposeNestedInput = {
+    create?: XOR<PurposeTagCreateWithoutPurposeInput, PurposeTagUncheckedCreateWithoutPurposeInput> | PurposeTagCreateWithoutPurposeInput[] | PurposeTagUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutPurposeInput | PurposeTagCreateOrConnectWithoutPurposeInput[]
+    upsert?: PurposeTagUpsertWithWhereUniqueWithoutPurposeInput | PurposeTagUpsertWithWhereUniqueWithoutPurposeInput[]
+    createMany?: PurposeTagCreateManyPurposeInputEnvelope
+    set?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    disconnect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    delete?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    update?: PurposeTagUpdateWithWhereUniqueWithoutPurposeInput | PurposeTagUpdateWithWhereUniqueWithoutPurposeInput[]
+    updateMany?: PurposeTagUpdateManyWithWhereWithoutPurposeInput | PurposeTagUpdateManyWithWhereWithoutPurposeInput[]
+    deleteMany?: PurposeTagScalarWhereInput | PurposeTagScalarWhereInput[]
+  }
+
+  export type DraftPurposeUncheckedUpdateManyWithoutPurposeNestedInput = {
+    create?: XOR<DraftPurposeCreateWithoutPurposeInput, DraftPurposeUncheckedCreateWithoutPurposeInput> | DraftPurposeCreateWithoutPurposeInput[] | DraftPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: DraftPurposeCreateOrConnectWithoutPurposeInput | DraftPurposeCreateOrConnectWithoutPurposeInput[]
+    upsert?: DraftPurposeUpsertWithWhereUniqueWithoutPurposeInput | DraftPurposeUpsertWithWhereUniqueWithoutPurposeInput[]
+    createMany?: DraftPurposeCreateManyPurposeInputEnvelope
+    set?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    disconnect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    delete?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    connect?: DraftPurposeWhereUniqueInput | DraftPurposeWhereUniqueInput[]
+    update?: DraftPurposeUpdateWithWhereUniqueWithoutPurposeInput | DraftPurposeUpdateWithWhereUniqueWithoutPurposeInput[]
+    updateMany?: DraftPurposeUpdateManyWithWhereWithoutPurposeInput | DraftPurposeUpdateManyWithWhereWithoutPurposeInput[]
+    deleteMany?: DraftPurposeScalarWhereInput | DraftPurposeScalarWhereInput[]
+  }
+
+  export type EmailPurposeUncheckedUpdateManyWithoutPurposeNestedInput = {
+    create?: XOR<EmailPurposeCreateWithoutPurposeInput, EmailPurposeUncheckedCreateWithoutPurposeInput> | EmailPurposeCreateWithoutPurposeInput[] | EmailPurposeUncheckedCreateWithoutPurposeInput[]
+    connectOrCreate?: EmailPurposeCreateOrConnectWithoutPurposeInput | EmailPurposeCreateOrConnectWithoutPurposeInput[]
+    upsert?: EmailPurposeUpsertWithWhereUniqueWithoutPurposeInput | EmailPurposeUpsertWithWhereUniqueWithoutPurposeInput[]
+    createMany?: EmailPurposeCreateManyPurposeInputEnvelope
+    set?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    disconnect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    delete?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    connect?: EmailPurposeWhereUniqueInput | EmailPurposeWhereUniqueInput[]
+    update?: EmailPurposeUpdateWithWhereUniqueWithoutPurposeInput | EmailPurposeUpdateWithWhereUniqueWithoutPurposeInput[]
+    updateMany?: EmailPurposeUpdateManyWithWhereWithoutPurposeInput | EmailPurposeUpdateManyWithWhereWithoutPurposeInput[]
+    deleteMany?: EmailPurposeScalarWhereInput | EmailPurposeScalarWhereInput[]
+  }
+
+  export type DraftCreateNestedOneWithoutDraftPurposesInput = {
+    create?: XOR<DraftCreateWithoutDraftPurposesInput, DraftUncheckedCreateWithoutDraftPurposesInput>
+    connectOrCreate?: DraftCreateOrConnectWithoutDraftPurposesInput
+    connect?: DraftWhereUniqueInput
+  }
+
+  export type PurposeCreateNestedOneWithoutPurposeDraftsInput = {
+    create?: XOR<PurposeCreateWithoutPurposeDraftsInput, PurposeUncheckedCreateWithoutPurposeDraftsInput>
+    connectOrCreate?: PurposeCreateOrConnectWithoutPurposeDraftsInput
+    connect?: PurposeWhereUniqueInput
+  }
+
+  export type DraftUpdateOneRequiredWithoutDraftPurposesNestedInput = {
+    create?: XOR<DraftCreateWithoutDraftPurposesInput, DraftUncheckedCreateWithoutDraftPurposesInput>
+    connectOrCreate?: DraftCreateOrConnectWithoutDraftPurposesInput
+    upsert?: DraftUpsertWithoutDraftPurposesInput
+    connect?: DraftWhereUniqueInput
+    update?: XOR<XOR<DraftUpdateToOneWithWhereWithoutDraftPurposesInput, DraftUpdateWithoutDraftPurposesInput>, DraftUncheckedUpdateWithoutDraftPurposesInput>
+  }
+
+  export type PurposeUpdateOneRequiredWithoutPurposeDraftsNestedInput = {
+    create?: XOR<PurposeCreateWithoutPurposeDraftsInput, PurposeUncheckedCreateWithoutPurposeDraftsInput>
+    connectOrCreate?: PurposeCreateOrConnectWithoutPurposeDraftsInput
+    upsert?: PurposeUpsertWithoutPurposeDraftsInput
+    connect?: PurposeWhereUniqueInput
+    update?: XOR<XOR<PurposeUpdateToOneWithWhereWithoutPurposeDraftsInput, PurposeUpdateWithoutPurposeDraftsInput>, PurposeUncheckedUpdateWithoutPurposeDraftsInput>
+  }
+
+  export type EmailCreateNestedOneWithoutEmailPurposesInput = {
+    create?: XOR<EmailCreateWithoutEmailPurposesInput, EmailUncheckedCreateWithoutEmailPurposesInput>
+    connectOrCreate?: EmailCreateOrConnectWithoutEmailPurposesInput
+    connect?: EmailWhereUniqueInput
+  }
+
+  export type PurposeCreateNestedOneWithoutPurposeEmailsInput = {
+    create?: XOR<PurposeCreateWithoutPurposeEmailsInput, PurposeUncheckedCreateWithoutPurposeEmailsInput>
+    connectOrCreate?: PurposeCreateOrConnectWithoutPurposeEmailsInput
+    connect?: PurposeWhereUniqueInput
+  }
+
+  export type EmailUpdateOneRequiredWithoutEmailPurposesNestedInput = {
+    create?: XOR<EmailCreateWithoutEmailPurposesInput, EmailUncheckedCreateWithoutEmailPurposesInput>
+    connectOrCreate?: EmailCreateOrConnectWithoutEmailPurposesInput
+    upsert?: EmailUpsertWithoutEmailPurposesInput
+    connect?: EmailWhereUniqueInput
+    update?: XOR<XOR<EmailUpdateToOneWithWhereWithoutEmailPurposesInput, EmailUpdateWithoutEmailPurposesInput>, EmailUncheckedUpdateWithoutEmailPurposesInput>
+  }
+
+  export type PurposeUpdateOneRequiredWithoutPurposeEmailsNestedInput = {
+    create?: XOR<PurposeCreateWithoutPurposeEmailsInput, PurposeUncheckedCreateWithoutPurposeEmailsInput>
+    connectOrCreate?: PurposeCreateOrConnectWithoutPurposeEmailsInput
+    upsert?: PurposeUpsertWithoutPurposeEmailsInput
+    connect?: PurposeWhereUniqueInput
+    update?: XOR<XOR<PurposeUpdateToOneWithWhereWithoutPurposeEmailsInput, PurposeUpdateWithoutPurposeEmailsInput>, PurposeUncheckedUpdateWithoutPurposeEmailsInput>
   }
 
   export type DraftCreateNestedManyWithoutSenderInput = {
@@ -26677,6 +32241,13 @@ export namespace Prisma {
     connect?: ContactTagWhereUniqueInput | ContactTagWhereUniqueInput[]
   }
 
+  export type PurposeTagCreateNestedManyWithoutTagInput = {
+    create?: XOR<PurposeTagCreateWithoutTagInput, PurposeTagUncheckedCreateWithoutTagInput> | PurposeTagCreateWithoutTagInput[] | PurposeTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutTagInput | PurposeTagCreateOrConnectWithoutTagInput[]
+    createMany?: PurposeTagCreateManyTagInputEnvelope
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+  }
+
   export type DraftTagCreateNestedManyWithoutTagInput = {
     create?: XOR<DraftTagCreateWithoutTagInput, DraftTagUncheckedCreateWithoutTagInput> | DraftTagCreateWithoutTagInput[] | DraftTagUncheckedCreateWithoutTagInput[]
     connectOrCreate?: DraftTagCreateOrConnectWithoutTagInput | DraftTagCreateOrConnectWithoutTagInput[]
@@ -26703,6 +32274,13 @@ export namespace Prisma {
     connectOrCreate?: ContactTagCreateOrConnectWithoutTagInput | ContactTagCreateOrConnectWithoutTagInput[]
     createMany?: ContactTagCreateManyTagInputEnvelope
     connect?: ContactTagWhereUniqueInput | ContactTagWhereUniqueInput[]
+  }
+
+  export type PurposeTagUncheckedCreateNestedManyWithoutTagInput = {
+    create?: XOR<PurposeTagCreateWithoutTagInput, PurposeTagUncheckedCreateWithoutTagInput> | PurposeTagCreateWithoutTagInput[] | PurposeTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutTagInput | PurposeTagCreateOrConnectWithoutTagInput[]
+    createMany?: PurposeTagCreateManyTagInputEnvelope
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
   }
 
   export type DraftTagUncheckedCreateNestedManyWithoutTagInput = {
@@ -26745,6 +32323,20 @@ export namespace Prisma {
     update?: ContactTagUpdateWithWhereUniqueWithoutTagInput | ContactTagUpdateWithWhereUniqueWithoutTagInput[]
     updateMany?: ContactTagUpdateManyWithWhereWithoutTagInput | ContactTagUpdateManyWithWhereWithoutTagInput[]
     deleteMany?: ContactTagScalarWhereInput | ContactTagScalarWhereInput[]
+  }
+
+  export type PurposeTagUpdateManyWithoutTagNestedInput = {
+    create?: XOR<PurposeTagCreateWithoutTagInput, PurposeTagUncheckedCreateWithoutTagInput> | PurposeTagCreateWithoutTagInput[] | PurposeTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutTagInput | PurposeTagCreateOrConnectWithoutTagInput[]
+    upsert?: PurposeTagUpsertWithWhereUniqueWithoutTagInput | PurposeTagUpsertWithWhereUniqueWithoutTagInput[]
+    createMany?: PurposeTagCreateManyTagInputEnvelope
+    set?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    disconnect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    delete?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    update?: PurposeTagUpdateWithWhereUniqueWithoutTagInput | PurposeTagUpdateWithWhereUniqueWithoutTagInput[]
+    updateMany?: PurposeTagUpdateManyWithWhereWithoutTagInput | PurposeTagUpdateManyWithWhereWithoutTagInput[]
+    deleteMany?: PurposeTagScalarWhereInput | PurposeTagScalarWhereInput[]
   }
 
   export type DraftTagUpdateManyWithoutTagNestedInput = {
@@ -26801,6 +32393,20 @@ export namespace Prisma {
     update?: ContactTagUpdateWithWhereUniqueWithoutTagInput | ContactTagUpdateWithWhereUniqueWithoutTagInput[]
     updateMany?: ContactTagUpdateManyWithWhereWithoutTagInput | ContactTagUpdateManyWithWhereWithoutTagInput[]
     deleteMany?: ContactTagScalarWhereInput | ContactTagScalarWhereInput[]
+  }
+
+  export type PurposeTagUncheckedUpdateManyWithoutTagNestedInput = {
+    create?: XOR<PurposeTagCreateWithoutTagInput, PurposeTagUncheckedCreateWithoutTagInput> | PurposeTagCreateWithoutTagInput[] | PurposeTagUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: PurposeTagCreateOrConnectWithoutTagInput | PurposeTagCreateOrConnectWithoutTagInput[]
+    upsert?: PurposeTagUpsertWithWhereUniqueWithoutTagInput | PurposeTagUpsertWithWhereUniqueWithoutTagInput[]
+    createMany?: PurposeTagCreateManyTagInputEnvelope
+    set?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    disconnect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    delete?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    connect?: PurposeTagWhereUniqueInput | PurposeTagWhereUniqueInput[]
+    update?: PurposeTagUpdateWithWhereUniqueWithoutTagInput | PurposeTagUpdateWithWhereUniqueWithoutTagInput[]
+    updateMany?: PurposeTagUpdateManyWithWhereWithoutTagInput | PurposeTagUpdateManyWithWhereWithoutTagInput[]
+    deleteMany?: PurposeTagScalarWhereInput | PurposeTagScalarWhereInput[]
   }
 
   export type DraftTagUncheckedUpdateManyWithoutTagNestedInput = {
@@ -26885,6 +32491,34 @@ export namespace Prisma {
     upsert?: TagUpsertWithoutTagContactsInput
     connect?: TagWhereUniqueInput
     update?: XOR<XOR<TagUpdateToOneWithWhereWithoutTagContactsInput, TagUpdateWithoutTagContactsInput>, TagUncheckedUpdateWithoutTagContactsInput>
+  }
+
+  export type PurposeCreateNestedOneWithoutPurposeTagsInput = {
+    create?: XOR<PurposeCreateWithoutPurposeTagsInput, PurposeUncheckedCreateWithoutPurposeTagsInput>
+    connectOrCreate?: PurposeCreateOrConnectWithoutPurposeTagsInput
+    connect?: PurposeWhereUniqueInput
+  }
+
+  export type TagCreateNestedOneWithoutTagPurposesInput = {
+    create?: XOR<TagCreateWithoutTagPurposesInput, TagUncheckedCreateWithoutTagPurposesInput>
+    connectOrCreate?: TagCreateOrConnectWithoutTagPurposesInput
+    connect?: TagWhereUniqueInput
+  }
+
+  export type PurposeUpdateOneRequiredWithoutPurposeTagsNestedInput = {
+    create?: XOR<PurposeCreateWithoutPurposeTagsInput, PurposeUncheckedCreateWithoutPurposeTagsInput>
+    connectOrCreate?: PurposeCreateOrConnectWithoutPurposeTagsInput
+    upsert?: PurposeUpsertWithoutPurposeTagsInput
+    connect?: PurposeWhereUniqueInput
+    update?: XOR<XOR<PurposeUpdateToOneWithWhereWithoutPurposeTagsInput, PurposeUpdateWithoutPurposeTagsInput>, PurposeUncheckedUpdateWithoutPurposeTagsInput>
+  }
+
+  export type TagUpdateOneRequiredWithoutTagPurposesNestedInput = {
+    create?: XOR<TagCreateWithoutTagPurposesInput, TagUncheckedCreateWithoutTagPurposesInput>
+    connectOrCreate?: TagCreateOrConnectWithoutTagPurposesInput
+    upsert?: TagUpsertWithoutTagPurposesInput
+    connect?: TagWhereUniqueInput
+    update?: XOR<XOR<TagUpdateToOneWithWhereWithoutTagPurposesInput, TagUpdateWithoutTagPurposesInput>, TagUncheckedUpdateWithoutTagPurposesInput>
   }
 
   export type DraftCreateNestedOneWithoutDraftTagsInput = {
@@ -27383,6 +33017,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sender: SenderCreateNestedOneWithoutEmailsInput
     emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     events?: EmailEventCreateNestedManyWithoutEmailInput
     followUps?: FollowUpCreateNestedManyWithoutEmailInput
     notifications?: NotificationCreateNestedManyWithoutEmailInput
@@ -27399,6 +33034,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
     followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
@@ -27731,6 +33367,24 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EmailPurposeCreateWithoutEmailInput = {
+    purpose: PurposeCreateNestedOneWithoutPurposeEmailsInput
+  }
+
+  export type EmailPurposeUncheckedCreateWithoutEmailInput = {
+    purposeId: string
+  }
+
+  export type EmailPurposeCreateOrConnectWithoutEmailInput = {
+    where: EmailPurposeWhereUniqueInput
+    create: XOR<EmailPurposeCreateWithoutEmailInput, EmailPurposeUncheckedCreateWithoutEmailInput>
+  }
+
+  export type EmailPurposeCreateManyEmailInputEnvelope = {
+    data: EmailPurposeCreateManyEmailInput | EmailPurposeCreateManyEmailInput[]
+    skipDuplicates?: boolean
+  }
+
   export type EmailEventCreateWithoutEmailInput = {
     id?: string
     eventType: $Enums.EmailEventType
@@ -27925,6 +33579,30 @@ export namespace Prisma {
     tagId?: StringFilter<"EmailTag"> | string
   }
 
+  export type EmailPurposeUpsertWithWhereUniqueWithoutEmailInput = {
+    where: EmailPurposeWhereUniqueInput
+    update: XOR<EmailPurposeUpdateWithoutEmailInput, EmailPurposeUncheckedUpdateWithoutEmailInput>
+    create: XOR<EmailPurposeCreateWithoutEmailInput, EmailPurposeUncheckedCreateWithoutEmailInput>
+  }
+
+  export type EmailPurposeUpdateWithWhereUniqueWithoutEmailInput = {
+    where: EmailPurposeWhereUniqueInput
+    data: XOR<EmailPurposeUpdateWithoutEmailInput, EmailPurposeUncheckedUpdateWithoutEmailInput>
+  }
+
+  export type EmailPurposeUpdateManyWithWhereWithoutEmailInput = {
+    where: EmailPurposeScalarWhereInput
+    data: XOR<EmailPurposeUpdateManyMutationInput, EmailPurposeUncheckedUpdateManyWithoutEmailInput>
+  }
+
+  export type EmailPurposeScalarWhereInput = {
+    AND?: EmailPurposeScalarWhereInput | EmailPurposeScalarWhereInput[]
+    OR?: EmailPurposeScalarWhereInput[]
+    NOT?: EmailPurposeScalarWhereInput | EmailPurposeScalarWhereInput[]
+    emailId?: StringFilter<"EmailPurpose"> | string
+    purposeId?: StringFilter<"EmailPurpose"> | string
+  }
+
   export type EmailEventUpsertWithWhereUniqueWithoutEmailInput = {
     where: EmailEventWhereUniqueInput
     update: XOR<EmailEventUpdateWithoutEmailInput, EmailEventUncheckedUpdateWithoutEmailInput>
@@ -28022,6 +33700,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutEmailsInput
     sender: SenderCreateNestedOneWithoutEmailsInput
     emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     followUps?: FollowUpCreateNestedManyWithoutEmailInput
     notifications?: NotificationCreateNestedManyWithoutEmailInput
   }
@@ -28038,6 +33717,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
   }
@@ -28070,6 +33750,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
     sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
     emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUpdateManyWithoutEmailNestedInput
   }
@@ -28086,6 +33767,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
   }
@@ -28102,6 +33784,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutEmailsInput
     sender: SenderCreateNestedOneWithoutEmailsInput
     emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     events?: EmailEventCreateNestedManyWithoutEmailInput
     notifications?: NotificationCreateNestedManyWithoutEmailInput
   }
@@ -28118,6 +33801,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
   }
@@ -28172,6 +33856,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
     sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
     emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     events?: EmailEventUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUpdateManyWithoutEmailNestedInput
   }
@@ -28188,6 +33873,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
   }
@@ -28355,6 +34041,24 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DraftPurposeCreateWithoutDraftInput = {
+    purpose: PurposeCreateNestedOneWithoutPurposeDraftsInput
+  }
+
+  export type DraftPurposeUncheckedCreateWithoutDraftInput = {
+    purposeId: string
+  }
+
+  export type DraftPurposeCreateOrConnectWithoutDraftInput = {
+    where: DraftPurposeWhereUniqueInput
+    create: XOR<DraftPurposeCreateWithoutDraftInput, DraftPurposeUncheckedCreateWithoutDraftInput>
+  }
+
+  export type DraftPurposeCreateManyDraftInputEnvelope = {
+    data: DraftPurposeCreateManyDraftInput | DraftPurposeCreateManyDraftInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SenderUpsertWithoutDraftsInput = {
     update: XOR<SenderUpdateWithoutDraftsInput, SenderUncheckedUpdateWithoutDraftsInput>
     create: XOR<SenderCreateWithoutDraftsInput, SenderUncheckedCreateWithoutDraftsInput>
@@ -28438,6 +34142,30 @@ export namespace Prisma {
     tagId?: StringFilter<"DraftTag"> | string
   }
 
+  export type DraftPurposeUpsertWithWhereUniqueWithoutDraftInput = {
+    where: DraftPurposeWhereUniqueInput
+    update: XOR<DraftPurposeUpdateWithoutDraftInput, DraftPurposeUncheckedUpdateWithoutDraftInput>
+    create: XOR<DraftPurposeCreateWithoutDraftInput, DraftPurposeUncheckedCreateWithoutDraftInput>
+  }
+
+  export type DraftPurposeUpdateWithWhereUniqueWithoutDraftInput = {
+    where: DraftPurposeWhereUniqueInput
+    data: XOR<DraftPurposeUpdateWithoutDraftInput, DraftPurposeUncheckedUpdateWithoutDraftInput>
+  }
+
+  export type DraftPurposeUpdateManyWithWhereWithoutDraftInput = {
+    where: DraftPurposeScalarWhereInput
+    data: XOR<DraftPurposeUpdateManyMutationInput, DraftPurposeUncheckedUpdateManyWithoutDraftInput>
+  }
+
+  export type DraftPurposeScalarWhereInput = {
+    AND?: DraftPurposeScalarWhereInput | DraftPurposeScalarWhereInput[]
+    OR?: DraftPurposeScalarWhereInput[]
+    NOT?: DraftPurposeScalarWhereInput | DraftPurposeScalarWhereInput[]
+    draftId?: StringFilter<"DraftPurpose"> | string
+    purposeId?: StringFilter<"DraftPurpose"> | string
+  }
+
   export type DraftCreateWithoutDraftContactsInput = {
     id?: string
     subject?: string | null
@@ -28447,6 +34175,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sender?: SenderCreateNestedOneWithoutDraftsInput
     draftTags?: DraftTagCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeCreateNestedManyWithoutDraftInput
   }
 
   export type DraftUncheckedCreateWithoutDraftContactsInput = {
@@ -28458,6 +34187,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     draftTags?: DraftTagUncheckedCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeUncheckedCreateNestedManyWithoutDraftInput
   }
 
   export type DraftCreateOrConnectWithoutDraftContactsInput = {
@@ -28524,6 +34254,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: SenderUpdateOneWithoutDraftsNestedInput
     draftTags?: DraftTagUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUpdateManyWithoutDraftNestedInput
   }
 
   export type DraftUncheckedUpdateWithoutDraftContactsInput = {
@@ -28535,6 +34266,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draftTags?: DraftTagUncheckedUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUncheckedUpdateManyWithoutDraftNestedInput
   }
 
   export type ContactUpsertWithoutContactDraftsInput = {
@@ -28594,6 +34326,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutEmailsInput
     sender: SenderCreateNestedOneWithoutEmailsInput
     emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     events?: EmailEventCreateNestedManyWithoutEmailInput
     followUps?: FollowUpCreateNestedManyWithoutEmailInput
   }
@@ -28610,6 +34343,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
     followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
   }
@@ -28642,6 +34376,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
     sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
     emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     events?: EmailEventUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUpdateManyWithoutEmailNestedInput
   }
@@ -28658,8 +34393,387 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
+  }
+
+  export type PurposeTagCreateWithoutPurposeInput = {
+    tag: TagCreateNestedOneWithoutTagPurposesInput
+  }
+
+  export type PurposeTagUncheckedCreateWithoutPurposeInput = {
+    tagId: string
+  }
+
+  export type PurposeTagCreateOrConnectWithoutPurposeInput = {
+    where: PurposeTagWhereUniqueInput
+    create: XOR<PurposeTagCreateWithoutPurposeInput, PurposeTagUncheckedCreateWithoutPurposeInput>
+  }
+
+  export type PurposeTagCreateManyPurposeInputEnvelope = {
+    data: PurposeTagCreateManyPurposeInput | PurposeTagCreateManyPurposeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DraftPurposeCreateWithoutPurposeInput = {
+    draft: DraftCreateNestedOneWithoutDraftPurposesInput
+  }
+
+  export type DraftPurposeUncheckedCreateWithoutPurposeInput = {
+    draftId: string
+  }
+
+  export type DraftPurposeCreateOrConnectWithoutPurposeInput = {
+    where: DraftPurposeWhereUniqueInput
+    create: XOR<DraftPurposeCreateWithoutPurposeInput, DraftPurposeUncheckedCreateWithoutPurposeInput>
+  }
+
+  export type DraftPurposeCreateManyPurposeInputEnvelope = {
+    data: DraftPurposeCreateManyPurposeInput | DraftPurposeCreateManyPurposeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EmailPurposeCreateWithoutPurposeInput = {
+    email: EmailCreateNestedOneWithoutEmailPurposesInput
+  }
+
+  export type EmailPurposeUncheckedCreateWithoutPurposeInput = {
+    emailId: string
+  }
+
+  export type EmailPurposeCreateOrConnectWithoutPurposeInput = {
+    where: EmailPurposeWhereUniqueInput
+    create: XOR<EmailPurposeCreateWithoutPurposeInput, EmailPurposeUncheckedCreateWithoutPurposeInput>
+  }
+
+  export type EmailPurposeCreateManyPurposeInputEnvelope = {
+    data: EmailPurposeCreateManyPurposeInput | EmailPurposeCreateManyPurposeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PurposeTagUpsertWithWhereUniqueWithoutPurposeInput = {
+    where: PurposeTagWhereUniqueInput
+    update: XOR<PurposeTagUpdateWithoutPurposeInput, PurposeTagUncheckedUpdateWithoutPurposeInput>
+    create: XOR<PurposeTagCreateWithoutPurposeInput, PurposeTagUncheckedCreateWithoutPurposeInput>
+  }
+
+  export type PurposeTagUpdateWithWhereUniqueWithoutPurposeInput = {
+    where: PurposeTagWhereUniqueInput
+    data: XOR<PurposeTagUpdateWithoutPurposeInput, PurposeTagUncheckedUpdateWithoutPurposeInput>
+  }
+
+  export type PurposeTagUpdateManyWithWhereWithoutPurposeInput = {
+    where: PurposeTagScalarWhereInput
+    data: XOR<PurposeTagUpdateManyMutationInput, PurposeTagUncheckedUpdateManyWithoutPurposeInput>
+  }
+
+  export type PurposeTagScalarWhereInput = {
+    AND?: PurposeTagScalarWhereInput | PurposeTagScalarWhereInput[]
+    OR?: PurposeTagScalarWhereInput[]
+    NOT?: PurposeTagScalarWhereInput | PurposeTagScalarWhereInput[]
+    purposeId?: StringFilter<"PurposeTag"> | string
+    tagId?: StringFilter<"PurposeTag"> | string
+  }
+
+  export type DraftPurposeUpsertWithWhereUniqueWithoutPurposeInput = {
+    where: DraftPurposeWhereUniqueInput
+    update: XOR<DraftPurposeUpdateWithoutPurposeInput, DraftPurposeUncheckedUpdateWithoutPurposeInput>
+    create: XOR<DraftPurposeCreateWithoutPurposeInput, DraftPurposeUncheckedCreateWithoutPurposeInput>
+  }
+
+  export type DraftPurposeUpdateWithWhereUniqueWithoutPurposeInput = {
+    where: DraftPurposeWhereUniqueInput
+    data: XOR<DraftPurposeUpdateWithoutPurposeInput, DraftPurposeUncheckedUpdateWithoutPurposeInput>
+  }
+
+  export type DraftPurposeUpdateManyWithWhereWithoutPurposeInput = {
+    where: DraftPurposeScalarWhereInput
+    data: XOR<DraftPurposeUpdateManyMutationInput, DraftPurposeUncheckedUpdateManyWithoutPurposeInput>
+  }
+
+  export type EmailPurposeUpsertWithWhereUniqueWithoutPurposeInput = {
+    where: EmailPurposeWhereUniqueInput
+    update: XOR<EmailPurposeUpdateWithoutPurposeInput, EmailPurposeUncheckedUpdateWithoutPurposeInput>
+    create: XOR<EmailPurposeCreateWithoutPurposeInput, EmailPurposeUncheckedCreateWithoutPurposeInput>
+  }
+
+  export type EmailPurposeUpdateWithWhereUniqueWithoutPurposeInput = {
+    where: EmailPurposeWhereUniqueInput
+    data: XOR<EmailPurposeUpdateWithoutPurposeInput, EmailPurposeUncheckedUpdateWithoutPurposeInput>
+  }
+
+  export type EmailPurposeUpdateManyWithWhereWithoutPurposeInput = {
+    where: EmailPurposeScalarWhereInput
+    data: XOR<EmailPurposeUpdateManyMutationInput, EmailPurposeUncheckedUpdateManyWithoutPurposeInput>
+  }
+
+  export type DraftCreateWithoutDraftPurposesInput = {
+    id?: string
+    subject?: string | null
+    body?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender?: SenderCreateNestedOneWithoutDraftsInput
+    draftContacts?: DraftContactCreateNestedManyWithoutDraftInput
+    draftTags?: DraftTagCreateNestedManyWithoutDraftInput
+  }
+
+  export type DraftUncheckedCreateWithoutDraftPurposesInput = {
+    id?: string
+    subject?: string | null
+    body?: string | null
+    scheduledAt?: Date | string | null
+    senderId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    draftContacts?: DraftContactUncheckedCreateNestedManyWithoutDraftInput
+    draftTags?: DraftTagUncheckedCreateNestedManyWithoutDraftInput
+  }
+
+  export type DraftCreateOrConnectWithoutDraftPurposesInput = {
+    where: DraftWhereUniqueInput
+    create: XOR<DraftCreateWithoutDraftPurposesInput, DraftUncheckedCreateWithoutDraftPurposesInput>
+  }
+
+  export type PurposeCreateWithoutPurposeDraftsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeTags?: PurposeTagCreateNestedManyWithoutPurposeInput
+    purposeEmails?: EmailPurposeCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeUncheckedCreateWithoutPurposeDraftsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeTags?: PurposeTagUncheckedCreateNestedManyWithoutPurposeInput
+    purposeEmails?: EmailPurposeUncheckedCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeCreateOrConnectWithoutPurposeDraftsInput = {
+    where: PurposeWhereUniqueInput
+    create: XOR<PurposeCreateWithoutPurposeDraftsInput, PurposeUncheckedCreateWithoutPurposeDraftsInput>
+  }
+
+  export type DraftUpsertWithoutDraftPurposesInput = {
+    update: XOR<DraftUpdateWithoutDraftPurposesInput, DraftUncheckedUpdateWithoutDraftPurposesInput>
+    create: XOR<DraftCreateWithoutDraftPurposesInput, DraftUncheckedCreateWithoutDraftPurposesInput>
+    where?: DraftWhereInput
+  }
+
+  export type DraftUpdateToOneWithWhereWithoutDraftPurposesInput = {
+    where?: DraftWhereInput
+    data: XOR<DraftUpdateWithoutDraftPurposesInput, DraftUncheckedUpdateWithoutDraftPurposesInput>
+  }
+
+  export type DraftUpdateWithoutDraftPurposesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: SenderUpdateOneWithoutDraftsNestedInput
+    draftContacts?: DraftContactUpdateManyWithoutDraftNestedInput
+    draftTags?: DraftTagUpdateManyWithoutDraftNestedInput
+  }
+
+  export type DraftUncheckedUpdateWithoutDraftPurposesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    senderId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draftContacts?: DraftContactUncheckedUpdateManyWithoutDraftNestedInput
+    draftTags?: DraftTagUncheckedUpdateManyWithoutDraftNestedInput
+  }
+
+  export type PurposeUpsertWithoutPurposeDraftsInput = {
+    update: XOR<PurposeUpdateWithoutPurposeDraftsInput, PurposeUncheckedUpdateWithoutPurposeDraftsInput>
+    create: XOR<PurposeCreateWithoutPurposeDraftsInput, PurposeUncheckedCreateWithoutPurposeDraftsInput>
+    where?: PurposeWhereInput
+  }
+
+  export type PurposeUpdateToOneWithWhereWithoutPurposeDraftsInput = {
+    where?: PurposeWhereInput
+    data: XOR<PurposeUpdateWithoutPurposeDraftsInput, PurposeUncheckedUpdateWithoutPurposeDraftsInput>
+  }
+
+  export type PurposeUpdateWithoutPurposeDraftsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeTags?: PurposeTagUpdateManyWithoutPurposeNestedInput
+    purposeEmails?: EmailPurposeUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type PurposeUncheckedUpdateWithoutPurposeDraftsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeTags?: PurposeTagUncheckedUpdateManyWithoutPurposeNestedInput
+    purposeEmails?: EmailPurposeUncheckedUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type EmailCreateWithoutEmailPurposesInput = {
+    id?: string
+    subject: string
+    body: string
+    messageId?: string | null
+    isBounced?: boolean
+    isSpamReported?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    contact: ContactCreateNestedOneWithoutEmailsInput
+    sender: SenderCreateNestedOneWithoutEmailsInput
+    emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    events?: EmailEventCreateNestedManyWithoutEmailInput
+    followUps?: FollowUpCreateNestedManyWithoutEmailInput
+    notifications?: NotificationCreateNestedManyWithoutEmailInput
+  }
+
+  export type EmailUncheckedCreateWithoutEmailPurposesInput = {
+    id?: string
+    subject: string
+    body: string
+    messageId?: string | null
+    contactId: string
+    isBounced?: boolean
+    isSpamReported?: boolean
+    senderId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
+    followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
+  }
+
+  export type EmailCreateOrConnectWithoutEmailPurposesInput = {
+    where: EmailWhereUniqueInput
+    create: XOR<EmailCreateWithoutEmailPurposesInput, EmailUncheckedCreateWithoutEmailPurposesInput>
+  }
+
+  export type PurposeCreateWithoutPurposeEmailsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeTags?: PurposeTagCreateNestedManyWithoutPurposeInput
+    purposeDrafts?: DraftPurposeCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeUncheckedCreateWithoutPurposeEmailsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeTags?: PurposeTagUncheckedCreateNestedManyWithoutPurposeInput
+    purposeDrafts?: DraftPurposeUncheckedCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeCreateOrConnectWithoutPurposeEmailsInput = {
+    where: PurposeWhereUniqueInput
+    create: XOR<PurposeCreateWithoutPurposeEmailsInput, PurposeUncheckedCreateWithoutPurposeEmailsInput>
+  }
+
+  export type EmailUpsertWithoutEmailPurposesInput = {
+    update: XOR<EmailUpdateWithoutEmailPurposesInput, EmailUncheckedUpdateWithoutEmailPurposesInput>
+    create: XOR<EmailCreateWithoutEmailPurposesInput, EmailUncheckedCreateWithoutEmailPurposesInput>
+    where?: EmailWhereInput
+  }
+
+  export type EmailUpdateToOneWithWhereWithoutEmailPurposesInput = {
+    where?: EmailWhereInput
+    data: XOR<EmailUpdateWithoutEmailPurposesInput, EmailUncheckedUpdateWithoutEmailPurposesInput>
+  }
+
+  export type EmailUpdateWithoutEmailPurposesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBounced?: BoolFieldUpdateOperationsInput | boolean
+    isSpamReported?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
+    sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
+    emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    events?: EmailEventUpdateManyWithoutEmailNestedInput
+    followUps?: FollowUpUpdateManyWithoutEmailNestedInput
+    notifications?: NotificationUpdateManyWithoutEmailNestedInput
+  }
+
+  export type EmailUncheckedUpdateWithoutEmailPurposesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
+    contactId?: StringFieldUpdateOperationsInput | string
+    isBounced?: BoolFieldUpdateOperationsInput | boolean
+    isSpamReported?: BoolFieldUpdateOperationsInput | boolean
+    senderId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
+    followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
+  }
+
+  export type PurposeUpsertWithoutPurposeEmailsInput = {
+    update: XOR<PurposeUpdateWithoutPurposeEmailsInput, PurposeUncheckedUpdateWithoutPurposeEmailsInput>
+    create: XOR<PurposeCreateWithoutPurposeEmailsInput, PurposeUncheckedCreateWithoutPurposeEmailsInput>
+    where?: PurposeWhereInput
+  }
+
+  export type PurposeUpdateToOneWithWhereWithoutPurposeEmailsInput = {
+    where?: PurposeWhereInput
+    data: XOR<PurposeUpdateWithoutPurposeEmailsInput, PurposeUncheckedUpdateWithoutPurposeEmailsInput>
+  }
+
+  export type PurposeUpdateWithoutPurposeEmailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeTags?: PurposeTagUpdateManyWithoutPurposeNestedInput
+    purposeDrafts?: DraftPurposeUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type PurposeUncheckedUpdateWithoutPurposeEmailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeTags?: PurposeTagUncheckedUpdateManyWithoutPurposeNestedInput
+    purposeDrafts?: DraftPurposeUncheckedUpdateManyWithoutPurposeNestedInput
   }
 
   export type DraftCreateWithoutSenderInput = {
@@ -28671,6 +34785,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     draftContacts?: DraftContactCreateNestedManyWithoutDraftInput
     draftTags?: DraftTagCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeCreateNestedManyWithoutDraftInput
   }
 
   export type DraftUncheckedCreateWithoutSenderInput = {
@@ -28682,6 +34797,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     draftContacts?: DraftContactUncheckedCreateNestedManyWithoutDraftInput
     draftTags?: DraftTagUncheckedCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeUncheckedCreateNestedManyWithoutDraftInput
   }
 
   export type DraftCreateOrConnectWithoutSenderInput = {
@@ -28705,6 +34821,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     contact: ContactCreateNestedOneWithoutEmailsInput
     emailTags?: EmailTagCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     events?: EmailEventCreateNestedManyWithoutEmailInput
     followUps?: FollowUpCreateNestedManyWithoutEmailInput
     notifications?: NotificationCreateNestedManyWithoutEmailInput
@@ -28721,6 +34838,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emailTags?: EmailTagUncheckedCreateNestedManyWithoutEmailInput
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
     followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
@@ -28817,6 +34935,24 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PurposeTagCreateWithoutTagInput = {
+    purpose: PurposeCreateNestedOneWithoutPurposeTagsInput
+  }
+
+  export type PurposeTagUncheckedCreateWithoutTagInput = {
+    purposeId: string
+  }
+
+  export type PurposeTagCreateOrConnectWithoutTagInput = {
+    where: PurposeTagWhereUniqueInput
+    create: XOR<PurposeTagCreateWithoutTagInput, PurposeTagUncheckedCreateWithoutTagInput>
+  }
+
+  export type PurposeTagCreateManyTagInputEnvelope = {
+    data: PurposeTagCreateManyTagInput | PurposeTagCreateManyTagInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DraftTagCreateWithoutTagInput = {
     draft: DraftCreateNestedOneWithoutDraftTagsInput
   }
@@ -28885,6 +35021,22 @@ export namespace Prisma {
     data: XOR<ContactTagUpdateManyMutationInput, ContactTagUncheckedUpdateManyWithoutTagInput>
   }
 
+  export type PurposeTagUpsertWithWhereUniqueWithoutTagInput = {
+    where: PurposeTagWhereUniqueInput
+    update: XOR<PurposeTagUpdateWithoutTagInput, PurposeTagUncheckedUpdateWithoutTagInput>
+    create: XOR<PurposeTagCreateWithoutTagInput, PurposeTagUncheckedCreateWithoutTagInput>
+  }
+
+  export type PurposeTagUpdateWithWhereUniqueWithoutTagInput = {
+    where: PurposeTagWhereUniqueInput
+    data: XOR<PurposeTagUpdateWithoutTagInput, PurposeTagUncheckedUpdateWithoutTagInput>
+  }
+
+  export type PurposeTagUpdateManyWithWhereWithoutTagInput = {
+    where: PurposeTagScalarWhereInput
+    data: XOR<PurposeTagUpdateManyMutationInput, PurposeTagUncheckedUpdateManyWithoutTagInput>
+  }
+
   export type DraftTagUpsertWithWhereUniqueWithoutTagInput = {
     where: DraftTagWhereUniqueInput
     update: XOR<DraftTagUpdateWithoutTagInput, DraftTagUncheckedUpdateWithoutTagInput>
@@ -28949,6 +35101,7 @@ export namespace Prisma {
     title: string
     isDeleted?: boolean
     tagContacts?: ContactTagCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagCreateNestedManyWithoutTagInput
   }
@@ -28958,6 +35111,7 @@ export namespace Prisma {
     title: string
     isDeleted?: boolean
     tagContacts?: ContactTagUncheckedCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagUncheckedCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagUncheckedCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagUncheckedCreateNestedManyWithoutTagInput
   }
@@ -29016,6 +35170,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagContacts?: ContactTagUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUpdateManyWithoutTagNestedInput
   }
@@ -29025,6 +35180,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagContacts?: ContactTagUncheckedUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUncheckedUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUncheckedUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUncheckedUpdateManyWithoutTagNestedInput
   }
@@ -29073,6 +35229,7 @@ export namespace Prisma {
     title: string
     isDeleted?: boolean
     tagCompanies?: CompanyTagCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagCreateNestedManyWithoutTagInput
   }
@@ -29082,6 +35239,7 @@ export namespace Prisma {
     title: string
     isDeleted?: boolean
     tagCompanies?: CompanyTagUncheckedCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagUncheckedCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagUncheckedCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagUncheckedCreateNestedManyWithoutTagInput
   }
@@ -29152,6 +35310,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUpdateManyWithoutTagNestedInput
   }
@@ -29161,6 +35320,123 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUncheckedUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUncheckedUpdateManyWithoutTagNestedInput
+    DraftTag?: DraftTagUncheckedUpdateManyWithoutTagNestedInput
+    EmailTag?: EmailTagUncheckedUpdateManyWithoutTagNestedInput
+  }
+
+  export type PurposeCreateWithoutPurposeTagsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeDrafts?: DraftPurposeCreateNestedManyWithoutPurposeInput
+    purposeEmails?: EmailPurposeCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeUncheckedCreateWithoutPurposeTagsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purposeDrafts?: DraftPurposeUncheckedCreateNestedManyWithoutPurposeInput
+    purposeEmails?: EmailPurposeUncheckedCreateNestedManyWithoutPurposeInput
+  }
+
+  export type PurposeCreateOrConnectWithoutPurposeTagsInput = {
+    where: PurposeWhereUniqueInput
+    create: XOR<PurposeCreateWithoutPurposeTagsInput, PurposeUncheckedCreateWithoutPurposeTagsInput>
+  }
+
+  export type TagCreateWithoutTagPurposesInput = {
+    id?: string
+    title: string
+    isDeleted?: boolean
+    tagCompanies?: CompanyTagCreateNestedManyWithoutTagInput
+    tagContacts?: ContactTagCreateNestedManyWithoutTagInput
+    DraftTag?: DraftTagCreateNestedManyWithoutTagInput
+    EmailTag?: EmailTagCreateNestedManyWithoutTagInput
+  }
+
+  export type TagUncheckedCreateWithoutTagPurposesInput = {
+    id?: string
+    title: string
+    isDeleted?: boolean
+    tagCompanies?: CompanyTagUncheckedCreateNestedManyWithoutTagInput
+    tagContacts?: ContactTagUncheckedCreateNestedManyWithoutTagInput
+    DraftTag?: DraftTagUncheckedCreateNestedManyWithoutTagInput
+    EmailTag?: EmailTagUncheckedCreateNestedManyWithoutTagInput
+  }
+
+  export type TagCreateOrConnectWithoutTagPurposesInput = {
+    where: TagWhereUniqueInput
+    create: XOR<TagCreateWithoutTagPurposesInput, TagUncheckedCreateWithoutTagPurposesInput>
+  }
+
+  export type PurposeUpsertWithoutPurposeTagsInput = {
+    update: XOR<PurposeUpdateWithoutPurposeTagsInput, PurposeUncheckedUpdateWithoutPurposeTagsInput>
+    create: XOR<PurposeCreateWithoutPurposeTagsInput, PurposeUncheckedCreateWithoutPurposeTagsInput>
+    where?: PurposeWhereInput
+  }
+
+  export type PurposeUpdateToOneWithWhereWithoutPurposeTagsInput = {
+    where?: PurposeWhereInput
+    data: XOR<PurposeUpdateWithoutPurposeTagsInput, PurposeUncheckedUpdateWithoutPurposeTagsInput>
+  }
+
+  export type PurposeUpdateWithoutPurposeTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeDrafts?: DraftPurposeUpdateManyWithoutPurposeNestedInput
+    purposeEmails?: EmailPurposeUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type PurposeUncheckedUpdateWithoutPurposeTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purposeDrafts?: DraftPurposeUncheckedUpdateManyWithoutPurposeNestedInput
+    purposeEmails?: EmailPurposeUncheckedUpdateManyWithoutPurposeNestedInput
+  }
+
+  export type TagUpsertWithoutTagPurposesInput = {
+    update: XOR<TagUpdateWithoutTagPurposesInput, TagUncheckedUpdateWithoutTagPurposesInput>
+    create: XOR<TagCreateWithoutTagPurposesInput, TagUncheckedCreateWithoutTagPurposesInput>
+    where?: TagWhereInput
+  }
+
+  export type TagUpdateToOneWithWhereWithoutTagPurposesInput = {
+    where?: TagWhereInput
+    data: XOR<TagUpdateWithoutTagPurposesInput, TagUncheckedUpdateWithoutTagPurposesInput>
+  }
+
+  export type TagUpdateWithoutTagPurposesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    tagCompanies?: CompanyTagUpdateManyWithoutTagNestedInput
+    tagContacts?: ContactTagUpdateManyWithoutTagNestedInput
+    DraftTag?: DraftTagUpdateManyWithoutTagNestedInput
+    EmailTag?: EmailTagUpdateManyWithoutTagNestedInput
+  }
+
+  export type TagUncheckedUpdateWithoutTagPurposesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    tagCompanies?: CompanyTagUncheckedUpdateManyWithoutTagNestedInput
+    tagContacts?: ContactTagUncheckedUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUncheckedUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUncheckedUpdateManyWithoutTagNestedInput
   }
@@ -29174,6 +35450,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sender?: SenderCreateNestedOneWithoutDraftsInput
     draftContacts?: DraftContactCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeCreateNestedManyWithoutDraftInput
   }
 
   export type DraftUncheckedCreateWithoutDraftTagsInput = {
@@ -29185,6 +35462,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     draftContacts?: DraftContactUncheckedCreateNestedManyWithoutDraftInput
+    draftPurposes?: DraftPurposeUncheckedCreateNestedManyWithoutDraftInput
   }
 
   export type DraftCreateOrConnectWithoutDraftTagsInput = {
@@ -29198,6 +35476,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: CompanyTagCreateNestedManyWithoutTagInput
     tagContacts?: ContactTagCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagCreateNestedManyWithoutTagInput
   }
 
@@ -29207,6 +35486,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: CompanyTagUncheckedCreateNestedManyWithoutTagInput
     tagContacts?: ContactTagUncheckedCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagUncheckedCreateNestedManyWithoutTagInput
     EmailTag?: EmailTagUncheckedCreateNestedManyWithoutTagInput
   }
 
@@ -29235,6 +35515,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: SenderUpdateOneWithoutDraftsNestedInput
     draftContacts?: DraftContactUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUpdateManyWithoutDraftNestedInput
   }
 
   export type DraftUncheckedUpdateWithoutDraftTagsInput = {
@@ -29246,6 +35527,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draftContacts?: DraftContactUncheckedUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUncheckedUpdateManyWithoutDraftNestedInput
   }
 
   export type TagUpsertWithoutDraftTagInput = {
@@ -29265,6 +35547,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUpdateManyWithoutTagNestedInput
     tagContacts?: ContactTagUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUpdateManyWithoutTagNestedInput
   }
 
@@ -29274,6 +35557,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUncheckedUpdateManyWithoutTagNestedInput
     tagContacts?: ContactTagUncheckedUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUncheckedUpdateManyWithoutTagNestedInput
     EmailTag?: EmailTagUncheckedUpdateManyWithoutTagNestedInput
   }
 
@@ -29288,6 +35572,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     contact: ContactCreateNestedOneWithoutEmailsInput
     sender: SenderCreateNestedOneWithoutEmailsInput
+    emailPurposes?: EmailPurposeCreateNestedManyWithoutEmailInput
     events?: EmailEventCreateNestedManyWithoutEmailInput
     followUps?: FollowUpCreateNestedManyWithoutEmailInput
     notifications?: NotificationCreateNestedManyWithoutEmailInput
@@ -29304,6 +35589,7 @@ export namespace Prisma {
     senderId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailPurposes?: EmailPurposeUncheckedCreateNestedManyWithoutEmailInput
     events?: EmailEventUncheckedCreateNestedManyWithoutEmailInput
     followUps?: FollowUpUncheckedCreateNestedManyWithoutEmailInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutEmailInput
@@ -29320,6 +35606,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: CompanyTagCreateNestedManyWithoutTagInput
     tagContacts?: ContactTagCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagCreateNestedManyWithoutTagInput
   }
 
@@ -29329,6 +35616,7 @@ export namespace Prisma {
     isDeleted?: boolean
     tagCompanies?: CompanyTagUncheckedCreateNestedManyWithoutTagInput
     tagContacts?: ContactTagUncheckedCreateNestedManyWithoutTagInput
+    tagPurposes?: PurposeTagUncheckedCreateNestedManyWithoutTagInput
     DraftTag?: DraftTagUncheckedCreateNestedManyWithoutTagInput
   }
 
@@ -29359,6 +35647,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
     sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     events?: EmailEventUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUpdateManyWithoutEmailNestedInput
@@ -29375,6 +35664,7 @@ export namespace Prisma {
     senderId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
@@ -29397,6 +35687,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUpdateManyWithoutTagNestedInput
     tagContacts?: ContactTagUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUpdateManyWithoutTagNestedInput
   }
 
@@ -29406,6 +35697,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     tagCompanies?: CompanyTagUncheckedUpdateManyWithoutTagNestedInput
     tagContacts?: ContactTagUncheckedUpdateManyWithoutTagNestedInput
+    tagPurposes?: PurposeTagUncheckedUpdateManyWithoutTagNestedInput
     DraftTag?: DraftTagUncheckedUpdateManyWithoutTagNestedInput
   }
 
@@ -29564,6 +35856,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: SenderUpdateOneRequiredWithoutEmailsNestedInput
     emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     events?: EmailEventUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUpdateManyWithoutEmailNestedInput
@@ -29580,6 +35873,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
@@ -29599,6 +35893,10 @@ export namespace Prisma {
 
   export type EmailTagCreateManyEmailInput = {
     tagId: string
+  }
+
+  export type EmailPurposeCreateManyEmailInput = {
+    purposeId: string
   }
 
   export type EmailEventCreateManyEmailInput = {
@@ -29636,6 +35934,18 @@ export namespace Prisma {
 
   export type EmailTagUncheckedUpdateManyWithoutEmailInput = {
     tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmailPurposeUpdateWithoutEmailInput = {
+    purpose?: PurposeUpdateOneRequiredWithoutPurposeEmailsNestedInput
+  }
+
+  export type EmailPurposeUncheckedUpdateWithoutEmailInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmailPurposeUncheckedUpdateManyWithoutEmailInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
   }
 
   export type EmailEventUpdateWithoutEmailInput = {
@@ -29747,6 +36057,10 @@ export namespace Prisma {
     tagId: string
   }
 
+  export type DraftPurposeCreateManyDraftInput = {
+    purposeId: string
+  }
+
   export type DraftContactUpdateWithoutDraftInput = {
     contact?: ContactUpdateOneRequiredWithoutContactDraftsNestedInput
   }
@@ -29769,6 +36083,66 @@ export namespace Prisma {
 
   export type DraftTagUncheckedUpdateManyWithoutDraftInput = {
     tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DraftPurposeUpdateWithoutDraftInput = {
+    purpose?: PurposeUpdateOneRequiredWithoutPurposeDraftsNestedInput
+  }
+
+  export type DraftPurposeUncheckedUpdateWithoutDraftInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DraftPurposeUncheckedUpdateManyWithoutDraftInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurposeTagCreateManyPurposeInput = {
+    tagId: string
+  }
+
+  export type DraftPurposeCreateManyPurposeInput = {
+    draftId: string
+  }
+
+  export type EmailPurposeCreateManyPurposeInput = {
+    emailId: string
+  }
+
+  export type PurposeTagUpdateWithoutPurposeInput = {
+    tag?: TagUpdateOneRequiredWithoutTagPurposesNestedInput
+  }
+
+  export type PurposeTagUncheckedUpdateWithoutPurposeInput = {
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurposeTagUncheckedUpdateManyWithoutPurposeInput = {
+    tagId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DraftPurposeUpdateWithoutPurposeInput = {
+    draft?: DraftUpdateOneRequiredWithoutDraftPurposesNestedInput
+  }
+
+  export type DraftPurposeUncheckedUpdateWithoutPurposeInput = {
+    draftId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DraftPurposeUncheckedUpdateManyWithoutPurposeInput = {
+    draftId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmailPurposeUpdateWithoutPurposeInput = {
+    email?: EmailUpdateOneRequiredWithoutEmailPurposesNestedInput
+  }
+
+  export type EmailPurposeUncheckedUpdateWithoutPurposeInput = {
+    emailId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmailPurposeUncheckedUpdateManyWithoutPurposeInput = {
+    emailId?: StringFieldUpdateOperationsInput | string
   }
 
   export type DraftCreateManySenderInput = {
@@ -29801,6 +36175,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draftContacts?: DraftContactUpdateManyWithoutDraftNestedInput
     draftTags?: DraftTagUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUpdateManyWithoutDraftNestedInput
   }
 
   export type DraftUncheckedUpdateWithoutSenderInput = {
@@ -29812,6 +36187,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draftContacts?: DraftContactUncheckedUpdateManyWithoutDraftNestedInput
     draftTags?: DraftTagUncheckedUpdateManyWithoutDraftNestedInput
+    draftPurposes?: DraftPurposeUncheckedUpdateManyWithoutDraftNestedInput
   }
 
   export type DraftUncheckedUpdateManyWithoutSenderInput = {
@@ -29834,6 +36210,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutEmailsNestedInput
     emailTags?: EmailTagUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUpdateManyWithoutEmailNestedInput
     events?: EmailEventUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUpdateManyWithoutEmailNestedInput
@@ -29850,6 +36227,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailTags?: EmailTagUncheckedUpdateManyWithoutEmailNestedInput
+    emailPurposes?: EmailPurposeUncheckedUpdateManyWithoutEmailNestedInput
     events?: EmailEventUncheckedUpdateManyWithoutEmailNestedInput
     followUps?: FollowUpUncheckedUpdateManyWithoutEmailNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutEmailNestedInput
@@ -29873,6 +36251,10 @@ export namespace Prisma {
 
   export type ContactTagCreateManyTagInput = {
     contactId: string
+  }
+
+  export type PurposeTagCreateManyTagInput = {
+    purposeId: string
   }
 
   export type DraftTagCreateManyTagInput = {
@@ -29905,6 +36287,18 @@ export namespace Prisma {
 
   export type ContactTagUncheckedUpdateManyWithoutTagInput = {
     contactId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurposeTagUpdateWithoutTagInput = {
+    purpose?: PurposeUpdateOneRequiredWithoutPurposeTagsNestedInput
+  }
+
+  export type PurposeTagUncheckedUpdateWithoutTagInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurposeTagUncheckedUpdateManyWithoutTagInput = {
+    purposeId?: StringFieldUpdateOperationsInput | string
   }
 
   export type DraftTagUpdateWithoutTagInput = {

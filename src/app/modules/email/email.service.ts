@@ -5,7 +5,6 @@ import { ERROR_MSG, SUCCESS_MSG } from 'src/app/utils/messages';
 import { SenderService } from '../sender/sender.service';
 import { CustomHttpException } from 'src/app/exceptions/error.exception';
 import { responseBuilder } from 'src/app/utils/responseBuilder';
-import { Email, Prisma } from '@prisma/client';
 import { GetEmailsDto } from './dto/get-emails.dto';
 import { getPagination, getSearchCond } from 'src/app/utils/common.utils';
 import { ESPService } from '../esp/esp.service';
@@ -19,6 +18,7 @@ import {
 import { QueryResponse } from 'src/app/types/common.type';
 import { EmailQuery } from './email.query';
 import { TagService } from '../tag/tag.service';
+import { Email, Prisma } from 'prisma/generated';
 
 @Injectable()
 export class EmailService {
