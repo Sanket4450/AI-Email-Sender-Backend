@@ -19,14 +19,27 @@ export class DraftQuery {
         'displayName', s."displayName"
       ) ELSE '{}'::JSON
     END AS sender,
-    COALESCE(
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-          'id', c.id,
-          'name', c.name
-          ${
-            getAllFields
-              ? Prisma.sql`
+    c.contacts AS contacts,
+    t.tags AS tags
+  `;
+
+  getDraftJoinClause = (): Prisma.Sql => Prisma.sql`
+    LEFT JOIN sender s ON s.id = d."senderId"
+    LEFT JOIN contacts_agg c ON c."draftId" = d.id
+    LEFT JOIN tags_agg t ON t."draftId" = d.id
+  `;
+
+  getContactsCTE = (getAllFields: boolean = false): Prisma.Sql => Prisma.sql`
+    SELECT
+      dc."draftId",
+      COALESCE(
+        JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'id', c.id,
+            'name', c.name
+            ${
+              getAllFields
+                ? Prisma.sql`
                 ,
                 'position', c.position,
                   'email', c.email,
@@ -34,31 +47,29 @@ export class DraftQuery {
                   'linkedInUrl', c."linkedInUrl",
                   'location', c.location
                 `
-              : Prisma.empty
-          }
-        )
-      ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-    ) AS contacts,
-    
-    COALESCE(
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-          'id', t.id,
-          'title', t.title
-        )
-      ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-    ) AS tags
+                : Prisma.empty
+            }
+          ) 
+        ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
+      ) AS contacts
+    FROM draft_contact dc
+    LEFT JOIN contact c ON c.id = dc."contactId"
+    GROUP BY dc."draftId"
   `;
 
-  getDraftJoinClause = (): Prisma.Sql => Prisma.sql`
-    LEFT JOIN sender s ON s.id = d."senderId"
-    LEFT JOIN draft_contact dc ON d.id = dc."draftId"
-    LEFT JOIN contact c ON dc."contactId" = c.id
-    LEFT JOIN draft_tag dt ON c.id = dt."draftId"
-    LEFT JOIN tag t ON dt."tagId" = t.id AND t."isDeleted" = false
-  `;
-
-  getGroupByClause = (): Prisma.Sql => Prisma.sql`
-    GROUP BY d.id, s.id
+  getTagsCTE = (): Prisma.Sql => Prisma.sql`
+    SELECT
+		  dt."draftId",
+      COALESCE(
+        JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'id', t.id,
+            'title', t.title
+          ) 
+        ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
+      ) AS tags
+    FROM draft_tag dt
+    LEFT JOIN tag t ON t.id = dt."tagId"
+    GROUP BY dt."draftId"
   `;
 }

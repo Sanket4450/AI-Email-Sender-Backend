@@ -33,7 +33,6 @@ export class ContactController {
 
   // Delete a contact by ID
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteContact(@Param('id') id: string) {
     return this.contactService.deleteContact(id);
   }

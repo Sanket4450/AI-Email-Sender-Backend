@@ -95,7 +95,7 @@ export class DraftService {
 
   // Update a draft by ID
   async updateDraft(id: string, body: UpdateDraftDto) {
-    const { senderId, contactIds, tags, ...updateDraftBody } = body;
+    const { senderId, contactIds = [], tags = [], ...updateDraftBody } = body;
 
     await this.draftExists(id);
 
@@ -105,7 +105,7 @@ export class DraftService {
     if (senderId) await this.senderService.senderExists(senderId);
 
     // Validate that all provided contact IDs exist in the database
-    if (contactIds) {
+    if (contactIds.length) {
       const existingContacts = await this.prisma.contact.findMany({
         where: { id: { in: contactIds } },
       });
@@ -118,7 +118,7 @@ export class DraftService {
       }
     }
 
-    if (tags?.length) await this.tagService.validateTags(tags);
+    if (tags.length) await this.tagService.validateTags(tags);
 
     // Update the draft and re-associate contacts
     await this.prisma.draft.update({
@@ -126,22 +126,18 @@ export class DraftService {
       data: {
         ...updateDraftBody,
         ...(senderId && { sender: { connect: { id: senderId } } }),
-        ...(contactIds?.length && {
-          contacts: {
-            connectOrCreate: contactIds.map((contactId) => ({
-              where: { draftId_contactId: { draftId: id, contactId } },
-              create: { contact: { connect: { id: contactId } } },
-            })),
-          },
-        }),
-        ...(tags?.length && {
-          draftTags: {
-            connectOrCreate: tags.map((tagId) => ({
-              where: { draftId_tagId: { draftId: id, tagId } },
-              create: { tag: { connect: { id: tagId } } },
-            })),
-          },
-        }),
+        draftContacts: {
+          connectOrCreate: contactIds.map((contactId) => ({
+            where: { draftId_contactId: { draftId: id, contactId } },
+            create: { contact: { connect: { id: contactId } } },
+          })),
+        },
+        draftTags: {
+          connectOrCreate: tags.map((tagId) => ({
+            where: { draftId_tagId: { draftId: id, tagId } },
+            create: { tag: { connect: { id: tagId } } },
+          })),
+        },
       },
     });
 
@@ -195,10 +191,15 @@ export class DraftService {
 
     const selectClause = this.draftQuery.getDraftSelectFields();
 
-    const groupByClause = this.draftQuery.getGroupByClause();
+    const subQueries = Prisma.sql`
+      WITH contacts_agg AS (${this.draftQuery.getContactsCTE()}),
+      tags_agg AS (${this.draftQuery.getTagsCTE()})
+    `;
 
     const rawQuery = Prisma.sql`
-      WITH "DraftsCount" AS (
+      ${subQueries},
+
+      "DraftsCount" AS (
         SELECT
           COUNT(DISTINCT d.id)::INT AS "count"
         FROM draft d
@@ -212,7 +213,6 @@ export class DraftService {
         FROM draft d
         ${joinClause}
         ${whereClause}
-        ${groupByClause}
         ORDER BY d."createdAt" DESC
         OFFSET ${offset}
         LIMIT ${limit}
@@ -241,15 +241,19 @@ export class DraftService {
 
     const selectClause = this.draftQuery.getDraftSelectFields(true);
 
-    const groupByClause = this.draftQuery.getGroupByClause();
+    const subQueries = Prisma.sql`
+      WITH contacts_agg AS (${this.draftQuery.getContactsCTE()}),
+      tags_agg AS (${this.draftQuery.getTagsCTE()})
+    `;
 
     const rawQuery = Prisma.sql`
+      ${subQueries}
+
       SELECT
         ${selectClause}
       FROM draft d
       ${joinClause}
       ${whereClause}
-      ${groupByClause}
     `;
 
     const [draft] = await this.prisma.$queryRaw<Draft[]>(rawQuery);

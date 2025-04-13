@@ -6,8 +6,6 @@ import {
   Param,
   Patch,
   Delete,
-  HttpCode,
-  HttpStatus,
 } from '@nestjs/common';
 import { DraftService } from './draft.service';
 import { CreateDraftDto } from './dto/create-draft.dto';
@@ -32,7 +30,6 @@ export class DraftController {
 
   // Delete a draft by ID
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteDraft(@Param('id') id: string) {
     return this.draftService.deleteDraft(id);
   }

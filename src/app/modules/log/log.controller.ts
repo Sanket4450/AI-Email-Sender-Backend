@@ -1,12 +1,9 @@
 import {
   Controller,
-  Post,
   Body,
   Get,
   Param,
   Delete,
-  HttpCode,
-  HttpStatus,
   Query,
 } from '@nestjs/common';
 import { LogService } from './log.service';
@@ -19,14 +16,12 @@ export class LogController {
 
   // Delete a log by ID
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteLog(@Param('id') id: string, @Body() body: DeleteLogDto) {
     return this.logService.deleteLog(id, body);
   }
 
   // Delete all logs
   @Delete()
-  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAllLogs(@Body() body: DeleteLogDto) {
     return this.logService.deleteAllLogs(body);
   }
