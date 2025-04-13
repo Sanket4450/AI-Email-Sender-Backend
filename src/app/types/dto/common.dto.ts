@@ -1,5 +1,12 @@
 import { Transform } from 'class-transformer';
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBooleanString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class SearchDto {
   @IsOptional()
@@ -19,6 +26,12 @@ export class PaginationDto {
   limit: number;
 }
 
+export class OptionsDto {
+  @IsOptional()
+  @IsBooleanString()
+  @IsNotEmpty()
+  asOptions?: boolean;
+}
 
 export class TagsDto {
   @IsOptional()

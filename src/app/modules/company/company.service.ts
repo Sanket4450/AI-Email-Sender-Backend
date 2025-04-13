@@ -120,7 +120,7 @@ export class CompanyService {
     const joinClause = this.companyQuery.getCompanyJoinClause();
 
     const rawQuery = Prisma.sql`
-      WITH "CompaniesCount" AS (
+      WITH "CompanieCount" AS (
         SELECT
           COUNT(DISTINCT c.id)::INT AS "count"
         FROM company c
@@ -141,7 +141,7 @@ export class CompanyService {
       )
       
       SELECT
-        (SELECT "count" FROM "CompaniesCount") AS "count",
+        (SELECT "count" FROM "CompanieCount") AS "count",
         COALESCE((SELECT JSON_AGG("CompaniesData") FROM "CompaniesData"), '[]'::JSON) AS "data";
     `;
 

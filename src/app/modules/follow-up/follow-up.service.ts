@@ -114,7 +114,7 @@ export class FollowUpService {
     `;
 
     const rawQuery = Prisma.sql`
-      WITH "FollowUpsCount" AS (
+      WITH "FollowUpCount" AS (
         SELECT
           COUNT(DISTINCT fu.id)::INT AS "count"
         FROM follow_up fu
@@ -147,7 +147,7 @@ export class FollowUpService {
       )
       
       SELECT
-        (SELECT "count" FROM "FollowUpsCount") AS "count",
+        (SELECT "count" FROM "FollowUpCount") AS "count",
         COALESCE((SELECT JSON_AGG("FollowUpsData") FROM "FollowUpsData"), '[]'::JSON) AS "data";
     `;
 

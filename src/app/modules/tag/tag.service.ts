@@ -79,7 +79,7 @@ export class TagService {
 
   // Get all tags
   async getTags(query: GetTagsDto) {
-    const { search } = query;
+    const { search, asOptions } = query;
     const { offset, limit } = getPagination(query);
 
     const conditions: Prisma.Sql[] = [];
@@ -95,8 +95,18 @@ export class TagService {
       ? Prisma.sql`WHERE ${Prisma.join(conditions, ` AND `)}`
       : Prisma.empty;
 
+    const joinClause = !asOptions
+      ? this.tagQuery.getJoinClause()
+      : Prisma.empty;
+
+    const groupByClause = !asOptions ? Prisma.sql`GROUP BY t.id` : Prisma.empty;
+
+    const conditionalPagination = !asOptions
+      ? Prisma.sql`LIMIT ${limit} OFFSET ${offset}`
+      : Prisma.empty;
+
     const rawQuery = Prisma.sql`
-      WITH "TagsCount" AS (
+      WITH "TagCount" AS (
         SELECT
           COUNT(t.id)::INT AS "count"
         FROM tag t
@@ -105,18 +115,20 @@ export class TagService {
       
       "Tags" AS (
         SELECT
-          ${this.tagQuery.getTagSelectFields()}
+          ${this.tagQuery.getTagSelectFields(!asOptions)}
         FROM tag t
+        ${joinClause}
         ${whereClause}
+        ${groupByClause}
         ORDER BY t.title
-        OFFSET ${offset}
-        LIMIT ${limit}
+        ${conditionalPagination}
       )
       
       SELECT
-        (SELECT "count" FROM "TagsCount") AS "count",
+        (SELECT "count" FROM "TagCount") AS "count",
         COALESCE((SELECT JSON_AGG("Tags") FROM "Tags"), '[]'::JSON) AS "data";
     `;
+
 
     const [TagResponse] =
       await this.prisma.$queryRaw<QueryResponse<Tag>>(rawQuery);

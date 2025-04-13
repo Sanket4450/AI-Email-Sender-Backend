@@ -171,7 +171,7 @@ export class SenderService {
       : Prisma.empty;
 
     const rawQuery = Prisma.sql`
-      WITH "SendersCount" AS (
+      WITH "SenderCount" AS (
         SELECT
           COUNT(s.id)::INT AS "count"
         FROM sender s
@@ -187,7 +187,7 @@ export class SenderService {
       )
 
       SELECT
-        (SELECT "count" FROM "SendersCount") AS "count",
+        (SELECT "count" FROM "SenderCount") AS "count",
         COALESCE((SELECT JSON_AGG("SendersData") FROM "SendersData"), '[]'::JSON) AS "data";
     `;
 

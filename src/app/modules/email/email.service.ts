@@ -134,7 +134,7 @@ export class EmailService {
     const groupByClause = this.emailQuery.getGroupByClause();
 
     const rawQuery = Prisma.sql`
-      WITH "EmailsCount" AS (
+      WITH "EmailCount" AS (
         SELECT
           COUNT(DISTINCT e.id)::INT AS "count"
         FROM email e
@@ -155,7 +155,7 @@ export class EmailService {
       )
       
       SELECT
-        (SELECT "count" FROM "EmailsCount") AS "count",
+        (SELECT "count" FROM "EmailCount") AS "count",
         COALESCE((SELECT JSON_AGG("EmailsData") FROM "EmailsData"), '[]'::JSON) AS "data";
     `;
 

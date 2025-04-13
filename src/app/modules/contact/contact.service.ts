@@ -138,7 +138,7 @@ export class ContactService {
     const joinClause = this.contactQuery.getContactJoinClause();
 
     const rawQuery = Prisma.sql`
-      WITH "ContactsCount" AS (
+      WITH "ContactCount" AS (
         SELECT
           COUNT(DISTINCT c.id)::INT AS "count"
         FROM contact c
@@ -159,7 +159,7 @@ export class ContactService {
       )
       
       SELECT
-        (SELECT "count" FROM "ContactsCount") AS "count",
+        (SELECT "count" FROM "ContactCount") AS "count",
         COALESCE((SELECT JSON_AGG("ContactsData") FROM "ContactsData"), '[]'::JSON) AS "data"
       ;
     `;

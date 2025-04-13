@@ -199,7 +199,7 @@ export class DraftService {
     const rawQuery = Prisma.sql`
       ${subQueries},
 
-      "DraftsCount" AS (
+      "DraftCount" AS (
         SELECT
           COUNT(DISTINCT d.id)::INT AS "count"
         FROM draft d
@@ -219,7 +219,7 @@ export class DraftService {
       )
       
       SELECT
-        (SELECT "count" FROM "DraftsCount") AS "count",
+        (SELECT "count" FROM "DraftCount") AS "count",
         COALESCE((SELECT JSON_AGG("DraftsData") FROM "DraftsData"), '[]'::JSON) AS "data";
       ;
     `;

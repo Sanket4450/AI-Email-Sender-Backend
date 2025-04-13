@@ -74,7 +74,7 @@ export class LogService {
     const tableName = type === LOG_TYPES.LLM ? 'llm_log' : 'webhook_log';
 
     const rawQuery = Prisma.sql`
-      WITH "LogsCount" AS (
+      WITH "LogCount" AS (
         SELECT
           COUNT(l.id)::INT AS "count"
         FROM ${tableName} t
@@ -92,7 +92,7 @@ export class LogService {
       )
       
       SELECT
-        (SELECT "count" FROM "LogsCount") AS "count",
+        (SELECT "count" FROM "LogCount") AS "count",
         COALESCE((SELECT JSON_AGG("Logs") FROM "Logs"), '[]'::JSON) AS "data";
     `;
 
