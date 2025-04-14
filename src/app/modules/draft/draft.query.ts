@@ -13,14 +13,14 @@ export class DraftQuery {
     ${getAllFields ? Prisma.sql`d.body AS body,` : Prisma.empty}
     d."scheduledAt" AS "scheduledAt",
     d."createdAt" AS "createdAt",
-    CASE WHEN d.id IS NOT NULL THEN
+    CASE WHEN s.id IS NOT NULL THEN
       JSON_BUILD_OBJECT(
         'id', s.id,
         'displayName', s."displayName"
       ) ELSE '{}'::JSON
     END AS sender,
-    c.contacts AS contacts,
-    t.tags AS tags
+    COALESCE(c.contacts, '[]'::JSON) AS contacts,
+    COALESCE(t.tags, '[]'::JSON) AS tags
   `;
 
   getDraftJoinClause = (): Prisma.Sql => Prisma.sql`
@@ -32,26 +32,25 @@ export class DraftQuery {
   getContactsCTE = (getAllFields: boolean = false): Prisma.Sql => Prisma.sql`
     SELECT
       dc."draftId",
-      COALESCE(
-        JSON_AGG(
-          JSON_BUILD_OBJECT(
-            'id', c.id,
-            'name', c.name
-            ${
-              getAllFields
-                ? Prisma.sql`
-                ,
-                'position', c.position,
-                  'email', c.email,
-                  'phone', c.phone,
-                  'linkedInUrl', c."linkedInUrl",
-                  'location', c.location
-                `
-                : Prisma.empty
-            }
-          ) 
-        ) FILTER (WHERE c.id IS NOT NULL), '[]'::JSON
-      ) AS contacts
+      JSON_AGG(
+        JSON_BUILD_OBJECT(
+          'id', c.id,
+          'name', c.name
+          ${
+            getAllFields
+              ? Prisma.sql`
+              ,
+              'position', c.position,
+                'email', c.email,
+                'phone', c.phone,
+                'linkedInUrl', c."linkedInUrl",
+                'location', c.location
+              `
+              : Prisma.empty
+          }
+        ) 
+      ) FILTER (WHERE c.id IS NOT NULL)
+      AS contacts
     FROM draft_contact dc
     LEFT JOIN contact c ON c.id = dc."contactId"
     GROUP BY dc."draftId"
@@ -60,14 +59,13 @@ export class DraftQuery {
   getTagsCTE = (): Prisma.Sql => Prisma.sql`
     SELECT
 		  dt."draftId",
-      COALESCE(
-        JSON_AGG(
-          JSON_BUILD_OBJECT(
-            'id', t.id,
-            'title', t.title
-          ) 
-        ) FILTER (WHERE t.id IS NOT NULL), '[]'::JSON
-      ) AS tags
+      JSON_AGG(
+        JSON_BUILD_OBJECT(
+          'id', t.id,
+          'title', t.title
+        ) 
+      ) FILTER (WHERE t.id IS NOT NULL)
+      AS tags
     FROM draft_tag dt
     LEFT JOIN tag t ON t.id = dt."tagId"
     GROUP BY dt."draftId"
