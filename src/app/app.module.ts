@@ -9,6 +9,7 @@ import { DraftModule } from './modules/draft/draft.module';
 import { EmailModule } from './modules/email/email.module';
 import { FollowUpModule } from './modules/follow-up/follow-up.module';
 import { AIModule } from './modules/ai/ai.module';
+import { LogModule } from './modules/log/log.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AIModule } from './modules/ai/ai.module';
     EmailModule,
     FollowUpModule,
     AIModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

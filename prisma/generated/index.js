@@ -362,12 +362,11 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "value": "postgres://sankettalaviya:sanket123@localhost:5432/ai_email_sender"
       }
     }
   },

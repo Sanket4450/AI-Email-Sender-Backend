@@ -13,12 +13,14 @@ import {
   EMAIL_EVENTS,
   EMAIL_SPAM_REPORT_EVENTS,
   EMAIL_TYPES,
+  ESPS,
   VALUES,
 } from 'src/app/utils/constants';
 import { QueryResponse } from 'src/app/types/common.type';
 import { EmailQuery } from './email.query';
 import { TagService } from '../tag/tag.service';
 import { Email, Prisma } from 'prisma/generated';
+import { LogService } from '../log/log.service';
 
 @Injectable()
 export class EmailService {
@@ -27,6 +29,7 @@ export class EmailService {
     private readonly senderService: SenderService,
     private readonly espService: ESPService,
     private readonly tagService: TagService,
+    private readonly logService: LogService,
     private readonly emailQuery: EmailQuery,
   ) {}
 
@@ -117,7 +120,6 @@ export class EmailService {
       const searchKeys = [
         'e.subject',
         'c.name',
-        's.name',
         ...(isDeepSearch ? ['e.body'] : []),
       ];
       conditions.push(getSearchCond(search, searchKeys));
@@ -208,6 +210,11 @@ export class EmailService {
           ERROR_MSG.INVALID_USER_AGENT,
         );
       }
+
+      await this.logService.createWebhookLog({
+        platform: ESPS.SENDGRID,
+        body: JSON.stringify(body),
+      });
 
       const emailData = [];
       const followUpData = [];

@@ -11,10 +11,14 @@ export class AIController {
   async generateEmail(@Body() body: GenerateEmailDto, @Res() res: Response) {
     const stream = await this.aiService.generateEmail(body);
 
+    const [stream1, stream2] = stream.tee();
+
+    this.aiService.handleSaveGeneratedEmail(body, stream1);
+
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Transfer-Encoding', 'chunked');
 
-    for await (const chunk of stream) {
+    for await (const chunk of stream2) {
       const content = chunk.choices[0]?.delta?.content;
       if (content) res.write(content);
     }
