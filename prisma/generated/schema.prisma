@@ -219,6 +219,7 @@ model EmailPurpose {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
+  binaryTargets   = ["native", "darwin-arm64", "debian-openssl-3.0.x"]
   output          = "../generated"
 }
 
